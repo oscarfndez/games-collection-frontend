@@ -1,0 +1,133 @@
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GameDto, GameService } from '../../core/game.service';
+
+@Component({
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  template: `
+    <div class="page-container">
+      <div class="card">
+        <h1>{{ isEditMode ? 'Modificar juego' : 'Dar de alta juego' }}</h1>
+        <p class="muted">
+          {{ isEditMode ? 'Actualiza los datos del juego existente.' : 'Introduce los datos del nuevo juego.' }}
+        </p>
+
+        <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
+          <div class="form-field">
+            <label for="name">Nombre</label>
+            <input id="name" type="text" formControlName="name" />
+          </div>
+
+          <div class="form-field">
+            <label for="description">Descripción</label>
+            <textarea id="description" formControlName="description"></textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="platformId">Platform ID</label>
+            <input id="platformId" type="text" formControlName="platform_id" placeholder="UUID de la plataforma" />
+          </div>
+
+          <div *ngIf="errorMessage" class="status-error">{{ errorMessage }}</div>
+          <div *ngIf="successMessage" class="status-success">{{ successMessage }}</div>
+
+          <div class="actions">
+            <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading">
+              {{ loading ? 'Guardando...' : 'Guardar' }}
+            </button>
+            <button class="btn btn-secondary" type="button" (click)="goBack()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `
+})
+export class GameFormComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly gameService = inject(GameService);
+
+  loading = false;
+  errorMessage = '';
+  successMessage = '';
+  isEditMode = false;
+  private gameId: string | null = null;
+
+  readonly form = this.fb.nonNullable.group({
+    name: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    platform_id: ['', [Validators.required]]
+  });
+
+  ngOnInit(): void {
+    this.gameId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.gameId;
+
+    if (this.gameId) {
+      this.loadGame(this.gameId);
+    }
+  }
+
+  loadGame(id: string): void {
+    this.loading = true;
+
+    this.gameService.getById(id).subscribe({
+      next: (game: GameDto) => {
+        this.form.patchValue({
+          name: game.name,
+          description: game.description,
+          platform_id: game.platform_id
+        });
+        this.loading = false;
+      },
+      error: () => {
+        this.errorMessage = 'No se pudieron cargar los datos del juego.';
+        this.loading = false;
+      }
+    });
+  }
+
+  submit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.loading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    const payload = this.form.getRawValue();
+
+    const request$ = this.isEditMode && this.gameId
+      ? this.gameService.update(this.gameId, payload)
+      : this.gameService.create(payload);
+
+    request$.subscribe({
+      next: (saved) => {
+        this.loading = false;
+        this.successMessage = this.isEditMode
+          ? 'Juego actualizado correctamente.'
+          : 'Juego creado correctamente.';
+        this.router.navigate(['/games', saved.id]);
+      },
+      error: () => {
+        this.loading = false;
+        this.errorMessage = 'No se pudo guardar el juego.';
+      }
+    });
+  }
+
+  goBack(): void {
+    if (this.gameId) {
+      this.router.navigate(['/games', this.gameId]);
+      return;
+    }
+
+    this.router.navigate(['/games']);
+  }
+}
