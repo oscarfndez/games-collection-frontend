@@ -1,16 +1,11 @@
 pipeline {
-  agent any
+  agent { label 'docker' }
 
   environment {
     REGISTRY = 'docker.io/TU_USUARIO_DOCKERHUB'
     IMAGE_NAME = 'game-collection-frontend'
     IMAGE_TAG = "build-${env.BUILD_NUMBER}"
     FULL_IMAGE = "${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
-  }
-
-  options {
-    timestamps()
-    disableConcurrentBuilds()
   }
 
   stages {
@@ -21,13 +16,9 @@ pipeline {
     }
 
     stage('Build Angular') {
-      agent {
-        docker {
-          image 'node:20-alpine'
-          reuseNode true
-        }
-      }
       steps {
+        sh 'node -v'
+        sh 'npm -v'
         sh 'npm ci'
         sh 'npm run build'
       }
@@ -35,26 +26,24 @@ pipeline {
 
     stage('Build Docker image') {
       steps {
-        script {
-          dockerImage = docker.build("${FULL_IMAGE}")
-        }
+        sh 'docker version'
+        sh "docker build -t ${FULL_IMAGE} ."
       }
     }
 
     stage('Push Docker image') {
       steps {
-        script {
-          docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-            dockerImage.push()
-          }
+        withCredentials([usernamePassword(
+          credentialsId: 'dockerhub-credentials',
+          usernameVariable: 'DOCKER_USER',
+          passwordVariable: 'DOCKER_PASS'
+        )]) {
+          sh '''
+            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+            docker push ${FULL_IMAGE}
+          '''
         }
       }
-    }
-  }
-
-  post {
-    always {
-      cleanWs()
     }
   }
 }
