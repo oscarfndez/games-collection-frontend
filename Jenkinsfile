@@ -1,5 +1,5 @@
 pipeline {
-  agent { label 'docker' }
+  agent any
 
   environment {
     REGISTRY = 'docker.io/TU_USUARIO_DOCKERHUB'
@@ -21,28 +21,6 @@ pipeline {
         sh 'npm -v'
         sh 'npm ci'
         sh 'npm run build'
-      }
-    }
-
-    stage('Build Docker image') {
-      steps {
-        sh 'docker version'
-        sh "docker build -t ${FULL_IMAGE} ."
-      }
-    }
-
-    stage('Push Docker image') {
-      steps {
-        withCredentials([usernamePassword(
-          credentialsId: 'dockerhub-credentials',
-          usernameVariable: 'DOCKER_USER',
-          passwordVariable: 'DOCKER_PASS'
-        )]) {
-          sh '''
-            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-            docker push ${FULL_IMAGE}
-          '''
-        }
       }
     }
   }
