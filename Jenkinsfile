@@ -1,26 +1,28 @@
 pipeline {
-  agent any
-
-  environment {
-    REGISTRY = 'docker.io/TU_USUARIO_DOCKERHUB'
-    IMAGE_NAME = 'game-collection-frontend'
-    IMAGE_TAG = "build-${env.BUILD_NUMBER}"
-    FULL_IMAGE = "${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+  agent {
+    kubernetes {
+      defaultContainer 'node'
+      yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+    - name: node
+      image: node:20-alpine
+      command:
+        - cat
+      tty: true
+'''
+    }
   }
 
   stages {
-    stage('Checkout') {
+    stage('Test') {
       steps {
-        checkout scm
-      }
-    }
-
-    stage('Build Angular') {
-      steps {
-        sh 'node -v'
-        sh 'npm -v'
-        sh 'npm ci'
-        sh 'npm run build'
+        container('node') {
+          sh 'node -v'
+          sh 'npm -v'
+        }
       }
     }
   }
