@@ -9,14 +9,12 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-# Etapa runtime
-FROM nginx:alpine
+FROM nginx:1.27-alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/dist/game-collection-frontend/browser /usr/share/nginx/html
-# Si tu build deja los ficheros en /app/dist/game-collection-frontend en vez de /browser,
-# cambia la línea anterior por:
-# COPY --from=build /app/dist/game-collection-frontend /usr/share/nginx/html
+RUN mkdir -p /usr/share/nginx/html/gamescollection
+COPY --from=build /app/dist/game-collection-frontend/browser/ /usr/share/nginx/html/gamescollection/
 
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]
