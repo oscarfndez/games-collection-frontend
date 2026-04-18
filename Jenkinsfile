@@ -15,7 +15,7 @@ spec:
         - cat
       tty: true
     - name: kaniko
-      image: gcr.io/kaniko-project/executor:latest
+      image: gcr.io/kaniko-project/executor:debug
       command:
         - /busybox/cat
       tty: true
@@ -38,11 +38,6 @@ spec:
     IMAGE_NAME = 'game-collection-frontend'
     IMAGE_TAG = "build-${env.BUILD_NUMBER}"
     FULL_IMAGE = "${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
-  }
-
-  options {
-    timestamps()
-    disableConcurrentBuilds()
   }
 
   stages {
@@ -74,12 +69,6 @@ spec:
           '''
         }
       }
-    }
-  }
-
-  post {
-    always {
-      cleanWs()
     }
   }
 }
