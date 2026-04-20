@@ -12,10 +12,13 @@ import { AuthService } from './core/auth.service';
       <header class="topbar">
         <div class="topbar-content">
           <a routerLink="/games"><strong>Game Collection</strong></a>
-          <div class="actions">
-            <a class="btn btn-secondary" routerLink="/games/new">Nuevo juego</a>
-            <button class="btn btn-danger" type="button" (click)="logout()">Cerrar sesión</button>
-          </div>
+            <div class="actions">
+                <a class="btn btn-secondary" routerLink="/games">Juegos</a>
+                <a class="btn btn-secondary" routerLink="/platforms">Plataformas</a>
+                <a class="btn btn-primary" routerLink="/games/new">Nuevo juego</a>
+                <a class="btn btn-primary" routerLink="/platforms/new">Nueva plataforma</a>
+                <button class="btn btn-danger" type="button" (click)="logout()">Cerrar sesión</button>
+            </div>
         </div>
       </header>
       <router-outlet></router-outlet>
