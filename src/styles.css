@@ -46,12 +46,14 @@ button {
 }
 
 .form-field input,
-.form-field textarea {
+.form-field textarea,
+.form-field select {
   width: 100%;
   padding: 12px;
   border: 1px solid #d0d7e2;
   border-radius: 8px;
   font-size: 14px;
+  background: white;
 }
 
 .form-field textarea {

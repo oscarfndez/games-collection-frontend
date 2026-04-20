@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameDto, GameService } from '../../core/game.service';
+import { PlatformDto, PlatformService } from '../../core/platform.service';
 
 @Component({
   standalone: true,
@@ -27,9 +28,14 @@ import { GameDto, GameService } from '../../core/game.service';
           </div>
 
           <div class="form-field">
-            <label for="platformId">Platform ID</label>
-            <input id="platformId" type="text" formControlName="platform_id" placeholder="UUID de la plataforma" />
-          </div>
+            <label for="platformId">Plataforma</label>
+                <select id="platformId" formControlName="platform_id">
+                    <option value="">Selecciona una plataforma</option>
+                    <option *ngFor="let platform of platforms" [value]="platform.id">
+                        {{ platform.name }}
+                    </option>
+                </select>
+            </div>
 
           <div *ngIf="errorMessage" class="status-error">{{ errorMessage }}</div>
           <div *ngIf="successMessage" class="status-success">{{ successMessage }}</div>
@@ -50,12 +56,15 @@ export class GameFormComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly gameService = inject(GameService);
+  private readonly platformService = inject(PlatformService);
 
   loading = false;
   errorMessage = '';
   successMessage = '';
   isEditMode = false;
   private gameId: string | null = null;
+  platforms: PlatformDto[] = [];
+  loadingPlatforms = false;
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required]],
@@ -64,12 +73,29 @@ export class GameFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.loadPlatforms();
+
     this.gameId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.gameId;
 
     if (this.gameId) {
       this.loadGame(this.gameId);
     }
+  }
+
+  loadPlatforms(): void {
+    this.loadingPlatforms = true;
+
+    this.platformService.getAll().subscribe({
+      next: (platforms) => {
+        this.platforms = platforms;
+        this.loadingPlatforms = false;
+      },
+      error: () => {
+        this.errorMessage = 'No se pudieron cargar las plataformas.';
+        this.loadingPlatforms = false;
+      }
+    });
   }
 
   loadGame(id: string): void {
