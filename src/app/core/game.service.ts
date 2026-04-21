@@ -16,8 +16,14 @@ export class GameService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiBaseUrl}/api/game`;
 
-  getAll(): Observable<GameDto[]> {
-    return this.http.get<GameDto[]>(`${this.baseUrl}/all`);
+  getAll(search?: string): Observable<GameDto[]> {
+    let params = new HttpParams();
+
+    if (search && search.trim()) {
+      params = params.set('search', search.trim());
+    }
+
+    return this.http.get<GameDto[]>(`${this.baseUrl}/all`, { params });
   }
 
   getById(id: string): Observable<GameDto> {

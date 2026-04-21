@@ -88,7 +88,7 @@ export class GamesListComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
-    this.gameService.getAll().subscribe({
+    this.gameService.getAll(this.searchTerm).subscribe({
       next: (games) => {
         this.games = games;
         this.filteredGames = games;
@@ -102,18 +102,7 @@ export class GamesListComponent implements OnInit {
   }
 
   applyFilter(): void {
-    const term = this.searchTerm.trim().toLowerCase();
-
-    if (!term) {
-      this.filteredGames = this.games;
-      return;
-    }
-
-    this.filteredGames = this.games.filter((game) =>
-      game.name.toLowerCase().includes(term) ||
-      game.description.toLowerCase().includes(term) ||
-      (game.platform_name || '').toLowerCase().includes(term)
-    );
+    this.loadGames();
   }
 
   remove(game: GameDto): void {
