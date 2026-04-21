@@ -12,7 +12,7 @@ import { GameDto, GameService } from '../../core/game.service';
         <h1>{{ game.name }}</h1>
         <p><strong>ID:</strong> {{ game.id }}</p>
         <p><strong>Descripción:</strong> {{ game.description }}</p>
-        <p><strong>Platform ID:</strong> {{ game.platform_id }}</p>
+        <p><strong>Plataforma:</strong> {{ game.platform_name }}</p>
 
         <div class="actions" style="margin-top: 24px;">
           <a class="btn btn-secondary" routerLink="/games">Volver</a>
