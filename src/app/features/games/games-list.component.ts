@@ -26,7 +26,7 @@ import { GameDto, GameService } from '../../core/game.service';
               <tr>
                 <th>Nombre</th>
                 <th>Descripción</th>
-                <th>Platform ID</th>
+                <th>Plataforma</th>
                 <th style="width: 240px;">Acciones</th>
               </tr>
             </thead>

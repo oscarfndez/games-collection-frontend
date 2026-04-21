@@ -8,8 +8,7 @@ export interface GameDto {
   name: string;
   description: string;
   platform_id: string;
-  platform_name: string;
-
+  platform_name?: string;
 }
 
 @Injectable({ providedIn: 'root' })
