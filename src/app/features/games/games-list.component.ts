@@ -36,9 +36,9 @@ import { GameDto, GameService } from '../../core/game.service';
           <table class="table" *ngIf="filteredGames.length; else emptyTpl">
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Plataforma</th>
+                <th (click)="sort('name')">Nombre</th>
+                <th (click)="sort('description')">Descripción</th>
+                <th (click)="sort('platform')">Plataforma</th>
                 <th style="width: 240px;">Acciones</th>
               </tr>
             </thead>
@@ -79,9 +79,11 @@ export class GamesListComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   searchTerm = '';
+  sortField = 'name';
+  sortDir = 'asc';
 
   ngOnInit(): void {
-    this.loadGames();
+    this.gameService.getAll(this.searchTerm, this.sortField, this.sortDir);
   }
 
   loadGames(): void {
@@ -125,5 +127,15 @@ export class GamesListComponent implements OnInit {
         this.errorMessage = 'No se pudo eliminar el juego.';
       }
     });
+  }
+
+  sort(field: string): void {
+    if (this.sortField === field) {
+      this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDir = 'asc';
+    }
+    this.loadGames();
   }
 }
