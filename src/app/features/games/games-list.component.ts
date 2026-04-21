@@ -83,7 +83,7 @@ export class GamesListComponent implements OnInit {
   sortDir = 'asc';
 
   ngOnInit(): void {
-    this.gameService.getAll(this.searchTerm, this.sortField, this.sortDir);
+    this.loadGames();
   }
 
   loadGames(): void {
@@ -102,6 +102,7 @@ export class GamesListComponent implements OnInit {
       }
     });
   }
+
 
   applyFilter(): void {
     this.loadGames();
