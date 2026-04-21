@@ -34,7 +34,7 @@ import { GameDto, GameService } from '../../core/game.service';
               <tr *ngFor="let game of games">
                 <td>{{ game.name }}</td>
                 <td>{{ game.description }}</td>
-                <td>{{ game.platform_id }}</td>
+                <td>{{ game.platform_name }}</td>
                 <td>
                   <div class="actions">
                     <a class="btn btn-secondary" [routerLink]="['/games', game.id]">Detalle</a>
