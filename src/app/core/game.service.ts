@@ -3,12 +3,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-export interface GameDto {
-  id?: string;
-  name: string;
-  description: string;
-  platform_id: string;
-  platform_name?: string;
+export interface PageResponseDto<T> {
+  content: T[];
+  page: number;
+  size: number;
+  total_elements: number;
+  total_pages: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -16,15 +16,31 @@ export class GameService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiBaseUrl}/api/game`;
 
-getAll(search?: string, sortField?: string, sortDir?: string): Observable<GameDto[]> {
-  let params = new HttpParams();
+    getAll(
+      search?: string,
+      sortField?: string,
+      sortDir?: string,
+      page: number = 0,
+      size: number = 10
+    ): Observable<PageResponseDto<GameDto>> {
+      let params = new HttpParams()
+        .set('page', page)
+        .set('size', size);
 
-  if (search) params = params.set('search', search);
-  if (sortField) params = params.set('sortField', sortField);
-  if (sortDir) params = params.set('sortDir', sortDir);
+      if (search && search.trim()) {
+        params = params.set('search', search.trim());
+      }
 
-  return this.http.get<GameDto[]>(`${this.baseUrl}/all`, { params });
-}
+      if (sortField) {
+        params = params.set('sortField', sortField);
+      }
+
+      if (sortDir) {
+        params = params.set('sortDir', sortDir);
+      }
+
+      return this.http.get<PageResponseDto<GameDto>>(`${this.baseUrl}/all`, { params });
+    }
 
   getById(id: string): Observable<GameDto> {
     const params = new HttpParams().set('id', id);

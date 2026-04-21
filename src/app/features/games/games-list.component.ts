@@ -57,6 +57,20 @@ import { GameDto, GameService } from '../../core/game.service';
               </tr>
             </tbody>
           </table>
+          <div class="actions" style="justify-content: space-between; align-items: center; margin-top: 16px;" *ngIf="!loading && totalPages > 0">
+            <div class="muted">
+              Página {{ currentPage + 1 }} de {{ totalPages }} · {{ totalElements }} juegos
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-secondary" type="button" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
+                Anterior
+              </button>
+              <button class="btn btn-secondary" type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">
+                Siguiente
+              </button>
+            </div>
+          </div>
         </div>
 
         <ng-template #loadingTpl>
@@ -81,6 +95,10 @@ export class GamesListComponent implements OnInit {
   searchTerm = '';
   sortField = 'name';
   sortDir = 'asc';
+  currentPage = 0;
+  pageSize = 10;
+  totalPages = 0;
+  totalElements = 0;
 
   ngOnInit(): void {
     this.loadGames();
@@ -90,10 +108,20 @@ export class GamesListComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
-    this.gameService.getAll(this.searchTerm, this.sortField, this.sortDir).subscribe({
-      next: (games) => {
-        this.games = games;
-        this.filteredGames = games;
+    this.gameService.getAll(
+      this.searchTerm,
+      this.sortField,
+      this.sortDir,
+      this.currentPage,
+      this.pageSize
+    ).subscribe({
+      next: (response) => {
+        this.games = response.content;
+        this.filteredGames = response.content;
+        this.currentPage = response.page;
+        this.pageSize = response.size;
+        this.totalPages = response.total_pages;
+        this.totalElements = response.total_elements;
         this.loading = false;
       },
       error: () => {
@@ -101,11 +129,12 @@ export class GamesListComponent implements OnInit {
         this.loading = false;
       }
     });
-  }
+}
 
-  applyFilter(): void {
-    this.loadGames();
-  }
+   applyFilter(): void {
+     this.currentPage = 0;
+     this.loadGames();
+   }
 
   sort(field: string): void {
     if (this.sortField === field) {
@@ -115,7 +144,22 @@ export class GamesListComponent implements OnInit {
       this.sortDir = 'asc';
     }
 
+    this.currentPage = 0;
     this.loadGames();
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadGames();
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.loadGames();
+    }
   }
 
   remove(game: GameDto): void {
