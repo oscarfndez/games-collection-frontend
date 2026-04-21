@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { GameDto, GameService } from '../../core/game.service';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   template: `
     <div class="page-container">
       <div class="card">
@@ -17,11 +18,22 @@ import { GameDto, GameService } from '../../core/game.service';
           <a class="btn btn-primary" routerLink="/games/new">Dar de alta juego</a>
         </div>
 
+        <div class="form-field" style="margin: 16px 0;">
+          <label for="search">Buscar juego</label>
+          <input
+            id="search"
+            type="text"
+            [(ngModel)]="searchTerm"
+            (input)="applyFilter()"
+            placeholder="Busca por nombre, descripción o plataforma"
+          />
+        </div>
+
         <div *ngIf="errorMessage" class="status-error" style="margin: 16px 0;">{{ errorMessage }}</div>
         <div *ngIf="successMessage" class="status-success" style="margin: 16px 0;">{{ successMessage }}</div>
 
         <div class="table-wrapper" *ngIf="!loading; else loadingTpl">
-          <table class="table" *ngIf="games.length; else emptyTpl">
+          <table class="table" *ngIf="filteredGames.length; else emptyTpl">
             <thead>
               <tr>
                 <th>Nombre</th>
@@ -31,10 +43,10 @@ import { GameDto, GameService } from '../../core/game.service';
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let game of games">
+              <tr *ngFor="let game of filteredGames">
                 <td>{{ game.name }}</td>
                 <td>{{ game.description }}</td>
-                <td>{{ game.platform_name }}</td>
+                <td>{{ game.platform_name || game.platform_id }}</td>
                 <td>
                   <div class="actions">
                     <a class="btn btn-secondary" [routerLink]="['/games', game.id]">Detalle</a>
@@ -62,9 +74,11 @@ export class GamesListComponent implements OnInit {
   private readonly gameService = inject(GameService);
 
   games: GameDto[] = [];
+  filteredGames: GameDto[] = [];
   loading = true;
   errorMessage = '';
   successMessage = '';
+  searchTerm = '';
 
   ngOnInit(): void {
     this.loadGames();
@@ -77,6 +91,7 @@ export class GamesListComponent implements OnInit {
     this.gameService.getAll().subscribe({
       next: (games) => {
         this.games = games;
+        this.filteredGames = games;
         this.loading = false;
       },
       error: () => {
@@ -84,6 +99,21 @@ export class GamesListComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  applyFilter(): void {
+    const term = this.searchTerm.trim().toLowerCase();
+
+    if (!term) {
+      this.filteredGames = this.games;
+      return;
+    }
+
+    this.filteredGames = this.games.filter((game) =>
+      game.name.toLowerCase().includes(term) ||
+      game.description.toLowerCase().includes(term) ||
+      (game.platform_name || '').toLowerCase().includes(term)
+    );
   }
 
   remove(game: GameDto): void {
@@ -100,6 +130,7 @@ export class GamesListComponent implements OnInit {
       next: () => {
         this.successMessage = 'Juego eliminado correctamente.';
         this.games = this.games.filter((g) => g.id !== game.id);
+        this.applyFilter();
       },
       error: () => {
         this.errorMessage = 'No se pudo eliminar el juego.';
