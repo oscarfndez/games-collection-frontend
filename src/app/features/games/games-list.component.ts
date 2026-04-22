@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GameDto, GameService } from '../../core/game.service';
 import { Router, RouterLink } from '@angular/router';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
-  template: `
+     imports: [CommonModule, RouterLink, FormsModule, ConfirmDialogComponent],  template: `
     <div class="page-container">
       <div class="card">
         <div class="actions" style="justify-content: space-between; align-items: center;">
@@ -69,8 +69,7 @@ import { Router, RouterLink } from '@angular/router';
                 <td>
                   <div class="actions">
                     <button class="action-btn" (click)="edit($event, game.id!)">Editar</button>
-                    <button class="action-btn danger" (click)="deleteGame($event, game.id!)">Borrar</button>
-                  </div>
+                    <button class="action-btn danger" (click)="deleteGame($event, game.id!, game.name)">Borrar</button>                  </div>
                  </td>
               </tr>
             </tbody>
@@ -100,7 +99,15 @@ import { Router, RouterLink } from '@angular/router';
         </ng-template>
       </div>
     </div>
+    <app-confirm-dialog
+      [open]="confirmDeleteOpen"
+      title="Eliminar juego"
+      [message]="'¿Seguro que quieres eliminar el juego &quot;' + gameNameToDelete + '&quot;?'"
+      (cancel)="cancelDelete()"
+      (confirm)="confirmDelete()">
+    </app-confirm-dialog>
   `
+
 })
 
 export class GamesListComponent implements OnInit {
@@ -120,6 +127,9 @@ export class GamesListComponent implements OnInit {
   totalPages = 0;
   totalElements = 0;
   defaultImage = 'https://play-lh.googleusercontent.com/0goocG7RJZDZ41ShfBPl-h7ctwHKHjqzn4nSImyL8_RWyXqeYNKw-CdGAKhgPGZG5Es=w480-h960-rw';
+  confirmDeleteOpen = false;
+  gameIdToDelete: string | null = null;
+  gameNameToDelete = '';
 
   ngOnInit(): void {
     this.loadGames();
@@ -217,23 +227,11 @@ edit(event: Event, id: string): void {
   this.router.navigate(['/games', id, 'edit']);
 }
 
-deleteGame(event: Event, id: string): void {
+deleteGame(event: Event, id: string, name: string): void {
   event.stopPropagation();
-
-  const confirmed = window.confirm('¿Seguro que quieres borrar este juego?');
-  if (!confirmed) {
-    return;
-  }
-
-  this.gameService.delete(id).subscribe({
-    next: () => {
-      this.successMessage = 'Juego eliminado correctamente.';
-      this.loadGames();
-    },
-    error: () => {
-      this.errorMessage = 'No se pudo eliminar el juego.';
-    }
-  });
+  this.gameIdToDelete = id;
+  this.gameNameToDelete = name;
+  this.confirmDeleteOpen = true;
 }
 
 getSortIcon(field: string): string {
@@ -247,4 +245,29 @@ getSortIcon(field: string): string {
 openGame(id: string): void {
   this.router.navigate(['/games', id]);
 }
+
+cancelDelete(): void {
+  this.confirmDeleteOpen = false;
+  this.gameIdToDelete = null;
+  this.gameNameToDelete = '';
+}
+
+confirmDelete(): void {
+  if (!this.gameIdToDelete) {
+    return;
+  }
+
+  this.gameService.delete(this.gameIdToDelete).subscribe({
+    next: () => {
+      this.successMessage = 'Juego eliminado correctamente.';
+      this.cancelDelete();
+      this.loadGames();
+    },
+    error: () => {
+      this.errorMessage = 'No se pudo eliminar el juego.';
+      this.cancelDelete();
+    }
+  });
+}
+
 }
