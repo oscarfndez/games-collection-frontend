@@ -14,9 +14,23 @@ export class PlatformService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiBaseUrl}/api/platform`;
 
-  getAll(): Observable<PlatformDto[]> {
-    return this.http.get<PlatformDto[]>(`${this.baseUrl}/all`);
+getAll(search?: string, sortField?: string, sortDir?: string): Observable<PlatformDto[]> {
+  let params = new HttpParams();
+
+  if (search && search.trim()) {
+    params = params.set('search', search.trim());
   }
+
+  if (sortField) {
+    params = params.set('sortField', sortField);
+  }
+
+  if (sortDir) {
+    params = params.set('sortDir', sortDir);
+  }
+
+  return this.http.get<PlatformDto[]>(`${this.baseUrl}/all`, { params });
+}
 
   getById(id: string): Observable<PlatformDto> {
     const params = new HttpParams().set('id', id);

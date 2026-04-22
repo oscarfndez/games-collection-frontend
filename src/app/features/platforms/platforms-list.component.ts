@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { PlatformDto, PlatformService } from '../../core/platform.service';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   template: `
     <div class="page-container">
       <div class="card">
@@ -17,27 +18,44 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
           <a class="btn btn-primary" routerLink="/platforms/new">Dar de alta plataforma</a>
         </div>
 
+        <div class="form-field" style="margin: 16px 0;">
+          <label for="search">Buscar plataforma</label>
+          <input
+            id="search"
+            type="text"
+            [(ngModel)]="searchTerm"
+            (input)="applyFilter()"
+            placeholder="Busca por nombre o descripción"
+          />
+        </div>
+
         <div *ngIf="errorMessage" class="status-error" style="margin: 16px 0;">{{ errorMessage }}</div>
         <div *ngIf="successMessage" class="status-success" style="margin: 16px 0;">{{ successMessage }}</div>
 
         <div class="table-wrapper" *ngIf="!loading; else loadingTpl">
-          <table class="table" *ngIf="platforms.length; else emptyTpl">
+          <table class="table" *ngIf="filteredPlatforms.length; else emptyTpl">
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
+                <th (click)="sort('name')" class="sortable-header">
+                  <span>Nombre</span>
+                  <span class="sort-icon">{{ getSortIcon('name') }}</span>
+                </th>
+                <th (click)="sort('description')" class="sortable-header">
+                  <span>Descripción</span>
+                  <span class="sort-icon">{{ getSortIcon('description') }}</span>
+                </th>
                 <th style="width: 240px;">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let platform of platforms">
+              <tr *ngFor="let platform of filteredPlatforms">
                 <td>{{ platform.name }}</td>
                 <td>{{ platform.description }}</td>
                 <td>
                   <div class="actions">
-                    <a class="btn btn-secondary" [routerLink]="['/platforms', platform.id]">Detalle</a>
-                    <a class="btn btn-primary" [routerLink]="['/platforms', platform.id, 'edit']">Editar</a>
-                    <button class="btn btn-danger" type="button" (click)="remove(platform)">Borrar</button>
+                    <button class="action-btn" type="button" (click)="view(platform.id!)">Ver</button>
+                    <button class="action-btn" type="button" (click)="edit(platform.id!)">Editar</button>
+                    <button class="action-btn danger" type="button" (click)="deletePlatform(platform.id!)">Borrar</button>
                   </div>
                 </td>
               </tr>
@@ -58,11 +76,16 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
 })
 export class PlatformsListComponent implements OnInit {
   private readonly platformService = inject(PlatformService);
+  private readonly router = inject(Router);
 
   platforms: PlatformDto[] = [];
+  filteredPlatforms: PlatformDto[] = [];
   loading = true;
   errorMessage = '';
   successMessage = '';
+  searchTerm = '';
+  sortField = 'name';
+  sortDir = 'asc';
 
   ngOnInit(): void {
     this.loadPlatforms();
@@ -72,9 +95,10 @@ export class PlatformsListComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
-    this.platformService.getAll().subscribe({
+    this.platformService.getAll(this.searchTerm, this.sortField, this.sortDir).subscribe({
       next: (platforms) => {
         this.platforms = platforms;
+        this.filteredPlatforms = platforms;
         this.loading = false;
       },
       error: () => {
@@ -84,20 +108,47 @@ export class PlatformsListComponent implements OnInit {
     });
   }
 
-  remove(platform: PlatformDto): void {
-    if (!platform.id) {
-      return;
+  applyFilter(): void {
+    this.loadPlatforms();
+  }
+
+  sort(field: string): void {
+    if (this.sortField === field) {
+      this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDir = 'asc';
     }
 
-    const confirmed = window.confirm(`¿Seguro que quieres eliminar "${platform.name}"?`);
+    this.loadPlatforms();
+  }
+
+  getSortIcon(field: string): string {
+    if (this.sortField !== field) {
+      return '↕';
+    }
+
+    return this.sortDir === 'asc' ? '↑' : '↓';
+  }
+
+  view(id: string): void {
+    this.router.navigate(['/platforms', id]);
+  }
+
+  edit(id: string): void {
+    this.router.navigate(['/platforms', id, 'edit']);
+  }
+
+  deletePlatform(id: string): void {
+    const confirmed = window.confirm('¿Seguro que quieres borrar esta plataforma?');
     if (!confirmed) {
       return;
     }
 
-    this.platformService.delete(platform.id).subscribe({
+    this.platformService.delete(id).subscribe({
       next: () => {
         this.successMessage = 'Plataforma eliminada correctamente.';
-        this.platforms = this.platforms.filter((p) => p.id !== platform.id);
+        this.loadPlatforms();
       },
       error: () => {
         this.errorMessage = 'No se pudo eliminar la plataforma.';
