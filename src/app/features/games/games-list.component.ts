@@ -196,4 +196,20 @@ export class GamesListComponent implements OnInit {
   onImageError(event: Event) {
     (event.target as HTMLImageElement).src = this.defaultImage;
   }
+
+  view(id: string) {
+    this.router.navigate(['/games', id]);
+  }
+
+  edit(id: string) {
+    this.router.navigate(['/games/edit', id]);
+  }
+
+  delete(id: string) {
+    if (!confirm('¿Seguro que quieres borrar este juego?')) return;
+
+    this.gameService.delete(id).subscribe(() => {
+      this.loadGames(); // o como recargues la lista
+    });
+  }
 }
