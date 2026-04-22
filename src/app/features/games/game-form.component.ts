@@ -143,7 +143,6 @@ readonly form = this.fb.nonNullable.group({
     this.loading = true;
     this.errorMessage = '';
     this.successMessage = '';
-    defaultImage = 'https://play-lh.googleusercontent.com/0goocG7RJZDZ41ShfBPl-h7ctwHKHjqzn4nSImyL8_RWyXqeYNKw-CdGAKhgPGZG5Es=w480-h960-rw';
 
     const payload = this.form.getRawValue();
 
