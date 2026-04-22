@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { GameDto, GameService } from '../../core/game.service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -58,9 +59,9 @@ import { GameDto, GameService } from '../../core/game.service';
                 <td>{{ game.platform_name || game.platform_id }}</td>
                 <td>
                   <div class="actions">
-                    <button class="action-btn" (click)="view(game.id)">Ver</button>
-                    <button class="action-btn" (click)="edit(game.id)">Editar</button>
-                    <button class="action-btn danger" (click)="delete(game.id)">Borrar</button>
+                    <button class="action-btn" (click)="view(game.id!)">Ver</button>
+                    <button class="action-btn" (click)="edit(game.id!)">Editar</button>
+                    <button class="action-btn danger" (click)="deleteGame(game.id!)">Borrar</button>
                   </div>
                  </td>
               </tr>
@@ -93,8 +94,10 @@ import { GameDto, GameService } from '../../core/game.service';
     </div>
   `
 })
+
 export class GamesListComponent implements OnInit {
   private readonly gameService = inject(GameService);
+  private readonly router = inject(Router);
 
   games: GameDto[] = [];
   filteredGames: GameDto[] = [];
@@ -197,19 +200,28 @@ export class GamesListComponent implements OnInit {
     (event.target as HTMLImageElement).src = this.defaultImage;
   }
 
-  view(id: string) {
-    this.router.navigate(['/games', id]);
+view(id: string): void {
+  this.router.navigate(['/games', id]);
+}
+
+edit(id: string): void {
+  this.router.navigate(['/games', id, 'edit']);
+}
+
+deleteGame(id: string): void {
+  const confirmed = window.confirm('¿Seguro que quieres borrar este juego?');
+  if (!confirmed) {
+    return;
   }
 
-  edit(id: string) {
-    this.router.navigate(['/games/edit', id]);
-  }
-
-  delete(id: string) {
-    if (!confirm('¿Seguro que quieres borrar este juego?')) return;
-
-    this.gameService.delete(id).subscribe(() => {
-      this.loadGames(); // o como recargues la lista
-    });
-  }
+  this.gameService.delete(id).subscribe({
+    next: () => {
+      this.successMessage = 'Juego eliminado correctamente.';
+      this.loadGames();
+    },
+    error: () => {
+      this.errorMessage = 'No se pudo eliminar el juego.';
+    }
+  });
+}
 }
