@@ -47,11 +47,11 @@ import { GameDto, GameService } from '../../core/game.service';
               <tr *ngFor="let game of filteredGames">
               <td>
                 <img
-                  *ngIf="game.image_url"
-                  [src]="game.image_url"
-                  [alt]="game.name"
-                  style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"
-                />
+                  [src]="game.image_url || defaultImage"
+                  (error)="onImageError($event)"
+                 [alt]="game.name"
+                 style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"
+                 />
               </td>
                 <td>{{ game.name }}</td>
                 <td>{{ game.description }}</td>
@@ -108,6 +108,7 @@ export class GamesListComponent implements OnInit {
   pageSize = 10;
   totalPages = 0;
   totalElements = 0;
+  defaultImage = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
 
   ngOnInit(): void {
     this.loadGames();
@@ -190,5 +191,9 @@ export class GamesListComponent implements OnInit {
         this.errorMessage = 'No se pudo eliminar el juego.';
       }
     });
+  }
+
+  onImageError(event: Event) {
+    (event.target as HTMLImageElement).src = this.defaultImage;
   }
 }

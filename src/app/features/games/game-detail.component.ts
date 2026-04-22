@@ -12,10 +12,11 @@ import { GameDto, GameService } from '../../core/game.service';
         <h1>{{ game.name }}</h1>
         <div *ngIf="game.image_url" style="margin: 16px 0;">
           <img
-            [src]="game.image_url"
+            [src]="game.image_url || defaultImage"
+            (error)="onImageError($event)"
             [alt]="game.name"
             style="max-width: 320px; width: 100%; border-radius: 12px;"
-          />
+           />
         </div>
         <p><strong>ID:</strong> {{ game.id }}</p>
         <p><strong>Descripción:</strong> {{ game.description }}</p>
@@ -43,6 +44,7 @@ export class GameDetailComponent implements OnInit {
   game?: GameDto;
   loading = true;
   errorMessage = '';
+  defaultImage = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -62,5 +64,9 @@ export class GameDetailComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  onImageError(event: Event) {
+    (event.target as HTMLImageElement).src = this.defaultImage;
   }
 }
