@@ -41,6 +41,16 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
                <label for="imageUrl">URL de imagen</label>
                <input id="imageUrl" type="text" formControlName="image_url" placeholder="https://..." />
             </div>
+
+            <div class="card" style="padding: 12px; margin-top: 8px;">
+              <img
+                [src]="form.controls.image_url.value || defaultImage"
+                (error)="onImageError($event)"
+                alt="Vista previa de la imagen del juego"
+                style="max-width: 260px; width: 100%; border-radius: 12px;"
+              />
+            </div>
+
           <div *ngIf="errorMessage" class="status-error">{{ errorMessage }}</div>
           <div *ngIf="successMessage" class="status-success">{{ successMessage }}</div>
 
@@ -132,6 +142,7 @@ readonly form = this.fb.nonNullable.group({
     this.loading = true;
     this.errorMessage = '';
     this.successMessage = '';
+    defaultImage = 'https://play-lh.googleusercontent.com/0goocG7RJZDZ41ShfBPl-h7ctwHKHjqzn4nSImyL8_RWyXqeYNKw-CdGAKhgPGZG5Es=w480-h960-rw';
 
     const payload = this.form.getRawValue();
 
@@ -162,4 +173,9 @@ readonly form = this.fb.nonNullable.group({
 
     this.router.navigate(['/games']);
   }
+
+
+onImageError(event: Event): void {
+  (event.target as HTMLImageElement).src = this.defaultImage;
+}
 }
