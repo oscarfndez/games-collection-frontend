@@ -81,6 +81,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
     </app-confirm-dialog>
   `
 })
+
 export class PlatformsListComponent implements OnInit {
   private readonly platformService = inject(PlatformService);
   private readonly router = inject(Router);

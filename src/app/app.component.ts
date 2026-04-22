@@ -9,19 +9,26 @@ import { AuthService } from './core/auth.service';
   imports: [CommonModule, RouterOutlet, RouterLink],
   template: `
     <ng-container *ngIf="isAuthenticated(); else loginOnly">
-      <header class="topbar">
-        <div class="topbar-content">
-          <a routerLink="/games"><strong>Game Collection</strong></a>
-            <div class="actions">
-                <a class="btn btn-secondary" routerLink="/games">Juegos</a>
-                <a class="btn btn-secondary" routerLink="/platforms">Plataformas</a>
-                <a class="btn btn-primary" routerLink="/games/new">Nuevo juego</a>
-                <a class="btn btn-primary" routerLink="/platforms/new">Nueva plataforma</a>
-                <button class="btn btn-danger" type="button" (click)="logout()">Cerrar sesión</button>
-            </div>
-        </div>
-      </header>
-      <router-outlet></router-outlet>
+<header class="topbar" *ngIf="isAuthenticated()">
+  <div class="topbar-content">
+    <div>
+      <strong>Game Collection</strong>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-danger" type="button" (click)="logout()">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<nav class="section-tabs" *ngIf="isAuthenticated()">
+  <div class="section-tabs-content">
+<a routerLink="/games" routerLinkActive="active-tab" [routerLinkActiveOptions]="{ exact: false }" class="tab-link">Juegos</a>
+<a routerLink="/platforms" routerLinkActive="active-tab" [routerLinkActiveOptions]="{ exact: false }" class="tab-link">Plataformas</a>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>
     </ng-container>
 
     <ng-template #loginOnly>

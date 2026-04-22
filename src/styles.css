@@ -266,3 +266,39 @@ button {
   justify-content: flex-end;
   gap: 8px;
 }
+
+.section-tabs {
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.section-tabs-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  gap: 8px;
+}
+
+.tab-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 18px;
+  font-weight: 600;
+  color: #4b5563;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tab-link:hover {
+  color: #111827;
+  background: #f9fafb;
+}
+
+.active-tab {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+}
