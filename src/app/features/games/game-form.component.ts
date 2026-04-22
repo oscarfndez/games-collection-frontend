@@ -99,20 +99,20 @@ readonly form = this.fb.nonNullable.group({
     }
   }
 
-  loadPlatforms(): void {
-    this.loadingPlatforms = true;
+loadPlatforms(): void {
+  this.loadingPlatforms = true;
 
-    this.platformService.getAll().subscribe({
-      next: (platforms) => {
-        this.platforms = platforms;
-        this.loadingPlatforms = false;
-      },
-      error: () => {
-        this.errorMessage = 'No se pudieron cargar las plataformas.';
-        this.loadingPlatforms = false;
-      }
-    });
-  }
+  this.platformService.getAll(undefined, 'name', 'asc', 0, 1000).subscribe({
+    next: (response) => {
+      this.platforms = response.content;
+      this.loadingPlatforms = false;
+    },
+    error: () => {
+      this.errorMessage = 'No se pudieron cargar las plataformas.';
+      this.loadingPlatforms = false;
+    }
+  });
+}
 
   loadGame(id: string): void {
     this.loading = true;
