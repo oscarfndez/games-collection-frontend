@@ -58,11 +58,11 @@ import { GameDto, GameService } from '../../core/game.service';
                 <td>{{ game.platform_name || game.platform_id }}</td>
                 <td>
                   <div class="actions">
-                    <a class="btn btn-secondary" [routerLink]="['/games', game.id]">Detalle</a>
-                    <a class="btn btn-primary" [routerLink]="['/games', game.id, 'edit']">Editar</a>
-                    <button class="btn btn-danger" type="button" (click)="remove(game)">Borrar</button>
+                    <button class="action-btn" (click)="view(game.id)">Ver</button>
+                    <button class="action-btn" (click)="edit(game.id)">Editar</button>
+                    <button class="action-btn danger" (click)="delete(game.id)">Borrar</button>
                   </div>
-                </td>
+                 </td>
               </tr>
             </tbody>
           </table>

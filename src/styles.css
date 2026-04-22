@@ -64,7 +64,6 @@ button {
 .actions {
   display: flex;
   gap: 8px;
-  align-items: center;
 }
 
 .actions button {
@@ -96,6 +95,37 @@ button {
 .btn-danger {
   background: #dc2626;
   color: white;
+}
+
+.action-btn {
+  flex: 1;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.action-btn:hover {
+  background-color: #d1d5db;
+}
+
+.action-btn.danger {
+  background-color: #ef4444;
+  color: white;
+}
+
+.action-btn.danger:hover {
+  background-color: #dc2626;
 }
 
 .topbar {
