@@ -79,6 +79,7 @@ export class GameFormComponent implements OnInit {
   private gameId: string | null = null;
   platforms: PlatformDto[] = [];
   loadingPlatforms = false;
+  defaultImage = 'https://play-lh.googleusercontent.com/0goocG7RJZDZ41ShfBPl-h7ctwHKHjqzn4nSImyL8_RWyXqeYNKw-CdGAKhgPGZG5Es=w480-h960-rw';
 
 readonly form = this.fb.nonNullable.group({
   name: ['', [Validators.required]],
