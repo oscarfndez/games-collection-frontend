@@ -63,8 +63,17 @@ button {
 
 .actions {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.actions button {
+  flex: 1;              /* todos igual de anchos */
+  height: 36px;         /* misma altura */
+  padding: 0 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
 }
 
 .btn {
@@ -156,4 +165,14 @@ button {
 .login-card {
   width: 100%;
   max-width: 420px;
+}
+
+tbody tr {
+  transition: background-color 0.2s ease;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+tbody tr:hover {
+  background-color: #eef2ff; /* tono azul muy suave */
+  cursor: pointer;
 }
