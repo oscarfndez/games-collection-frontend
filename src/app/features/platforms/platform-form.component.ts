@@ -26,6 +26,18 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
             <textarea id="description" formControlName="description"></textarea>
           </div>
 
+<div class="form-field">
+  <label>Vista previa</label>
+  <div style="margin-top: 8px;">
+    <img
+      [src]="form.controls.image_url.value || defaultImage"
+      (error)="onImageError($event)"
+      alt="Vista previa de la imagen de la plataforma"
+      style="max-width: 260px; width: 100%; border-radius: 12px; border: 1px solid #d0d7e2;"
+    />
+  </div>
+</div>
+
           <div *ngIf="errorMessage" class="status-error">{{ errorMessage }}</div>
           <div *ngIf="successMessage" class="status-success">{{ successMessage }}</div>
 
@@ -51,11 +63,13 @@ export class PlatformFormComponent implements OnInit {
   successMessage = '';
   isEditMode = false;
   private platformId: string | null = null;
+defaultImage = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
 
-  readonly form = this.fb.nonNullable.group({
-    name: ['', [Validators.required]],
-    description: ['', [Validators.required]]
-  });
+readonly form = this.fb.nonNullable.group({
+  name: ['', [Validators.required]],
+  description: ['', [Validators.required]],
+  image_url: ['']
+});
 
   ngOnInit(): void {
     this.platformId = this.route.snapshot.paramMap.get('id');
@@ -123,4 +137,8 @@ export class PlatformFormComponent implements OnInit {
 
     this.router.navigate(['/platforms']);
   }
+
+onImageError(event: Event): void {
+  (event.target as HTMLImageElement).src = this.defaultImage;
+}
 }

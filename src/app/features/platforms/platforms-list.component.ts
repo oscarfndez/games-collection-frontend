@@ -35,20 +35,29 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
         <div class="table-wrapper" *ngIf="!loading; else loadingTpl">
           <table class="table" *ngIf="filteredPlatforms.length; else emptyTpl">
             <thead>
-              <tr>
-                <th (click)="sort('name')" class="sortable-header">
-                  <span>Nombre</span>
-                  <span class="sort-icon">{{ getSortIcon('name') }}</span>
-                </th>
-                <th (click)="sort('description')" class="sortable-header">
-                  <span>Descripción</span>
-                  <span class="sort-icon">{{ getSortIcon('description') }}</span>
-                </th>
-                <th style="width: 240px;">Acciones</th>
-              </tr>
-            </thead>
+<tr>
+  <th>Imagen</th>
+  <th (click)="sort('name')" class="sortable-header">
+    <span>Nombre</span>
+    <span class="sort-icon">{{ getSortIcon('name') }}</span>
+  </th>
+  <th (click)="sort('description')" class="sortable-header">
+    <span>Descripción</span>
+    <span class="sort-icon">{{ getSortIcon('description') }}</span>
+  </th>
+  <th style="width: 240px;">Acciones</th>
+</tr>
+           </thead>
             <tbody>
               <tr *ngFor="let platform of filteredPlatforms" (click)="openPlatform(platform.id!)" class="clickable-row">
+              <td>
+                <img
+                  [src]="platform.image_url || defaultImage"
+                  (error)="onImageError($event)"
+                  [alt]="platform.name"
+                  style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"
+                />
+              </td>
                 <td>{{ platform.name }}</td>
                 <td>{{ platform.description }}</td>
                 <td>
@@ -113,6 +122,7 @@ currentPage = 0;
 pageSize = 10;
 totalPages = 0;
 totalElements = 0;
+defaultImage = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
 
   ngOnInit(): void {
     this.loadPlatforms();
@@ -226,4 +236,9 @@ goToNextPage(): void {
     this.loadPlatforms();
   }
 }
+
+onImageError(event: Event): void {
+  (event.target as HTMLImageElement).src = this.defaultImage;
+}
+
 }

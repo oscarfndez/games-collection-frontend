@@ -7,6 +7,7 @@ export interface PlatformDto {
   id?: string;
   name: string;
   description: string;
+  image_url?: string;
 }
 
 export interface PageResponseDto<T> {
