@@ -37,6 +37,10 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
                 </select>
             </div>
 
+            <div class="form-field">
+               <label for="imageUrl">URL de imagen</label>
+               <input id="imageUrl" type="text" formControlName="image_url" placeholder="https://..." />
+            </div>
           <div *ngIf="errorMessage" class="status-error">{{ errorMessage }}</div>
           <div *ngIf="successMessage" class="status-success">{{ successMessage }}</div>
 
@@ -66,11 +70,12 @@ export class GameFormComponent implements OnInit {
   platforms: PlatformDto[] = [];
   loadingPlatforms = false;
 
-  readonly form = this.fb.nonNullable.group({
-    name: ['', [Validators.required]],
-    description: ['', [Validators.required]],
-    platform_id: ['', [Validators.required]]
-  });
+readonly form = this.fb.nonNullable.group({
+  name: ['', [Validators.required]],
+  description: ['', [Validators.required]],
+  platform_id: ['', [Validators.required]],
+  image_url: ['']
+});
 
   ngOnInit(): void {
     this.loadPlatforms();
@@ -103,11 +108,12 @@ export class GameFormComponent implements OnInit {
 
     this.gameService.getById(id).subscribe({
       next: (game: GameDto) => {
-        this.form.patchValue({
+          this.form.patchValue({
           name: game.name,
           description: game.description,
-          platform_id: game.platform_id
-        });
+          platform_id: game.platform_id,
+          image_url: game.image_url ?? ''
+       });
         this.loading = false;
       },
       error: () => {

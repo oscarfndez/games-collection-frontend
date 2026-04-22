@@ -9,6 +9,7 @@ export interface GameDto {
   description: string;
   platform_id: string;
   platform_name?: string;
+  image_url?: string;
 }
 
 export interface PageResponseDto<T> {

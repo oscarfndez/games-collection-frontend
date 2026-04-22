@@ -10,6 +10,13 @@ import { GameDto, GameService } from '../../core/game.service';
     <div class="page-container">
       <div class="card" *ngIf="game; else stateTpl">
         <h1>{{ game.name }}</h1>
+        <div *ngIf="game.image_url" style="margin: 16px 0;">
+          <img
+            [src]="game.image_url"
+            [alt]="game.name"
+            style="max-width: 320px; width: 100%; border-radius: 12px;"
+          />
+        </div>
         <p><strong>ID:</strong> {{ game.id }}</p>
         <p><strong>Descripción:</strong> {{ game.description }}</p>
         <p><strong>Plataforma:</strong> {{ game.platform_name }}</p>

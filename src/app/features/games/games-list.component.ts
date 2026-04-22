@@ -36,6 +36,7 @@ import { GameDto, GameService } from '../../core/game.service';
           <table class="table" *ngIf="filteredGames.length; else emptyTpl">
             <thead>
               <tr>
+                <th>Imagen</th>
                 <th (click)="sort('name')" style="cursor: pointer;">Nombre</th>
                 <th (click)="sort('description')" style="cursor: pointer;">Descripción</th>
                 <th (click)="sort('platform')" style="cursor: pointer;">Plataforma</th>
@@ -44,6 +45,14 @@ import { GameDto, GameService } from '../../core/game.service';
             </thead>
             <tbody>
               <tr *ngFor="let game of filteredGames">
+              <td>
+                <img
+                  *ngIf="game.image_url"
+                  [src]="game.image_url"
+                  [alt]="game.name"
+                  style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"
+                />
+              </td>
                 <td>{{ game.name }}</td>
                 <td>{{ game.description }}</td>
                 <td>{{ game.platform_name || game.platform_id }}</td>
