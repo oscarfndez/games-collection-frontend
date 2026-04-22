@@ -60,6 +60,20 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
               </tr>
             </tbody>
           </table>
+          <div class="actions" style="justify-content: space-between; align-items: center; margin-top: 16px;" *ngIf="!loading && totalPages > 0">
+            <div class="muted">
+              Página {{ currentPage + 1 }} de {{ totalPages }} · {{ totalElements }} plataformas
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-secondary" type="button" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
+                Anterior
+              </button>
+              <button class="btn btn-secondary" type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">
+                Siguiente
+              </button>
+            </div>
+          </div>
         </div>
 
         <ng-template #loadingTpl>
@@ -95,42 +109,58 @@ export class PlatformsListComponent implements OnInit {
   confirmDeleteOpen = false;
   platformIdToDelete: string | null = null;
   platformNameToDelete = '';
+currentPage = 0;
+pageSize = 10;
+totalPages = 0;
+totalElements = 0;
 
   ngOnInit(): void {
     this.loadPlatforms();
   }
 
-  loadPlatforms(): void {
-    this.loading = true;
-    this.errorMessage = '';
+loadPlatforms(): void {
+  this.loading = true;
+  this.errorMessage = '';
 
-    this.platformService.getAll(this.searchTerm, this.sortField, this.sortDir).subscribe({
-      next: (platforms) => {
-        this.platforms = platforms;
-        this.filteredPlatforms = platforms;
-        this.loading = false;
-      },
-      error: () => {
-        this.errorMessage = 'No se pudo cargar el listado de plataformas.';
-        this.loading = false;
-      }
-    });
-  }
-
-  applyFilter(): void {
-    this.loadPlatforms();
-  }
-
-  sort(field: string): void {
-    if (this.sortField === field) {
-      this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortField = field;
-      this.sortDir = 'asc';
+  this.platformService.getAll(
+    this.searchTerm,
+    this.sortField,
+    this.sortDir,
+    this.currentPage,
+    this.pageSize
+  ).subscribe({
+    next: (response) => {
+      this.platforms = response.content;
+      this.filteredPlatforms = response.content;
+      this.currentPage = response.page;
+      this.pageSize = response.size;
+      this.totalPages = response.total_pages;
+      this.totalElements = response.total_elements;
+      this.loading = false;
+    },
+    error: () => {
+      this.errorMessage = 'No se pudo cargar el listado de plataformas.';
+      this.loading = false;
     }
+  });
+}
 
-    this.loadPlatforms();
+applyFilter(): void {
+  this.currentPage = 0;
+  this.loadPlatforms();
+}
+
+sort(field: string): void {
+  if (this.sortField === field) {
+    this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    this.sortField = field;
+    this.sortDir = 'asc';
   }
+
+  this.currentPage = 0;
+  this.loadPlatforms();
+}
 
   getSortIcon(field: string): string {
     if (this.sortField !== field) {
@@ -181,5 +211,19 @@ confirmDelete(): void {
       this.cancelDelete();
     }
   });
+}
+
+goToPreviousPage(): void {
+  if (this.currentPage > 0) {
+    this.currentPage--;
+    this.loadPlatforms();
+  }
+}
+
+goToNextPage(): void {
+  if (this.currentPage < this.totalPages - 1) {
+    this.currentPage++;
+    this.loadPlatforms();
+  }
 }
 }

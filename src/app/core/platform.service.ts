@@ -3,10 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-export interface PlatformDto {
-  id?: string;
-  name: string;
-  description: string;
+
+export interface PageResponseDto<T> {
+  content: T[];
+  page: number;
+  size: number;
+  total_elements: number;
+  total_pages: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -14,8 +17,16 @@ export class PlatformService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiBaseUrl}/api/platform`;
 
-getAll(search?: string, sortField?: string, sortDir?: string): Observable<PlatformDto[]> {
-  let params = new HttpParams();
+getAll(
+  search?: string,
+  sortField?: string,
+  sortDir?: string,
+  page: number = 0,
+  size: number = 10
+): Observable<PageResponseDto<PlatformDto>> {
+  let params = new HttpParams()
+    .set('page', page)
+    .set('size', size);
 
   if (search && search.trim()) {
     params = params.set('search', search.trim());
@@ -29,7 +40,7 @@ getAll(search?: string, sortField?: string, sortDir?: string): Observable<Platfo
     params = params.set('sortDir', sortDir);
   }
 
-  return this.http.get<PlatformDto[]>(`${this.baseUrl}/all`, { params });
+  return this.http.get<PageResponseDto<PlatformDto>>(`${this.baseUrl}/all`, { params });
 }
 
   getById(id: string): Observable<PlatformDto> {
