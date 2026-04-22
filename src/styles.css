@@ -207,20 +207,18 @@ button {
   max-width: 420px;
 }
 
-tbody tr {
+.table tbody tr {
   transition: background-color 0.2s ease;
-    border-bottom: 1px solid #e5e7eb;
 }
 
-tbody tr:hover {
-  background-color: #eef2ff; /* tono azul muy suave */
-  cursor: pointer;
-}
-
-.table tbody tr:nth-child(even) {
+.table tbody tr:nth-child(even) td {
   background-color: #f9fafb;
 }
 
-.table tbody tr:nth-child(odd) {
+.table tbody tr:nth-child(odd) td {
   background-color: #ffffff;
+}
+
+.table tbody tr:hover td {
+  background-color: #eef2ff;
 }
