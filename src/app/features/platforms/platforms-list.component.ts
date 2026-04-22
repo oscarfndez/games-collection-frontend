@@ -48,12 +48,10 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let platform of filteredPlatforms">
-                <td>{{ platform.name }}</td>
+              <tr *ngFor="let platform of filteredPlatforms" (click)="openPlatform(platform.id!)" class="clickable-row">                <td>{{ platform.name }}</td>
                 <td>{{ platform.description }}</td>
                 <td>
                   <div class="actions">
-                    <button class="action-btn" type="button" (click)="view(platform.id!)">Ver</button>
                     <button class="action-btn" type="button" (click)="edit(platform.id!)">Editar</button>
                     <button class="action-btn danger" type="button" (click)="deletePlatform(platform.id!)">Borrar</button>
                   </div>
@@ -135,24 +133,31 @@ export class PlatformsListComponent implements OnInit {
     this.router.navigate(['/platforms', id]);
   }
 
-  edit(id: string): void {
-    this.router.navigate(['/platforms', id, 'edit']);
+edit(event: Event, id: string): void {
+  event.stopPropagation();
+  this.router.navigate(['/platforms', id, 'edit']);
+}
+
+deletePlatform(event: Event, id: string): void {
+  event.stopPropagation();
+
+  const confirmed = window.confirm('¿Seguro que quieres borrar esta plataforma?');
+  if (!confirmed) {
+    return;
   }
 
-  deletePlatform(id: string): void {
-    const confirmed = window.confirm('¿Seguro que quieres borrar esta plataforma?');
-    if (!confirmed) {
-      return;
+  this.platformService.delete(id).subscribe({
+    next: () => {
+      this.successMessage = 'Plataforma eliminada correctamente.';
+      this.loadPlatforms();
+    },
+    error: () => {
+      this.errorMessage = 'No se pudo eliminar la plataforma.';
     }
+  });
+}
 
-    this.platformService.delete(id).subscribe({
-      next: () => {
-        this.successMessage = 'Plataforma eliminada correctamente.';
-        this.loadPlatforms();
-      },
-      error: () => {
-        this.errorMessage = 'No se pudo eliminar la plataforma.';
-      }
-    });
-  }
+openPlatform(id: string): void {
+  this.router.navigate(['/platforms', id]);
+}
 }

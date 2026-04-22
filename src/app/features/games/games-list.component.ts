@@ -55,8 +55,7 @@ import { Router, RouterLink } from '@angular/router';
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let game of filteredGames">
-              <td>
+              <tr *ngFor="let game of filteredGames" (click)="openGame(game.id!)" class="clickable-row">              <td>
                 <img
                   [src]="game.image_url || defaultImage"
                   (error)="onImageError($event)"
@@ -69,7 +68,6 @@ import { Router, RouterLink } from '@angular/router';
                 <td>{{ game.platform_name || game.platform_id }}</td>
                 <td>
                   <div class="actions">
-                    <button class="action-btn" (click)="view(game.id!)">Ver</button>
                     <button class="action-btn" (click)="edit(game.id!)">Editar</button>
                     <button class="action-btn danger" (click)="deleteGame(game.id!)">Borrar</button>
                   </div>
@@ -214,11 +212,14 @@ view(id: string): void {
   this.router.navigate(['/games', id]);
 }
 
-edit(id: string): void {
+edit(event: Event, id: string): void {
+  event.stopPropagation();
   this.router.navigate(['/games', id, 'edit']);
 }
 
-deleteGame(id: string): void {
+deleteGame(event: Event, id: string): void {
+  event.stopPropagation();
+
   const confirmed = window.confirm('¿Seguro que quieres borrar este juego?');
   if (!confirmed) {
     return;
@@ -241,5 +242,9 @@ getSortIcon(field: string): string {
   }
 
   return this.sortDir === 'asc' ? '↑' : '↓';
+}
+
+openGame(id: string): void {
+  this.router.navigate(['/games', id]);
 }
 }

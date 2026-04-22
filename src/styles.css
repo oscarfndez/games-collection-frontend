@@ -207,7 +207,15 @@ button {
   max-width: 420px;
 }
 
+.table tbody tr.clickable-row {
+  cursor: pointer;
+}
+
 .table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table tbody td {
   transition: background-color 0.2s ease;
 }
 
