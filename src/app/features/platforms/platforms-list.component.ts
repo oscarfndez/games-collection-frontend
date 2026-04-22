@@ -52,8 +52,8 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
                 <td>{{ platform.description }}</td>
                 <td>
                   <div class="actions">
-                    <button class="action-btn" type="button" (click)="edit(platform.id!)">Editar</button>
-                    <button class="action-btn danger" type="button" (click)="deletePlatform(platform.id!)">Borrar</button>
+                    <button class="action-btn" (click)="edit($event, platform.id!)">Editar</button>
+                    <button class="action-btn danger" (click)="deletePlatform($event, platform.id!)">Borrar</button>
                   </div>
                 </td>
               </tr>

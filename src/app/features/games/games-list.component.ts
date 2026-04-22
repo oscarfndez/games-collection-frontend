@@ -68,8 +68,8 @@ import { Router, RouterLink } from '@angular/router';
                 <td>{{ game.platform_name || game.platform_id }}</td>
                 <td>
                   <div class="actions">
-                    <button class="action-btn" (click)="edit(game.id!)">Editar</button>
-                    <button class="action-btn danger" (click)="deleteGame(game.id!)">Borrar</button>
+                    <button class="action-btn" (click)="edit($event, game.id!)">Editar</button>
+                    <button class="action-btn danger" (click)="deleteGame($event, game.id!)">Borrar</button>
                   </div>
                  </td>
               </tr>
