@@ -2,11 +2,12 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/auth.service';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink],
+imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   template: `
     <ng-container *ngIf="isAuthenticated(); else loginOnly">
 <header class="topbar" *ngIf="isAuthenticated()">
