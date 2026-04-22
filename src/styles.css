@@ -104,7 +104,6 @@ button {
   border-radius: 6px;
   border: none;
   cursor: pointer;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,6 +164,17 @@ button {
 
 .table th {
   background: #f9fafb;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+.table td .actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .status-error {
