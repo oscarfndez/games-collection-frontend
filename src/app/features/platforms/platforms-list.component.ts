@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { PlatformDto, PlatformService } from '../../core/platform.service';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, ConfirmDialogComponent],
   template: `
     <div class="page-container">
       <div class="card">
@@ -48,12 +49,13 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let platform of filteredPlatforms" (click)="openPlatform(platform.id!)" class="clickable-row">                <td>{{ platform.name }}</td>
+              <tr *ngFor="let platform of filteredPlatforms" (click)="openPlatform(platform.id!)" class="clickable-row">
+                <td>{{ platform.name }}</td>
                 <td>{{ platform.description }}</td>
                 <td>
                   <div class="actions">
                     <button class="action-btn" (click)="edit($event, platform.id!)">Editar</button>
-                    <button class="action-btn danger" (click)="deletePlatform($event, platform.id!)">Borrar</button>
+                    <button class="action-btn danger" type="button" (click)="deletePlatform($event, platform.id!, platform.name)">Borrar</button>
                   </div>
                 </td>
               </tr>
@@ -70,6 +72,13 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
         </ng-template>
       </div>
     </div>
+    <app-confirm-dialog
+      [open]="confirmDeleteOpen"
+      title="Eliminar plataforma"
+      [message]="'¿Seguro que quieres eliminar la plataforma &quot;' + platformNameToDelete + '&quot;?'"
+      (cancel)="cancelDelete()"
+      (confirm)="confirmDelete()">
+    </app-confirm-dialog>
   `
 })
 export class PlatformsListComponent implements OnInit {
@@ -84,6 +93,9 @@ export class PlatformsListComponent implements OnInit {
   searchTerm = '';
   sortField = 'name';
   sortDir = 'asc';
+  confirmDeleteOpen = false;
+  platformIdToDelete: string | null = null;
+  platformNameToDelete = '';
 
   ngOnInit(): void {
     this.loadPlatforms();
@@ -138,26 +150,37 @@ edit(event: Event, id: string): void {
   this.router.navigate(['/platforms', id, 'edit']);
 }
 
-deletePlatform(event: Event, id: string): void {
+deletePlatform(event: Event, id: string, name: string): void {
   event.stopPropagation();
-
-  const confirmed = window.confirm('¿Seguro que quieres borrar esta plataforma?');
-  if (!confirmed) {
-    return;
-  }
-
-  this.platformService.delete(id).subscribe({
-    next: () => {
-      this.successMessage = 'Plataforma eliminada correctamente.';
-      this.loadPlatforms();
-    },
-    error: () => {
-      this.errorMessage = 'No se pudo eliminar la plataforma.';
-    }
-  });
+  this.platformIdToDelete = id;
+  this.platformNameToDelete = name;
+  this.confirmDeleteOpen = true;
 }
 
 openPlatform(id: string): void {
   this.router.navigate(['/platforms', id]);
+}
+cancelDelete(): void {
+  this.confirmDeleteOpen = false;
+  this.platformIdToDelete = null;
+  this.platformNameToDelete = '';
+}
+
+confirmDelete(): void {
+  if (!this.platformIdToDelete) {
+    return;
+  }
+
+  this.platformService.delete(this.platformIdToDelete).subscribe({
+    next: () => {
+      this.successMessage = 'Plataforma eliminada correctamente.';
+      this.cancelDelete();
+      this.loadPlatforms();
+    },
+    error: () => {
+      this.errorMessage = 'No se pudo eliminar la plataforma.';
+      this.cancelDelete();
+    }
+  });
 }
 }
