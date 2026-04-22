@@ -267,22 +267,6 @@ button {
   gap: 8px;
 }
 
-.section-tabs {
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.section-tabs-content {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  gap: 8px;
-}
-
 .tab-link {
   display: inline-flex;
   align-items: center;
@@ -301,4 +285,49 @@ button {
 .active-tab {
   color: #2563eb;
   border-bottom-color: #2563eb;
+}
+
+.app-shell {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 24px 24px;
+}
+
+.app-panel {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.panel-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 0 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: white;
+}
+
+.tab-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 16px 18px 14px;
+  font-weight: 600;
+  color: #6b7280;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tab-link:hover {
+  color: #111827;
+  background: #f9fafb;
+}
+
+.active-tab {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+}
+
+.panel-content {
+  padding: 24px;
 }

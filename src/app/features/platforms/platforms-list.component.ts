@@ -9,8 +9,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule, ConfirmDialogComponent],
   template: `
-    <div class="page-container">
-      <div class="card">
+      <div>
         <div class="actions" style="justify-content: space-between; align-items: center;">
           <div>
             <h1>Listado de plataformas</h1>
@@ -70,7 +69,6 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
         <ng-template #emptyTpl>
           <p>No hay plataformas registradas.</p>
         </ng-template>
-      </div>
     </div>
     <app-confirm-dialog
       [open]="confirmDeleteOpen"
