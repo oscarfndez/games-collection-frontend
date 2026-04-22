@@ -37,9 +37,20 @@ import { Router, RouterLink } from '@angular/router';
             <thead>
               <tr>
                 <th>Imagen</th>
-                <th (click)="sort('name')" style="cursor: pointer;">Nombre</th>
-                <th (click)="sort('description')" style="cursor: pointer;">Descripción</th>
-                <th (click)="sort('platform')" style="cursor: pointer;">Plataforma</th>
+                <th (click)="sort('name')" class="sortable-header">
+                  <span>Nombre</span>
+                  <span class="sort-icon">{{ getSortIcon('name') }}</span>
+                </th>
+
+                <th (click)="sort('description')" class="sortable-header">
+                  <span>Descripción</span>
+                  <span class="sort-icon">{{ getSortIcon('description') }}</span>
+                </th>
+
+                <th (click)="sort('platform')" class="sortable-header">
+                  <span>Plataforma</span>
+                  <span class="sort-icon">{{ getSortIcon('platform') }}</span>
+                </th>
                 <th style="width: 240px;">Acciones</th>
               </tr>
             </thead>
@@ -222,5 +233,13 @@ deleteGame(id: string): void {
       this.errorMessage = 'No se pudo eliminar el juego.';
     }
   });
+}
+
+getSortIcon(field: string): string {
+  if (this.sortField !== field) {
+    return '↕';
+  }
+
+  return this.sortDir === 'asc' ? '↑' : '↓';
 }
 }
