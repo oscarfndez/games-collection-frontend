@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PlatformDto, PlatformService } from '../../core/platform.service';
+import { PlatformDto, PlatformService } from '../../../core/platform.service';
 
 @Component({
   standalone: true,

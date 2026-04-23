@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { GameDto, GameService } from '../../core/game.service';
+import { GameDto, GameService } from '../../../core/game.service';
 
 @Component({
   standalone: true,
