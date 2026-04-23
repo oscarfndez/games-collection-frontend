@@ -1,8 +1,13 @@
+/* =========================
+   Reset / base
+========================= */
+
 * {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background: #f5f7fb;
@@ -18,18 +23,44 @@ button {
   cursor: pointer;
 }
 
+/* =========================
+   Layout general
+========================= */
+
 .page-container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 24px;
 }
 
-.card {
+.app-shell {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 24px 24px;
+}
+
+.card,
+.app-panel {
   background: white;
   border-radius: 12px;
-  padding: 24px;
   box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
 }
+
+.card {
+  padding: 24px;
+}
+
+.app-panel {
+  overflow: hidden;
+}
+
+.panel-content {
+  padding: 24px;
+}
+
+/* =========================
+   Formularios
+========================= */
 
 .form-grid {
   display: grid;
@@ -61,19 +92,9 @@ button {
   resize: vertical;
 }
 
-.actions {
-  display: flex;
-  gap: 8px;
-}
-
-.actions button {
-  flex: 1;              /* todos igual de anchos */
-  height: 36px;         /* misma altura */
-  padding: 0 12px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
+/* =========================
+   Botones
+========================= */
 
 .btn {
   border: none;
@@ -97,35 +118,14 @@ button {
   color: white;
 }
 
-.action-btn {
-  flex: 1;
-  height: 36px;
-  padding: 0 12px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
+.actions {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 8px;
 }
 
-.action-btn {
-  background-color: #e5e7eb;
-  color: #1f2937;
-}
-
-.action-btn:hover {
-  background-color: #d1d5db;
-}
-
-.action-btn.danger {
-  background-color: #ef4444;
-  color: white;
-}
-
-.action-btn.danger:hover {
-  background-color: #dc2626;
-}
+/* =========================
+   Topbar
+========================= */
 
 .topbar {
   background: #111827;
@@ -142,163 +142,15 @@ button {
   align-items: center;
 }
 
-.table-wrapper {
-  overflow-x: auto;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.table th,
-.table td {
-  padding: 14px;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: left;
-  vertical-align: top;
-}
-
-.table th {
-  background: #f9fafb;
-}
-
-.table td,
-.table th {
-  vertical-align: middle;
-}
-
-.table td .actions {
+.topbar-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.status-error {
-  background: #fee2e2;
-  color: #991b1b;
-  padding: 12px;
-  border-radius: 8px;
-}
-
-.status-success {
-  background: #dcfce7;
-  color: #166534;
-  padding: 12px;
-  border-radius: 8px;
-}
-
-.muted {
-  color: #6b7280;
-}
-
-.login-wrapper {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-}
-
-.login-card {
-  width: 100%;
-  max-width: 420px;
-}
-
-.table tbody tr.clickable-row {
-  cursor: pointer;
-}
-
-.table tbody tr {
-  transition: background-color 0.2s ease;
-}
-
-.table tbody td {
-  transition: background-color 0.2s ease;
-}
-
-.table tbody tr:nth-child(even) td {
-  background-color: #f9fafb;
-}
-
-.table tbody tr:nth-child(odd) td {
-  background-color: #ffffff;
-}
-
-.table tbody tr:hover td {
-  background-color: #eef2ff;
-}
-
-.dialog-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(17, 24, 39, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  z-index: 1000;
-}
-
-.dialog-card {
-  width: 100%;
-  max-width: 420px;
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
-}
-
-.dialog-card h2 {
-  margin-top: 0;
-  margin-bottom: 12px;
-}
-
-.dialog-card p {
-  margin: 0 0 20px;
-  color: #4b5563;
-}
-
-.dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.tab-link {
-  display: inline-flex;
-  align-items: center;
-  padding: 14px 18px;
-  font-weight: 600;
-  color: #4b5563;
-  border-bottom: 3px solid transparent;
-  transition: all 0.2s ease;
-}
-
-.tab-link:hover {
-  color: #111827;
-  background: #f9fafb;
-}
-
-.active-tab {
-  color: #2563eb;
-  border-bottom-color: #2563eb;
-}
-
-.app-shell {
-  max-width: 1100px;
-  margin: 24px auto;
-  padding: 0 24px 24px;
-}
-
-.app-panel {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
-  overflow: hidden;
-}
+/* =========================
+   Tabs
+========================= */
 
 .panel-tabs {
   display: flex;
@@ -328,9 +180,57 @@ button {
   border-bottom-color: #2563eb;
 }
 
-.panel-content {
-  padding: 24px;
+/* =========================
+   Tablas
+========================= */
+
+.table-wrapper {
+  overflow-x: auto;
 }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table th {
+  background: #f9fafb;
+}
+
+.table td {
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr.clickable-row {
+  cursor: pointer;
+}
+
+.table tbody tr:nth-child(even) td {
+  background-color: #f9fafb;
+}
+
+.table tbody tr:nth-child(odd) td {
+  background-color: #ffffff;
+}
+
+.table tbody tr:hover td {
+  background-color: #eef2ff;
+}
+
+/* =========================
+   Columna acciones en tablas
+========================= */
 
 .actions-col,
 .actions-cell {
@@ -338,7 +238,6 @@ button {
 }
 
 .actions-cell {
-  width: 56px;
   padding-left: 8px;
   padding-right: 8px;
 }
@@ -357,6 +256,10 @@ button {
   opacity: 1;
   pointer-events: auto;
 }
+
+/* =========================
+   Icon buttons
+========================= */
 
 .icon-btn {
   width: 22px;
@@ -394,125 +297,87 @@ button {
   color: #dc2626;
 }
 
-.table tbody tr.clickable-row {
-  cursor: pointer;
+/* =========================
+   Estados
+========================= */
+
+.status-error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 12px;
+  border-radius: 8px;
 }
 
-.table tbody tr:nth-child(even) td {
-  background-color: #f9fafb;
+.status-success {
+  background: #dcfce7;
+  color: #166534;
+  padding: 12px;
+  border-radius: 8px;
 }
 
-.table tbody tr:nth-child(odd) td {
-  background-color: #ffffff;
+.muted {
+  color: #6b7280;
 }
 
-.table tbody tr:hover td {
-  background-color: #eef2ff;
+/* =========================
+   Login
+========================= */
+
+.login-wrapper {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
 }
 
-.topbar-actions {
+.login-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* =========================
+   Dialog / modal
+========================= */
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.45);
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.menu-container {
-  position: relative;
-}
-
-.menu-toggle-btn {
-  width: 40px;
-  height: 40px;
-  border: none;
-  background: transparent;
-  color: white;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
+  padding: 24px;
+  z-index: 1000;
 }
 
-.menu-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.menu-toggle-btn svg {
-  width: 20px;
-  height: 20px;
-  fill: currentColor;
-}
-
-.app-tile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 10px;
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;  text-align: center;
-  transition: background-color 0.15s ease, transform 0.15s ease;
-}
-
-.app-tile:hover {
-  background: #f3f4f6;
-  transform: translateY(-1px);
-}
-
-.app-tile img {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
+.dialog-card {
+  width: 100%;
+  max-width: 420px;
+  background: white;
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
 }
 
-.app-tile span {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1f2937;
+.dialog-card h2 {
+  margin-top: 0;
+  margin-bottom: 12px;
 }
 
-.user-info {
+.dialog-card p {
+  margin: 0 0 20px;
+  color: #4b5563;
+}
+
+.dialog-actions {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-right: 12px;
-  line-height: 1.2;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
-.user-email {
-  font-size: 13px;
-  font-weight: 600;
-  color: white;
-}
-
-.user-role {
-  font-size: 11px;
-  color: #d1d5db;
-}
-
-.user-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  background: #2563eb;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  margin-right: 8px;
-}
-
-.topbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+/* =========================
+   Menú superior desplegable
+========================= */
 
 .menu-container {
   position: relative;
@@ -528,7 +393,6 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
