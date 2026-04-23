@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/auth.service';
 import { UserService, WhoAmI } from './core/user.service';
@@ -15,16 +15,12 @@ import { UserService, WhoAmI } from './core/user.service';
           <strong>Game Collection</strong>
         </div>
 
-<div class="user-avatar">
-  {{ user?.email?.charAt(0).toUpperCase() }}
-</div>
-
-<div class="user-info" *ngIf="user">
-  <span class="user-email">{{ user.email }}</span>
-  <span class="user-role">{{ user.role }}</span>
-</div>
-
         <div class="topbar-actions">
+          <div class="user-info" *ngIf="user">
+            <span class="user-email">{{ user.email }}</span>
+            <span class="user-role">{{ roleLabel }}</span>
+          </div>
+
           <button class="btn btn-danger" type="button" (click)="logout()">Cerrar sesión</button>
 
           <div class="menu-container">
@@ -54,17 +50,17 @@ import { UserService, WhoAmI } from './core/user.service';
               </a>
 
               <a class="app-tile" routerLink="/users" (click)="closeAppsMenu()">
-                <img [src]="usersIcon" alt="Usuarios" />
+                <img [src]="profileIcon" alt="Usuarios" />
                 <span>Usuarios</span>
               </a>
 
               <a class="app-tile" routerLink="/inventory" (click)="closeAppsMenu()">
-                <img [src]="inventoryIcon" alt="Inventario" />
+                <img [src]="profileIcon" alt="Inventario" />
                 <span>Inventario</span>
               </a>
 
               <a class="app-tile" routerLink="/collection" (click)="closeAppsMenu()">
-                <img [src]="gamesIcon" alt="Colección" />
+                <img [src]="profileIcon" alt="Colección" />
                 <span>Colección</span>
               </a>
             </div>
@@ -76,15 +72,20 @@ import { UserService, WhoAmI } from './core/user.service';
     <router-outlet></router-outlet>
   `
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   private readonly authService = inject(AuthService);
+  private readonly userService = inject(UserService);
 
   appsMenuOpen = false;
+  user: WhoAmI | null = null;
 
   profileIcon = 'assets/images/profile.png';
-  usersIcon = 'assets/images/users.png';
-  inventoryIcon = 'assets/images/inventory.png';
-  gamesIcon = 'assets/images/games.png';
+
+  ngOnInit(): void {
+    if (this.isAuthenticated()) {
+      this.loadUser();
+    }
+  }
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
@@ -92,6 +93,25 @@ export class AppComponent {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  loadUser(): void {
+    this.userService.whoAmI().subscribe({
+      next: (user) => {
+        this.user = user;
+      },
+      error: () => {
+        this.user = null;
+      }
+    });
+  }
+
+  get roleLabel(): string {
+    if (!this.user?.role) {
+      return '';
+    }
+
+    return this.user.role.replace('ROLE_', '');
   }
 
   toggleAppsMenu(event: Event): void {
@@ -102,19 +122,6 @@ export class AppComponent {
   closeAppsMenu(): void {
     this.appsMenuOpen = false;
   }
-
-ngOnInit(): void {
-  if (this.isAuthenticated()) {
-    this.loadUser();
-  }
-}
-
-loadUser(): void {
-  this.userService.whoAmI().subscribe({
-    next: (user) => this.user = user,
-    error: () => this.user = null
-  });
-}
 
   @HostListener('document:click')
   onDocumentClick(): void {
