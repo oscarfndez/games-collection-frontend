@@ -70,7 +70,11 @@ export class AppComponent {
   private readonly authService = inject(AuthService);
 
   appsMenuOpen = false;
+
   menuIcon = 'assets/images/profile.png'; // o el icono que quieras reutilizar
+  menuIcon = 'assets/images/users.png'; // o el icono que quieras reutilizar
+  menuIcon = 'assets/images/inventory.png'; // o el icono que quieras reutilizar
+  menuIcon = 'assets/images/games.png'; // o el icono que quieras reutilizar
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
