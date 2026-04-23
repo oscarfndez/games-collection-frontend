@@ -43,15 +43,6 @@ import { UserService, WhoAmI } from './core/user.service';
   </div>
 
   <div class="apps-grid">
-    <a class="app-tile" routerLink="/profile" (click)="closeAppsMenu()">
-      <img [src]="profileIcon" alt="Perfil" />
-      <span>Perfil</span>
-    </a>
-
-    <a class="app-tile" routerLink="/users" (click)="closeAppsMenu()">
-      <img [src]="profileIcon" alt="Usuarios" />
-      <span>Usuarios</span>
-    </a>
 
     <a class="app-tile" routerLink="/inventory" (click)="closeAppsMenu()">
       <img [src]="inventoryIcon" alt="Inventario" />
@@ -62,13 +53,19 @@ import { UserService, WhoAmI } from './core/user.service';
       <img [src]="gamesIcon" alt="Colección" />
       <span>Colección</span>
     </a>
+
+    <a class="app-tile" routerLink="/users" (click)="closeAppsMenu()">
+      <img [src]="usersIcon" alt="Usuarios" />
+      <span>Usuarios</span>
+    </a>
+
+    <a class="app-tile" (click)="logoutFromMenu()">
+      <img [src]="exitIcon" alt="Salir" />
+      <span>Salir</span>
+    </a>
+
   </div>
 
-  <div class="apps-footer">
-    <button class="btn btn-danger" type="button" (click)="logoutFromMenu()">
-      Cerrar sesión
-    </button>
-  </div>
 </div>
 
 
@@ -91,6 +88,7 @@ export class AppComponent implements OnInit {
   usersIcon = 'assets/images/users.png';
   inventoryIcon = 'assets/images/inventory.png';
   gamesIcon = 'assets/images/games.png';
+  exitIcon = 'assets/images/exit.png';
 
   ngOnInit(): void {
     if (this.isAuthenticated()) {
