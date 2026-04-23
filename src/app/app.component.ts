@@ -102,7 +102,7 @@ export class AppComponent {
   appsMenuOpen = false;
 
   menuIcon = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
-  profileIcon = '../../images/profile-icon.png';
+  profileIcon = 'https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/blue_dark_grey/64x64/plain/book2.png';
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
