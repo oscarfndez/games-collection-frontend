@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/auth.service';
+import { UserService, WhoAmI } from './core/user.service';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,15 @@ import { AuthService } from './core/auth.service';
         <div>
           <strong>Game Collection</strong>
         </div>
+
+<div class="user-avatar">
+  {{ user?.email?.charAt(0).toUpperCase() }}
+</div>
+
+<div class="user-info" *ngIf="user">
+  <span class="user-email">{{ user.email }}</span>
+  <span class="user-role">{{ user.role }}</span>
+</div>
 
         <div class="topbar-actions">
           <button class="btn btn-danger" type="button" (click)="logout()">Cerrar sesión</button>
@@ -92,6 +102,19 @@ export class AppComponent {
   closeAppsMenu(): void {
     this.appsMenuOpen = false;
   }
+
+ngOnInit(): void {
+  if (this.isAuthenticated()) {
+    this.loadUser();
+  }
+}
+
+loadUser(): void {
+  this.userService.whoAmI().subscribe({
+    next: (user) => this.user = user,
+    error: () => this.user = null
+  });
+}
 
   @HostListener('document:click')
   onDocumentClick(): void {

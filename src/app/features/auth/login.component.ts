@@ -34,6 +34,7 @@ import { AuthService } from '../../core/auth.service';
     </div>
   `
 })
+
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
@@ -68,4 +69,6 @@ export class LoginComponent {
       }
     });
   }
+
+
 }
