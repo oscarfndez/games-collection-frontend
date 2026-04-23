@@ -105,7 +105,7 @@ export class AppComponent {
   profileIcon = 'assets/images/profile.png';
   usersIcon = 'assets/images/users.png';
   inventoryIcon = 'assets/images/inventory.png';
-  gamesIcon = 'assets/images/mes.png';
+  gamesIcon = 'assets/images/games.png';
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
