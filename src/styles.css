@@ -54,6 +54,48 @@ button {
   overflow: hidden;
 }
 
+.apps-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 260px;
+  background: white;
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+
+  transform-origin: top right;
+  animation: appsPanelIn 0.16s ease-out;
+}
+
+@keyframes appsPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.app-tile {
+  animation: appTileIn 0.18s ease-out;
+}
+
+@keyframes appTileIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .panel-content {
   padding: 24px;
 }

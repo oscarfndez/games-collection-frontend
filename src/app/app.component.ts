@@ -54,12 +54,12 @@ import { UserService, WhoAmI } from './core/user.service';
     </a>
 
     <a class="app-tile" routerLink="/inventory" (click)="closeAppsMenu()">
-      <img [src]="profileIcon" alt="Inventario" />
+      <img [src]="inventoryIcon" alt="Inventario" />
       <span>Inventario</span>
     </a>
 
     <a class="app-tile" routerLink="/collection" (click)="closeAppsMenu()">
-      <img [src]="profileIcon" alt="Colección" />
+      <img [src]="gamesIcon" alt="Colección" />
       <span>Colección</span>
     </a>
   </div>
@@ -88,6 +88,9 @@ export class AppComponent implements OnInit {
   user: WhoAmI | null = null;
 
   profileIcon = 'assets/images/profile.png';
+  usersIcon = 'assets/images/users.png';
+  inventoryIcon = 'assets/images/inventory.png';
+  gamesIcon = 'assets/images/games.png';
 
   ngOnInit(): void {
     if (this.isAuthenticated()) {
