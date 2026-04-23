@@ -24,7 +24,7 @@ import { PlatformDto, PlatformService } from '../../../core/platform.service';
 
         <div class="actions" style="margin-top: 24px;">
           <a class="btn btn-secondary" routerLink="/inventory/platforms">Volver</a>
-          <a class="btn btn-primary" [routerLink]="['/inventory', /platforms', platform.id, 'edit']">Editar</a>
+          <a class="btn btn-primary" [routerLink]="['/inventory', '/platforms', platform.id, 'edit']">Editar</a>
         </div>
       </div>
 
