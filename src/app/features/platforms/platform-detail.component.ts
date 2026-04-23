@@ -13,7 +13,7 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
 
           <div style="margin-top: 8px;">
             <img
-              [src]="form.controls.image_url.value || defaultImage"
+            [src]="platform.image_url || defaultImage"
               (error)="onImageError($event)"
               alt="Vista previa de la imagen de la plataforma"
               style="max-width: 260px; width: 100%; border-radius: 12px; border: 1px solid #d0d7e2;"
@@ -44,6 +44,7 @@ export class PlatformDetailComponent implements OnInit {
   platform?: PlatformDto;
   loading = true;
   errorMessage = '';
+  defaultImage = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -64,4 +65,9 @@ export class PlatformDetailComponent implements OnInit {
       }
     });
   }
+
+onImageError(event: Event): void {
+  (event.target as HTMLImageElement).src = this.defaultImage;
+}
+
 }
