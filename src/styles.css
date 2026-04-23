@@ -523,3 +523,129 @@ button {
   font-weight: 600;
   margin-right: 8px;
 }
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-container {
+  position: relative;
+}
+
+.menu-toggle-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: white;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.menu-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.menu-toggle-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.apps-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 320px;
+  background: white;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+  z-index: 1000;
+}
+
+.apps-user-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.apps-user-avatar {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.apps-user-meta {
+  min-width: 0;
+}
+
+.apps-user-email {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  word-break: break-word;
+}
+
+.apps-user-role {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.app-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 10px;
+  border-radius: 12px;
+  text-align: center;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.app-tile:hover {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+}
+
+.app-tile img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.app-tile span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.apps-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px solid #e5e7eb;
+}

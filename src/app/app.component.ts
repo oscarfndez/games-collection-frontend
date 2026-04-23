@@ -16,13 +16,6 @@ import { UserService, WhoAmI } from './core/user.service';
         </div>
 
         <div class="topbar-actions">
-          <div class="user-info" *ngIf="user">
-            <span class="user-email">{{ user.email }}</span>
-            <span class="user-role">{{ roleLabel }}</span>
-          </div>
-
-          <button class="btn btn-danger" type="button" (click)="logout()">Cerrar sesión</button>
-
           <div class="menu-container">
             <button
               class="menu-toggle-btn"
@@ -44,25 +37,41 @@ import { UserService, WhoAmI } from './core/user.service';
             </button>
 
             <div class="apps-panel" *ngIf="appsMenuOpen" (click)="$event.stopPropagation()">
-              <a class="app-tile" routerLink="/profile" (click)="closeAppsMenu()">
-                <img [src]="profileIcon" alt="Perfil" />
-                <span>Perfil</span>
-              </a>
+              <div class="apps-user-header" *ngIf="user">
+                <img class="apps-user-avatar" [src]="profileIcon" alt="Usuario" />
+                <div class="apps-user-meta">
+                  <div class="apps-user-email">{{ user.email }}</div>
+                  <div class="apps-user-role">{{ roleLabel }}</div>
+                </div>
+              </div>
 
-              <a class="app-tile" routerLink="/users" (click)="closeAppsMenu()">
-                <img [src]="profileIcon" alt="Usuarios" />
-                <span>Usuarios</span>
-              </a>
+              <div class="apps-grid">
+                <a class="app-tile" routerLink="/profile" (click)="closeAppsMenu()">
+                  <img [src]="profileIcon" alt="Perfil" />
+                  <span>Perfil</span>
+                </a>
 
-              <a class="app-tile" routerLink="/inventory" (click)="closeAppsMenu()">
-                <img [src]="profileIcon" alt="Inventario" />
-                <span>Inventario</span>
-              </a>
+                <a class="app-tile" routerLink="/users" (click)="closeAppsMenu()">
+                  <img [src]="profileIcon" alt="Usuarios" />
+                  <span>Usuarios</span>
+                </a>
 
-              <a class="app-tile" routerLink="/collection" (click)="closeAppsMenu()">
-                <img [src]="profileIcon" alt="Colección" />
-                <span>Colección</span>
-              </a>
+                <a class="app-tile" routerLink="/inventory" (click)="closeAppsMenu()">
+                  <img [src]="profileIcon" alt="Inventario" />
+                  <span>Inventario</span>
+                </a>
+
+                <a class="app-tile" routerLink="/collection" (click)="closeAppsMenu()">
+                  <img [src]="profileIcon" alt="Colección" />
+                  <span>Colección</span>
+                </a>
+              </div>
+
+              <div class="apps-footer">
+                <button class="btn btn-danger" type="button" (click)="logoutFromMenu()">
+                  Cerrar sesión
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -91,10 +100,6 @@ export class AppComponent implements OnInit {
     return this.authService.isAuthenticated();
   }
 
-  logout(): void {
-    this.authService.logout();
-  }
-
   loadUser(): void {
     this.userService.whoAmI().subscribe({
       next: (user) => {
@@ -121,6 +126,15 @@ export class AppComponent implements OnInit {
 
   closeAppsMenu(): void {
     this.appsMenuOpen = false;
+  }
+
+  logout(): void {
+    this.authService.logout();
+  }
+
+  logoutFromMenu(): void {
+    this.closeAppsMenu();
+    this.logout();
   }
 
   @HostListener('document:click')
