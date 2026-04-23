@@ -233,12 +233,12 @@ export class GamesListComponent implements OnInit {
   }
 
 view(id: string): void {
-  this.router.navigate(['/games', id]);
+  this.router.navigate(['/inventory', '/games', id]);
 }
 
 edit(event: Event, id: string): void {
   event.stopPropagation();
-  this.router.navigate(['/games', id, 'edit']);
+  this.router.navigate(['/inventory', '/games', id, 'edit']);
 }
 
 deleteGame(event: Event, id: string, name: string): void {
@@ -257,7 +257,7 @@ getSortIcon(field: string): string {
 }
 
 openGame(id: string): void {
-  this.router.navigate(['/games', id]);
+  this.router.navigate(['/inventory', '/games', id]);
 }
 
 cancelDelete(): void {

@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterOutlet, RouterLink],
   template: `
     <header class="topbar" *ngIf="isAuthenticated()">
       <div class="topbar-content">
@@ -39,22 +39,22 @@ import { AuthService } from './core/auth.service';
 
             <div class="apps-panel" *ngIf="appsMenuOpen" (click)="$event.stopPropagation()">
               <a class="app-tile" routerLink="/profile" (click)="closeAppsMenu()">
-                <img [src]="profileIcon" alt="Perfil" />
+                <img [src]="menuIcon" alt="Perfil" />
                 <span>Perfil</span>
               </a>
 
               <a class="app-tile" routerLink="/users" (click)="closeAppsMenu()">
-                <img [src]="usersIcon" alt="Usuarios" />
+                <img [src]="menuIcon" alt="Usuarios" />
                 <span>Usuarios</span>
               </a>
 
               <a class="app-tile" routerLink="/inventory" (click)="closeAppsMenu()">
-                <img [src]="inventoryIcon" alt="Inventario" />
+                <img [src]="menuIcon" alt="Inventario" />
                 <span>Inventario</span>
               </a>
 
               <a class="app-tile" routerLink="/collection" (click)="closeAppsMenu()">
-                <img [src]="gamesIcon" alt="Colección" />
+                <img [src]="menuIcon" alt="Colección" />
                 <span>Colección</span>
               </a>
             </div>
@@ -63,49 +63,14 @@ import { AuthService } from './core/auth.service';
       </div>
     </header>
 
-    <ng-container *ngIf="isAuthenticated(); else authContent">
-      <main class="app-shell">
-        <div class="app-panel">
-          <nav class="panel-tabs">
-            <a
-              routerLink="/games"
-              routerLinkActive="active-tab"
-              [routerLinkActiveOptions]="{ exact: false }"
-              class="tab-link">
-              Juegos
-            </a>
-
-            <a
-              routerLink="/platforms"
-              routerLinkActive="active-tab"
-              [routerLinkActiveOptions]="{ exact: false }"
-              class="tab-link">
-              Plataformas
-            </a>
-          </nav>
-
-          <div class="panel-content">
-            <router-outlet></router-outlet>
-          </div>
-        </div>
-      </main>
-    </ng-container>
-
-    <ng-template #authContent>
-      <router-outlet></router-outlet>
-    </ng-template>
+    <router-outlet></router-outlet>
   `
 })
 export class AppComponent {
   private readonly authService = inject(AuthService);
 
   appsMenuOpen = false;
-
-  menuIcon = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
-  profileIcon = 'assets/images/profile.png';
-  usersIcon = 'assets/images/users.png';
-  inventoryIcon = 'assets/images/inventory.png';
-  gamesIcon = 'assets/images/games.png';
+  menuIcon = 'assets/images/profile.png'; // o el icono que quieras reutilizar
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();

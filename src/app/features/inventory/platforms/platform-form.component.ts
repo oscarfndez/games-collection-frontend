@@ -140,11 +140,11 @@ export class PlatformFormComponent implements OnInit {
 
   goBack(): void {
     if (this.platformId) {
-      this.router.navigate(['/platforms', this.platformId]);
+      this.router.navigate(['/inventory', '/platforms', this.platformId]);
       return;
     }
 
-    this.router.navigate(['/platforms']);
+    this.router.navigate(['/inventory', '/platforms']);
   }
 
   onImageError(event: Event): void {

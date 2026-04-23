@@ -167,11 +167,11 @@ loadPlatforms(): void {
 
   goBack(): void {
     if (this.gameId) {
-      this.router.navigate(['/games', this.gameId]);
+      this.router.navigate(['/inventory', '/games', this.gameId]);
       return;
     }
 
-    this.router.navigate(['/games']);
+    this.router.navigate(['/inventory', '/games']);
   }
 
 

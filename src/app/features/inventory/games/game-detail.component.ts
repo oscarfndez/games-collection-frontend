@@ -24,8 +24,8 @@ import { GameDto, GameService } from '../../core/game.service';
         <p><strong>Plataforma:</strong> {{ game.platform_name }}</p>
 
         <div class="actions" style="margin-top: 24px;">
-          <a class="btn btn-secondary" routerLink="/games">Volver</a>
-          <a class="btn btn-primary" [routerLink]="['/games', game.id, 'edit']">Editar</a>
+          <a class="btn btn-secondary" routerLink="/inventory/games">Volver</a>
+          <a class="btn btn-primary" [routerLink]="['/inventory/games', game.id, 'edit']">Editar</a>
         </div>
       </div>
 
