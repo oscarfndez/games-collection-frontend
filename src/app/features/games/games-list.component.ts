@@ -66,10 +66,10 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
                 <td>{{ game.description }}</td>
                 <td>{{ game.platform_name || game.platform_id }}</td>
                 <td>
-                  <div class="actions">
-                    <button class="action-btn" (click)="edit($event, game.id!)">Editar</button>
-                    <button class="action-btn danger" (click)="deleteGame($event, game.id!, game.name)">Borrar</button>                  </div>
-                 </td>
+            <div class="actions">
+                <button class="icon-btn" (click)="edit($event, game.id!)" title="Editar">✏️</button>
+                <button class="icon-btn danger" (click)="deleteGame($event, game.id!, game.name)" title="Borrar">🗑</button>
+            </div>
               </tr>
             </tbody>
           </table>
@@ -79,8 +79,12 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
             </div>
 
             <div class="actions">
-                <button class="icon-btn" (click)="edit($event, game.id!)" title="Editar">✏️</button>
-                <button class="icon-btn danger" (click)="deleteGame($event, game.id!, game.name)" title="Borrar">🗑</button>
+              <button class="btn btn-secondary" type="button" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
+                Anterior
+              </button>
+              <button class="btn btn-secondary" type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">
+                Siguiente
+              </button>
             </div>
           </div>
         </div>
