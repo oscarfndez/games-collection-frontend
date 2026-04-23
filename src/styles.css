@@ -35,8 +35,8 @@ button {
 
 .app-shell {
   max-width: 1100px;
-  margin: 24px auto;
-  padding: 0 24px 24px;
+  margin: 16px auto; /* reducido */
+  padding: 0 16px 16px;
 }
 
 .card,
@@ -47,7 +47,7 @@ button {
 }
 
 .card {
-  padding: 24px;
+  padding: 20px; /* reducido */
 }
 
 .app-panel {
@@ -55,7 +55,7 @@ button {
 }
 
 .panel-content {
-  padding: 24px;
+  padding: 20px; /* reducido */
 }
 
 /* =========================
@@ -64,12 +64,12 @@ button {
 
 .form-grid {
   display: grid;
-  gap: 16px;
+  gap: 12px; /* reducido */
 }
 
 .form-field {
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 
 .form-field label {
@@ -80,7 +80,7 @@ button {
 .form-field textarea,
 .form-field select {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   border: 1px solid #d0d7e2;
   border-radius: 8px;
   font-size: 14px;
@@ -88,7 +88,7 @@ button {
 }
 
 .form-field textarea {
-  min-height: 120px;
+  min-height: 100px;
   resize: vertical;
 }
 
@@ -99,8 +99,9 @@ button {
 .btn {
   border: none;
   border-radius: 8px;
-  padding: 12px 18px;
+  padding: 10px 16px;
   font-weight: 600;
+  font-size: 13px;
 }
 
 .btn-primary {
@@ -120,7 +121,7 @@ button {
 
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 /* =========================
@@ -130,7 +131,7 @@ button {
 .topbar {
   background: #111827;
   color: white;
-  padding: 16px 24px;
+  padding: 12px 20px; /* reducido */
 }
 
 .topbar-content {
@@ -138,14 +139,13 @@ button {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  gap: 16px;
   align-items: center;
 }
 
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 /* =========================
@@ -154,25 +154,22 @@ button {
 
 .panel-tabs {
   display: flex;
-  gap: 8px;
-  padding: 0 24px;
+  gap: 4px;
+  padding: 0 16px;
   border-bottom: 1px solid #e5e7eb;
-  background: white;
 }
 
 .tab-link {
-  display: inline-flex;
-  align-items: center;
-  padding: 16px 18px 14px;
+  padding: 12px 14px;
   font-weight: 600;
+  font-size: 13px;
   color: #6b7280;
   border-bottom: 3px solid transparent;
-  transition: all 0.2s ease;
 }
 
 .tab-link:hover {
-  color: #111827;
   background: #f9fafb;
+  color: #111827;
 }
 
 .active-tab {
@@ -198,18 +195,13 @@ button {
 
 .table th,
 .table td {
-  padding: 14px;
+  padding: 10px;
   border-bottom: 1px solid #e5e7eb;
-  text-align: left;
-  vertical-align: middle;
+  font-size: 13px;
 }
 
 .table th {
   background: #f9fafb;
-}
-
-.table td {
-  transition: background-color 0.2s ease;
 }
 
 .table tbody tr.clickable-row {
@@ -229,30 +221,28 @@ button {
 }
 
 /* =========================
-   Columna acciones en tablas
+   Acciones tabla
 ========================= */
 
 .actions-col,
 .actions-cell {
-  width: 56px;
+  width: 50px;
 }
 
 .actions-cell {
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 6px;
+  padding-right: 6px;
 }
 
 .row-actions {
   display: flex;
   justify-content: flex-end;
-  align-items: center;
   gap: 4px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.15s ease;
 }
 
-.table tbody tr.clickable-row:hover .row-actions {
+.table tbody tr:hover .row-actions {
   opacity: 1;
   pointer-events: auto;
 }
@@ -262,38 +252,29 @@ button {
 ========================= */
 
 .icon-btn {
-  width: 22px;
-  height: 22px;
-  padding: 0;
-  border: none;
+  width: 20px;
+  height: 20px;
   background: transparent;
+  border: none;
   color: #6b7280;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  border-radius: 4px;
 }
 
 .icon-btn svg {
-  width: 22px;
-  height: 22px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  width: 18px;
+  height: 18px;
 }
 
 .icon-btn:hover {
-  background-color: rgba(37, 99, 235, 0.10);
+  background: rgba(37, 99, 235, 0.1);
   color: #2563eb;
-  transform: translateY(-1px);
 }
 
 .icon-btn.danger:hover {
-  background-color: rgba(239, 68, 68, 0.12);
+  background: rgba(239, 68, 68, 0.12);
   color: #dc2626;
 }
 
@@ -304,14 +285,14 @@ button {
 .status-error {
   background: #fee2e2;
   color: #991b1b;
-  padding: 12px;
+  padding: 10px;
   border-radius: 8px;
 }
 
 .status-success {
   background: #dcfce7;
   color: #166534;
-  padding: 12px;
+  padding: 10px;
   border-radius: 8px;
 }
 
@@ -320,23 +301,7 @@ button {
 }
 
 /* =========================
-   Login
-========================= */
-
-.login-wrapper {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-}
-
-.login-card {
-  width: 100%;
-  max-width: 420px;
-}
-
-/* =========================
-   Dialog / modal
+   Dialog
 ========================= */
 
 .dialog-backdrop {
@@ -346,37 +311,16 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  z-index: 1000;
 }
 
 .dialog-card {
-  width: 100%;
-  max-width: 420px;
-  background: white;
+  max-width: 380px;
+  padding: 20px;
   border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
-}
-
-.dialog-card h2 {
-  margin-top: 0;
-  margin-bottom: 12px;
-}
-
-.dialog-card p {
-  margin: 0 0 20px;
-  color: #4b5563;
-}
-
-.dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
 }
 
 /* =========================
-   Menú superior desplegable
+   Menu desplegable
 ========================= */
 
 .menu-container {
@@ -384,101 +328,79 @@ button {
 }
 
 .menu-toggle-btn {
-  width: 40px;
-  height: 40px;
-  border: none;
+  width: 36px;
+  height: 36px;
   background: transparent;
-  color: white;
+  border: none;
   border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.15s ease;
+  color: white;
 }
 
 .menu-toggle-btn:hover {
   background: rgba(255, 255, 255, 0.12);
 }
 
-.menu-toggle-btn svg {
-  width: 20px;
-  height: 20px;
-  fill: currentColor;
-}
-
 .apps-panel {
   position: absolute;
   right: 0;
-  top: calc(100% + 10px);
-  width: 320px;
+  top: calc(100% + 8px);
+  width: 260px;
   background: white;
-  border-radius: 18px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 12px;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
-  z-index: 1000;
 }
 
+/* usuario */
+
 .apps-user-header {
-  padding-bottom: 14px;
-  margin-bottom: 14px;
-  border-bottom: 1px solid #e5e7eb;
   text-align: center;
+  margin-bottom: 10px;
 }
 
 .apps-user-email {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  color: #111827;
-  word-break: break-word;
 }
 
 .apps-user-role {
-  font-size: 12px;
+  font-size: 11px;
   color: #6b7280;
-  margin-top: 4px;
 }
+
+/* grid */
 
 .apps-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 8px;
 }
 
 .app-tile {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 10px;
-  border-radius: 12px;
-  text-align: center;
-  transition: background-color 0.15s ease, transform 0.15s ease;
+  padding: 8px;
+  gap: 4px;
+  border-radius: 10px;
 }
 
 .app-tile:hover {
   background: #f3f4f6;
-  transform: translateY(-1px);
 }
 
 .app-tile img {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  width: 36px;
+  height: 36px;
 }
 
 .app-tile span {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1f2937;
+  font-size: 12px;
 }
 
+/* footer */
+
 .apps-footer {
-  display: flex;
-  justify-content: center;
-  padding-top: 14px;
-  margin-top: 14px;
-  border-top: 1px solid #e5e7eb;
+  margin-top: 10px;
+  text-align: center;
 }
