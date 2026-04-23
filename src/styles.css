@@ -409,3 +409,85 @@ button {
 .table tbody tr:hover td {
   background-color: #eef2ff;
 }
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-container {
+  position: relative;
+}
+
+.menu-toggle-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: white;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.menu-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.menu-toggle-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.apps-panel {
+  border-radius: 24px;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 280px;
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  z-index: 1000;
+}
+
+.app-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;  text-align: center;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.app-tile:hover {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+}
+
+.app-tile img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.app-tile span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}

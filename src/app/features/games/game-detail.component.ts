@@ -18,6 +18,7 @@ import { GameDto, GameService } from '../../core/game.service';
             style="max-width: 320px; width: 100%; border-radius: 12px;"
            />
         </div>
+
         <p><strong>ID:</strong> {{ game.id }}</p>
         <p><strong>Descripción:</strong> {{ game.description }}</p>
         <p><strong>Plataforma:</strong> {{ game.platform_name }}</p>
