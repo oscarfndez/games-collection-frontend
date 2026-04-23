@@ -332,9 +332,35 @@ button {
   padding: 24px;
 }
 
+.actions-col,
+.actions-cell {
+  width: 56px;
+}
+
+.actions-cell {
+  width: 56px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.table tbody tr.clickable-row:hover .row-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .icon-btn {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   padding: 0;
   border: none;
   background: transparent;
@@ -342,11 +368,19 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 15px;
-  line-height: 1;
   transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.icon-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .icon-btn:hover {
@@ -355,17 +389,23 @@ button {
   transform: translateY(-1px);
 }
 
-.icon-btn.danger {
-  color: #6b7280;
-}
-
 .icon-btn.danger:hover {
   background-color: rgba(239, 68, 68, 0.12);
   color: #dc2626;
 }
 
-.table td .actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.table tbody tr.clickable-row {
+  cursor: pointer;
+}
+
+.table tbody tr:nth-child(even) td {
+  background-color: #f9fafb;
+}
+
+.table tbody tr:nth-child(odd) td {
+  background-color: #ffffff;
+}
+
+.table tbody tr:hover td {
+  background-color: #eef2ff;
 }
