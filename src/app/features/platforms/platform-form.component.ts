@@ -26,25 +26,22 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
             <textarea id="description" formControlName="description"></textarea>
           </div>
 
-            <div class="form-field">
-               <label for="imageUrl">URL de imagen</label>
-               <input id="imageUrl" type="text" formControlName="image_url" placeholder="https://..." />
+          <div class="form-field">
+            <label for="imageUrl">URL de imagen</label>
+            <input id="imageUrl" type="text" formControlName="image_url" placeholder="https://..." />
+          </div>
+
+          <div class="form-field">
+            <label>Vista previa</label>
+            <div style="margin-top: 8px;">
+              <img
+                [src]="form.controls.image_url.value || defaultImage"
+                (error)="onImageError($event)"
+                alt="Vista previa de la imagen de la plataforma"
+                style="max-width: 260px; width: 100%; border-radius: 12px; border: 1px solid #d0d7e2;"
+              />
             </div>
-
-<div class="form-field">
-  <label>Vista previa</label>
-  <div style="margin-top: 8px;">
-    <img
-      [src]="form.controls.image_url.value || defaultImage"
-      (error)="onImageError($event)"
-      alt="Vista previa de la imagen de la plataforma"
-      style="max-width: 260px; width: 100%; border-radius: 12px; border: 1px solid #d0d7e2;"
-    />
-  </div>
-</div>
-
-
-
+          </div>
 
           <div *ngIf="errorMessage" class="status-error">{{ errorMessage }}</div>
           <div *ngIf="successMessage" class="status-success">{{ successMessage }}</div>
@@ -66,18 +63,19 @@ export class PlatformFormComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly platformService = inject(PlatformService);
 
+  defaultImage = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
+
   loading = false;
   errorMessage = '';
   successMessage = '';
   isEditMode = false;
   private platformId: string | null = null;
-defaultImage = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
 
-readonly form = this.fb.nonNullable.group({
-  name: ['', [Validators.required]],
-  description: ['', [Validators.required]],
-  image_url: ['']
-});
+  readonly form = this.fb.nonNullable.group({
+    name: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    image_url: ['']
+  });
 
   ngOnInit(): void {
     this.platformId = this.route.snapshot.paramMap.get('id');
@@ -90,12 +88,14 @@ readonly form = this.fb.nonNullable.group({
 
   loadPlatform(id: string): void {
     this.loading = true;
+    this.errorMessage = '';
 
     this.platformService.getById(id).subscribe({
       next: (platform: PlatformDto) => {
         this.form.patchValue({
           name: platform.name,
-          description: platform.description
+          description: platform.description,
+          image_url: platform.image_url ?? ''
         });
         this.loading = false;
       },
@@ -116,7 +116,7 @@ readonly form = this.fb.nonNullable.group({
     this.errorMessage = '';
     this.successMessage = '';
 
-    const payload = this.form.getRawValue();
+    const payload: PlatformDto = this.form.getRawValue();
 
     const request$ = this.isEditMode && this.platformId
       ? this.platformService.update(this.platformId, payload)
@@ -128,6 +128,7 @@ readonly form = this.fb.nonNullable.group({
         this.successMessage = this.isEditMode
           ? 'Plataforma actualizada correctamente.'
           : 'Plataforma creada correctamente.';
+
         this.router.navigate(['/platforms', saved.id]);
       },
       error: () => {
@@ -146,7 +147,7 @@ readonly form = this.fb.nonNullable.group({
     this.router.navigate(['/platforms']);
   }
 
-onImageError(event: Event): void {
-  (event.target as HTMLImageElement).src = this.defaultImage;
-}
+  onImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = this.defaultImage;
+  }
 }
