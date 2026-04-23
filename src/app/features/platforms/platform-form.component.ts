@@ -26,6 +26,11 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
             <textarea id="description" formControlName="description"></textarea>
           </div>
 
+            <div class="form-field">
+               <label for="imageUrl">URL de imagen</label>
+               <input id="imageUrl" type="text" formControlName="image_url" placeholder="https://..." />
+            </div>
+
 <div class="form-field">
   <label>Vista previa</label>
   <div style="margin-top: 8px;">
@@ -37,6 +42,9 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
     />
   </div>
 </div>
+
+
+
 
           <div *ngIf="errorMessage" class="status-error">{{ errorMessage }}</div>
           <div *ngIf="successMessage" class="status-success">{{ successMessage }}</div>
