@@ -104,8 +104,8 @@ export class AppComponent {
   menuIcon = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
   profileIcon = 'assets/images/profile.png';
   usersIcon = 'assets/images/users.png';
-  inventoryIcon = '/assets/images/inventory.png';
-  gamesIcon = '/assets/images/mes.png';
+  inventoryIcon = 'assets/images/inventory.png';
+  gamesIcon = 'assets/images/mes.png';
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
