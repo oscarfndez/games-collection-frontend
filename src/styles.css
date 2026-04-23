@@ -547,7 +547,6 @@ button {
   right: 0;
   top: calc(100% + 10px);
   width: 320px;
-  height: 500px;
   background: white;
   border-radius: 18px;
   padding: 16px;
@@ -555,42 +554,11 @@ button {
   z-index: 1000;
 }
 
-.apps-panel {
-    position: absolute;
-    right: 0;
-    top: calc(100% + 10px);
-    width: 180px;
-    background: #fff;
-    border-radius: 16px;
-    padding: 26px;
-    box-shadow: 0 18px 40px #0f172a2e;
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 22px;
-    z-index: 1000
-}
-
-
 .apps-user-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
   padding-bottom: 14px;
   margin-bottom: 14px;
   border-bottom: 1px solid #e5e7eb;
-}
-
-.apps-user-avatar {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  border-radius: 999px;
-  border: 1px solid #e5e7eb;
-  flex-shrink: 0;
-}
-
-.apps-user-meta {
-  min-width: 0;
+  text-align: center;
 }
 
 .apps-user-email {
@@ -603,7 +571,7 @@ button {
 .apps-user-role {
   font-size: 12px;
   color: #6b7280;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .apps-grid {
@@ -645,7 +613,7 @@ button {
 
 .apps-footer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   padding-top: 14px;
   margin-top: 14px;
   border-top: 1px solid #e5e7eb;
