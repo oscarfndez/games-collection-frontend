@@ -156,7 +156,7 @@ loadPlatforms(): void {
         this.successMessage = this.isEditMode
           ? 'Juego actualizado correctamente.'
           : 'Juego creado correctamente.';
-        this.router.navigate(['/games', saved.id]);
+        this.router.navigate(['games', saved.id]);
       },
       error: () => {
         this.loading = false;
@@ -167,11 +167,11 @@ loadPlatforms(): void {
 
   goBack(): void {
     if (this.gameId) {
-      this.router.navigate(['/inventory', '/games', this.gameId]);
+      this.router.navigate(['inventory', 'games', this.gameId]);
       return;
     }
 
-    this.router.navigate(['/inventory', '/games']);
+    this.router.navigate(['inventory', 'games']);
   }
 
 

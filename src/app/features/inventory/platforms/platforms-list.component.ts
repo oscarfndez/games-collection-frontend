@@ -199,12 +199,12 @@ sort(field: string): void {
   }
 
   view(id: string): void {
-    this.router.navigate(['/inventory', '/platforms', id]);
+    this.router.navigate(['inventory', 'platforms', id]);
   }
 
 edit(event: Event, id: string): void {
   event.stopPropagation();
-  this.router.navigate(['/inventory', '/platforms', id, 'edit']);
+  this.router.navigate(['inventory', 'platforms', id, 'edit']);
 }
 
 deletePlatform(event: Event, id: string, name: string): void {
@@ -215,7 +215,7 @@ deletePlatform(event: Event, id: string, name: string): void {
 }
 
 openPlatform(id: string): void {
-  this.router.navigate(['/inventory', '/platforms', id]);
+  this.router.navigate(['inventory', 'platforms', id]);
 }
 cancelDelete(): void {
   this.confirmDeleteOpen = false;
