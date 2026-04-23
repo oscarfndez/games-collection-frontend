@@ -39,22 +39,22 @@ import { AuthService } from './core/auth.service';
 
             <div class="apps-panel" *ngIf="appsMenuOpen" (click)="$event.stopPropagation()">
               <a class="app-tile" routerLink="/profile" (click)="closeAppsMenu()">
-                <img [src]="menuIcon" alt="Perfil" />
+                <img [src]="profileIcon" alt="Perfil" />
                 <span>Perfil</span>
               </a>
 
               <a class="app-tile" routerLink="/users" (click)="closeAppsMenu()">
-                <img [src]="menuIcon" alt="Usuarios" />
+                <img [src]="usersIcon" alt="Usuarios" />
                 <span>Usuarios</span>
               </a>
 
               <a class="app-tile" routerLink="/inventory" (click)="closeAppsMenu()">
-                <img [src]="menuIcon" alt="Inventario" />
+                <img [src]="inventoryIcon" alt="Inventario" />
                 <span>Inventario</span>
               </a>
 
               <a class="app-tile" routerLink="/collection" (click)="closeAppsMenu()">
-                <img [src]="menuIcon" alt="Colección" />
+                <img [src]="gamesIcon" alt="Colección" />
                 <span>Colección</span>
               </a>
             </div>
@@ -71,10 +71,10 @@ export class AppComponent {
 
   appsMenuOpen = false;
 
-  menuIcon = 'assets/images/profile.png'; // o el icono que quieras reutilizar
-  menuIcon = 'assets/images/users.png'; // o el icono que quieras reutilizar
-  menuIcon = 'assets/images/inventory.png'; // o el icono que quieras reutilizar
-  menuIcon = 'assets/images/games.png'; // o el icono que quieras reutilizar
+  profileIcon = 'assets/images/profile.png';
+  usersIcon = 'assets/images/users.png';
+  inventoryIcon = 'assets/images/inventory.png';
+  gamesIcon = 'assets/images/games.png';
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
