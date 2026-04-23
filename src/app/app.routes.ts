@@ -4,13 +4,13 @@ import { LoginComponent } from './features/auth/login.component';
 
 import { InventoryShellComponent } from './features/inventory/inventory-shell.component';
 
-import { GamesListComponent } from './features/games/games-list.component';
-import { GameDetailComponent } from './features/games/game-detail.component';
-import { GameFormComponent } from './features/games/game-form.component';
+import { GamesListComponent } from './features/inventory/games/games-list.component';
+import { GameDetailComponent } from './features/inventory/games/game-detail.component';
+import { GameFormComponent } from './features/inventory/games/game-form.component';
 
-import { PlatformsListComponent } from './features/platforms/platforms-list.component';
-import { PlatformDetailComponent } from './features/platforms/platform-detail.component';
-import { PlatformFormComponent } from './features/platforms/platform-form.component';
+import { PlatformsListComponent } from './features/inventory/platforms/platforms-list.component';
+import { PlatformDetailComponent } from './features/inventory/platforms/platform-detail.component';
+import { PlatformFormComponent } from './features/inventory/platforms/platform-form.component';
 
 import { ProfilePageComponent } from './features/profile/profile-page.component';
 import { UsersPageComponent } from './features/users/users-page.component';
