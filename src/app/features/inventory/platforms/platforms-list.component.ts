@@ -15,7 +15,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
             <h1>Listado de plataformas</h1>
             <p class="muted">Consulta, crea y gestiona las plataformas disponibles.</p>
           </div>
-          <a class="btn btn-primary" routerLink="/platforms/new">Nueva plataforma</a>
+          <a class="btn btn-primary" routerLink="/inventory/platforms/new">Nueva plataforma</a>
         </div>
 
         <div class="form-field" style="margin: 16px 0;">

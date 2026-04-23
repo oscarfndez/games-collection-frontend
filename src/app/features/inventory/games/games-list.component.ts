@@ -14,7 +14,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
             <h1>Listado de juegos</h1>
             <p class="muted">Consulta, navega y gestiona tu colección de videojuegos.</p>
           </div>
-          <a class="btn btn-primary" routerLink="/games/new">Nuevo juego</a>
+          <a class="btn btn-primary" routerLink="/inventory/games/new">Nuevo juego</a>
         </div>
 
         <div class="form-field" style="margin: 16px 0;">
