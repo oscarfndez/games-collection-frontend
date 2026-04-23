@@ -39,7 +39,7 @@ import { AuthService } from './core/auth.service';
 
             <div class="apps-panel" *ngIf="appsMenuOpen" (click)="$event.stopPropagation()">
               <a class="app-tile" routerLink="/profile" (click)="closeAppsMenu()">
-                <img [src]="menuIcon" alt="Perfil" />
+                <img [src]="../../images/profile.png" alt="Perfil" />
                 <span>Perfil</span>
               </a>
 
