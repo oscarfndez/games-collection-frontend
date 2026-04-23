@@ -66,10 +66,14 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
                 <td>{{ game.description }}</td>
                 <td>{{ game.platform_name || game.platform_id }}</td>
                 <td>
-            <div class="actions">
-                <button class="icon-btn" (click)="edit($event, game.id!)" title="Editar">✏️</button>
-                <button class="icon-btn danger" (click)="deleteGame($event, game.id!, game.name)" title="Borrar">🗑</button>
-            </div>
+<div class="actions">
+  <button class="icon-btn" (click)="edit($event, game.id!)" title="Editar" aria-label="Editar">
+    ✏️
+  </button>
+  <button class="icon-btn danger" (click)="deleteGame($event, game.id!, game.name)" title="Borrar" aria-label="Borrar">
+    🗑
+  </button>
+</div>
               </tr>
             </tbody>
           </table>
