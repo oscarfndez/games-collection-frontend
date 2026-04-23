@@ -10,6 +10,15 @@ import { PlatformDto, PlatformService } from '../../core/platform.service';
     <div class="page-container">
       <div class="card" *ngIf="platform; else stateTpl">
         <h1>{{ platform.name }}</h1>
+
+          <div style="margin-top: 8px;">
+            <img
+              [src]="form.controls.image_url.value || defaultImage"
+              (error)="onImageError($event)"
+              alt="Vista previa de la imagen de la plataforma"
+              style="max-width: 260px; width: 100%; border-radius: 12px; border: 1px solid #d0d7e2;"
+            />
+          </div>
         <p><strong>ID:</strong> {{ platform.id }}</p>
         <p><strong>Descripción:</strong> {{ platform.description }}</p>
 
