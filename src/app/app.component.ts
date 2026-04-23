@@ -44,17 +44,17 @@ import { AuthService } from './core/auth.service';
               </a>
 
               <a class="app-tile" routerLink="/users" (click)="closeAppsMenu()">
-                <img [src]="menuIcon" alt="Usuarios" />
+                <img [src]="usersIcon" alt="Usuarios" />
                 <span>Usuarios</span>
               </a>
 
               <a class="app-tile" routerLink="/inventory" (click)="closeAppsMenu()">
-                <img [src]="menuIcon" alt="Inventario" />
+                <img [src]="inventoryIcon" alt="Inventario" />
                 <span>Inventario</span>
               </a>
 
               <a class="app-tile" routerLink="/collection" (click)="closeAppsMenu()">
-                <img [src]="menuIcon" alt="Colección" />
+                <img [src]="gamesIcon" alt="Colección" />
                 <span>Colección</span>
               </a>
             </div>
@@ -102,7 +102,10 @@ export class AppComponent {
   appsMenuOpen = false;
 
   menuIcon = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
-  profileIcon = 'https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/blue_dark_grey/64x64/plain/book2.png';
+  profileIcon = '/assets/images/profile.png';
+  usersIcon = '/assets/images/users.png';
+  inventoryIcon = '/assets/images/inventory.png';
+  gamesIcon = '/assets/images/mes.png';
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
