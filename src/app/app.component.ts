@@ -39,7 +39,7 @@ import { AuthService } from './core/auth.service';
 
             <div class="apps-panel" *ngIf="appsMenuOpen" (click)="$event.stopPropagation()">
               <a class="app-tile" routerLink="/profile" (click)="closeAppsMenu()">
-                <img [src]="../../images/profile.png" alt="Perfil" />
+                <img [src]="profileIcon" alt="Perfil" />
                 <span>Perfil</span>
               </a>
 
@@ -102,6 +102,7 @@ export class AppComponent {
   appsMenuOpen = false;
 
   menuIcon = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
+  profileIcon '../../images/profile-icon.png';
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
