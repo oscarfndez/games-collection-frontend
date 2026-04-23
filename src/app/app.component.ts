@@ -36,43 +36,25 @@ import { UserService, WhoAmI } from './core/user.service';
               </svg>
             </button>
 
-            <div class="apps-panel" *ngIf="appsMenuOpen" (click)="$event.stopPropagation()">
-              <div class="apps-user-header" *ngIf="user">
-                <img class="apps-user-avatar" [src]="profileIcon" alt="Usuario" />
-                <div class="apps-user-meta">
-                  <div class="apps-user-email">{{ user.email }}</div>
-                  <div class="apps-user-role">{{ roleLabel }}</div>
-                </div>
-              </div>
+         <div class="apps-panel" *ngIf="appsMenuOpen" (click)="$event.stopPropagation()">
+           <div class="apps-user-header" *ngIf="user">
+             <img class="apps-user-avatar" [src]="profileIcon" alt="Usuario" />
+             <div class="apps-user-meta">
+               <div class="apps-user-email">{{ user.email }}</div>
+               <div class="apps-user-role">{{ roleLabel }}</div>
+             </div>
+           </div>
 
-              <div class="apps-grid">
-                <a class="app-tile" routerLink="/profile" (click)="closeAppsMenu()">
-                  <img [src]="profileIcon" alt="Perfil" />
-                  <span>Perfil</span>
-                </a>
+           <div class="apps-grid">
+             ...
+           </div>
 
-                <a class="app-tile" routerLink="/users" (click)="closeAppsMenu()">
-                  <img [src]="profileIcon" alt="Usuarios" />
-                  <span>Usuarios</span>
-                </a>
-
-                <a class="app-tile" routerLink="/inventory" (click)="closeAppsMenu()">
-                  <img [src]="profileIcon" alt="Inventario" />
-                  <span>Inventario</span>
-                </a>
-
-                <a class="app-tile" routerLink="/collection" (click)="closeAppsMenu()">
-                  <img [src]="profileIcon" alt="Colección" />
-                  <span>Colección</span>
-                </a>
-              </div>
-
-              <div class="apps-footer">
-                <button class="btn btn-danger" type="button" (click)="logoutFromMenu()">
-                  Cerrar sesión
-                </button>
-              </div>
-            </div>
+           <div class="apps-footer">
+             <button class="btn btn-danger" type="button" (click)="logoutFromMenu()">
+               Cerrar sesión
+             </button>
+           </div>
+         </div>
           </div>
         </div>
       </div>

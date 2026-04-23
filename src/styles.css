@@ -444,22 +444,6 @@ button {
   fill: currentColor;
 }
 
-.apps-panel {
-    position: absolute;
-    right: 0;
-    top: calc(100% + 10px);
-    width: 180px;
-    height: 180px;
-    background: #fff;
-    border-radius: 16px;
-    padding: 26px;
-    box-shadow: 0 18px 40px #0f172a2e;
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 22px;
-    z-index: 1000
-}
-
 .app-tile {
   display: flex;
   flex-direction: column;
@@ -563,12 +547,29 @@ button {
   right: 0;
   top: calc(100% + 10px);
   width: 320px;
+  height: 500px;
   background: white;
   border-radius: 18px;
   padding: 16px;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
   z-index: 1000;
 }
+
+.apps-panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 10px);
+    width: 180px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 26px;
+    box-shadow: 0 18px 40px #0f172a2e;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 22px;
+    z-index: 1000
+}
+
 
 .apps-user-header {
   display: flex;
