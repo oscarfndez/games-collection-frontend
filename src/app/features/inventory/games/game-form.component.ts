@@ -31,10 +31,10 @@ import { PlatformDto, PlatformService } from '../../../core/platform.service';
             <label>Plataformas</label>
             <p class="muted" style="margin: 0 0 8px;">Selecciona una o varias plataformas para este juego.</p>
             <div *ngIf="loadingPlatforms" class="muted">Cargando plataformas...</div>
-            <div *ngIf="!loadingPlatforms" style="display: grid; gap: 8px;">
+            <div *ngIf="!loadingPlatforms" style="display: grid; gap: 10px;">
               <label
                 *ngFor="let platform of platforms"
-                style="display: flex; align-items: center; gap: 8px; font-weight: 500;"
+                class="platform-option"
               >
                 <input
                   type="checkbox"
@@ -75,7 +75,25 @@ import { PlatformDto, PlatformService } from '../../../core/platform.service';
         </form>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .platform-option {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      width: fit-content;
+      max-width: 100%;
+      font-weight: 500;
+      line-height: 1.25;
+      cursor: pointer;
+    }
+
+    .platform-option input {
+      flex: 0 0 auto;
+      margin: 0;
+    }
+  `]
 })
 export class GameFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
