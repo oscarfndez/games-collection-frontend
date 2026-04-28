@@ -65,7 +65,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
               </td>
                 <td>{{ game.name }}</td>
                 <td>{{ game.description }}</td>
-                <td>{{ game.platform_name || game.platform_id }}</td>
+                <td>{{ displayPlatform(game) }}</td>
                 <td class="actions-cell" (click)="$event.stopPropagation()">
                   <div class="row-actions">
                     <button class="icon-btn" (click)="edit($event, game.id!)" title="Editar" aria-label="Editar">
@@ -282,6 +282,22 @@ confirmDelete(): void {
       this.cancelDelete();
     }
   });
+}
+
+displayPlatform(game: GameDto): string {
+  if (game.platform_name) {
+    return game.platform_name;
+  }
+
+  if (game.platform_names?.length === 1) {
+    return game.platform_names[0];
+  }
+
+  if (game.platform_names && game.platform_names.length > 1) {
+    return 'Multiplataforma';
+  }
+
+  return game.platform_id ?? '-';
 }
 
 }

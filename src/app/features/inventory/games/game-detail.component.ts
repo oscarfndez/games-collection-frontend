@@ -22,6 +22,9 @@ import { GameDto, GameService } from '../../../core/game.service';
         <p><strong>ID:</strong> {{ game.id }}</p>
         <p><strong>Descripción:</strong> {{ game.description }}</p>
         <p><strong>Plataforma:</strong> {{ game.platform_name }}</p>
+        <p *ngIf="game.platform_names?.length">
+          <strong>Disponible en:</strong> {{ game.platform_names?.join(', ') }}
+        </p>
 
         <div class="actions" style="margin-top: 24px;">
           <a class="btn btn-secondary" routerLink="/inventory/games">Volver</a>

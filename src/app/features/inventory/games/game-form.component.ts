@@ -28,14 +28,26 @@ import { PlatformDto, PlatformService } from '../../../core/platform.service';
           </div>
 
           <div class="form-field">
-            <label for="platformId">Plataforma</label>
-                <select id="platformId" formControlName="platform_id">
-                    <option value="">Selecciona una plataforma</option>
-                    <option *ngFor="let platform of platforms" [value]="platform.id">
-                        {{ platform.name }}
-                    </option>
-                </select>
+            <label>Plataformas</label>
+            <p class="muted" style="margin: 0 0 8px;">Selecciona una o varias plataformas para este juego.</p>
+            <div *ngIf="loadingPlatforms" class="muted">Cargando plataformas...</div>
+            <div *ngIf="!loadingPlatforms" style="display: grid; gap: 8px;">
+              <label
+                *ngFor="let platform of platforms"
+                style="display: flex; align-items: center; gap: 8px; font-weight: 500;"
+              >
+                <input
+                  type="checkbox"
+                  [checked]="isPlatformSelected(platform.id)"
+                  (change)="togglePlatform(platform.id)"
+                />
+                <span>{{ platform.name }}</span>
+              </label>
             </div>
+            <div *ngIf="platformSelectionError" class="status-error" style="margin-top: 8px;">
+              Debes seleccionar al menos una plataforma.
+            </div>
+          </div>
 
             <div class="form-field">
                <label for="imageUrl">URL de imagen</label>
@@ -84,7 +96,7 @@ export class GameFormComponent implements OnInit {
 readonly form = this.fb.nonNullable.group({
   name: ['', [Validators.required]],
   description: ['', [Validators.required]],
-  platform_id: ['', [Validators.required]],
+  platform_ids: [[] as string[]],
   image_url: ['']
 });
 
@@ -122,7 +134,7 @@ loadPlatforms(): void {
           this.form.patchValue({
           name: game.name,
           description: game.description,
-          platform_id: game.platform_id,
+          platform_ids: game.platform_ids?.length ? game.platform_ids : game.platform_id ? [game.platform_id] : [],
           image_url: game.image_url ?? ''
        });
         this.loading = false;
@@ -140,9 +152,15 @@ loadPlatforms(): void {
       return;
     }
 
+    if (this.form.controls.platform_ids.value.length === 0) {
+      this.platformSelectionError = true;
+      return;
+    }
+
     this.loading = true;
     this.errorMessage = '';
     this.successMessage = '';
+    this.platformSelectionError = false;
 
     const payload = this.form.getRawValue();
 
@@ -156,7 +174,7 @@ loadPlatforms(): void {
         this.successMessage = this.isEditMode
           ? 'Juego actualizado correctamente.'
           : 'Juego creado correctamente.';
-        this.router.navigate(['games', saved.id]);
+        this.router.navigate(['inventory', 'games', saved.id]);
       },
       error: () => {
         this.loading = false;
@@ -177,5 +195,25 @@ loadPlatforms(): void {
 
 onImageError(event: Event): void {
   (event.target as HTMLImageElement).src = this.defaultImage;
+}
+
+platformSelectionError = false;
+
+isPlatformSelected(platformId?: string): boolean {
+  return !!platformId && this.form.controls.platform_ids.value.includes(platformId);
+}
+
+togglePlatform(platformId?: string): void {
+  if (!platformId) {
+    return;
+  }
+
+  const selectedPlatformIds = this.form.controls.platform_ids.value;
+  const nextPlatformIds = selectedPlatformIds.includes(platformId)
+    ? selectedPlatformIds.filter((id) => id !== platformId)
+    : [...selectedPlatformIds, platformId];
+
+  this.form.controls.platform_ids.setValue(nextPlatformIds);
+  this.platformSelectionError = nextPlatformIds.length === 0;
 }
 }

@@ -7,8 +7,10 @@ export interface GameDto {
   id?: string;
   name: string;
   description: string;
-  platform_id: string;
+  platform_id?: string;
   platform_name?: string;
+  platform_ids?: string[];
+  platform_names?: string[];
   image_url?: string;
 }
 
