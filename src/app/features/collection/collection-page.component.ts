@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { CollectionService, GameItemDto } from '../../core/collection.service';
 import { GameDto, GameService } from '../../core/game.service';
 import { UserService, WhoAmI } from '../../core/user.service';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ConfirmDialogComponent],
   template: `
     <div class="page-container">
       <div class="card">
@@ -90,6 +91,14 @@ import { UserService, WhoAmI } from '../../core/user.service';
         </div>
       </div>
     </div>
+
+    <app-confirm-dialog
+      [open]="confirmDeleteOpen"
+      title="Quitar juego de la colección"
+      [message]="'¿Seguro que quieres quitar &quot;' + gameNameToDelete + '&quot; de tu colección?'"
+      (cancel)="cancelDelete()"
+      (confirm)="confirmDelete()">
+    </app-confirm-dialog>
   `
 })
 export class CollectionPageComponent implements OnInit {
@@ -106,6 +115,9 @@ export class CollectionPageComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   defaultImage = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
+  confirmDeleteOpen = false;
+  itemIdToDelete: string | null = null;
+  gameNameToDelete = '';
 
   ngOnInit(): void {
     this.loadGames();
@@ -187,13 +199,31 @@ export class CollectionPageComponent implements OnInit {
       return;
     }
 
-    this.collectionService.delete(item.id).subscribe({
+    this.itemIdToDelete = item.id;
+    this.gameNameToDelete = item.game_name ?? 'este juego';
+    this.confirmDeleteOpen = true;
+  }
+
+  cancelDelete(): void {
+    this.confirmDeleteOpen = false;
+    this.itemIdToDelete = null;
+    this.gameNameToDelete = '';
+  }
+
+  confirmDelete(): void {
+    if (!this.itemIdToDelete) {
+      return;
+    }
+
+    this.collectionService.delete(this.itemIdToDelete).subscribe({
       next: () => {
         this.successMessage = 'Juego eliminado de la colección.';
+        this.cancelDelete();
         this.loadCollection();
       },
       error: () => {
         this.errorMessage = 'No se pudo eliminar el juego de la colección.';
+        this.cancelDelete();
       }
     });
   }
