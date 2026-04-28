@@ -8,6 +8,7 @@ export interface GameItemDto {
   user_id?: string;
   game_id: string;
   game_name?: string;
+  game_image_url?: string;
   platform_id: string;
   platform_name?: string;
 }

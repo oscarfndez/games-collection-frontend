@@ -63,6 +63,7 @@ import { UserService, WhoAmI } from '../../core/user.service';
           <table class="table">
             <thead>
               <tr>
+                <th>Imagen</th>
                 <th>Juego</th>
                 <th>Plataforma</th>
                 <th style="width: 120px;"></th>
@@ -70,6 +71,14 @@ import { UserService, WhoAmI } from '../../core/user.service';
             </thead>
             <tbody>
               <tr *ngFor="let item of items">
+                <td>
+                  <img
+                    [src]="item.game_image_url || defaultImage"
+                    (error)="onImageError($event)"
+                    [alt]="item.game_name"
+                    style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"
+                  />
+                </td>
                 <td>{{ item.game_name }}</td>
                 <td>{{ item.platform_name }}</td>
                 <td>
@@ -96,6 +105,7 @@ export class CollectionPageComponent implements OnInit {
   loading = false;
   errorMessage = '';
   successMessage = '';
+  defaultImage = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
 
   ngOnInit(): void {
     this.loadGames();
@@ -193,5 +203,9 @@ export class CollectionPageComponent implements OnInit {
     return platformIndex >= 0
       ? game.platform_names?.[platformIndex] ?? platformId
       : platformId;
+  }
+
+  onImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = this.defaultImage;
   }
 }
