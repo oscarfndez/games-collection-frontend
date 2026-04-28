@@ -31,18 +31,19 @@ import { PlatformDto, PlatformService } from '../../../core/platform.service';
             <label>Plataformas</label>
             <p class="muted" style="margin: 0 0 8px;">Selecciona una o varias plataformas para este juego.</p>
             <div *ngIf="loadingPlatforms" class="muted">Cargando plataformas...</div>
-            <div *ngIf="!loadingPlatforms" style="display: grid; gap: 10px;">
-              <label
+            <div *ngIf="!loadingPlatforms" class="platform-options">
+              <div
                 *ngFor="let platform of platforms"
                 class="platform-option"
               >
                 <input
+                  [id]="'platform-' + platform.id"
                   type="checkbox"
                   [checked]="isPlatformSelected(platform.id)"
                   (change)="togglePlatform(platform.id)"
                 />
-                <span>{{ platform.name }}</span>
-              </label>
+                <label [for]="'platform-' + platform.id">{{ platform.name }}</label>
+              </div>
             </div>
             <div *ngIf="platformSelectionError" class="status-error" style="margin-top: 8px;">
               Debes seleccionar al menos una plataforma.
@@ -77,21 +78,37 @@ import { PlatformDto, PlatformService } from '../../../core/platform.service';
     </div>
   `,
   styles: [`
-    .platform-option {
-      display: inline-flex;
+    .platform-options {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .platform-options .platform-option {
+      display: flex;
       align-items: center;
       justify-content: flex-start;
       gap: 10px;
-      width: fit-content;
+      width: 100%;
       max-width: 100%;
+    }
+
+    .platform-options .platform-option input {
+      flex: 0 0 auto;
+      margin: 0;
+      width: auto;
+    }
+
+    .platform-options .platform-option label {
+      display: inline;
+      margin: 0;
+      width: auto;
+      max-width: none;
       font-weight: 500;
       line-height: 1.25;
       cursor: pointer;
-    }
-
-    .platform-option input {
-      flex: 0 0 auto;
-      margin: 0;
+      text-align: left;
     }
   `]
 })
