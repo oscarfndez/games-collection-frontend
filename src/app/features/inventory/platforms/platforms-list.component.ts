@@ -62,21 +62,12 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
                 <td>{{ platform.description }}</td>
          <td class="actions-cell" (click)="$event.stopPropagation()">
                   <div class="row-actions">
-                    <button class="icon-btn" (click)="edit($event, platform.id!)" title="Editar" aria-label="Editar">
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M4 20h4l10.5-10.5a1.4 1.4 0 0 0 0-2L16.5 5a1.4 1.4 0 0 0-2 0L4 15.5V20z"></path>
-                        <path d="M13.5 6.5l4 4"></path>
-                      </svg>
+                    <button class="btn btn-secondary" type="button" (click)="edit($event, platform.id!)">
+                      Editar
                     </button>
 
-                    <button class="icon-btn danger" (click)="deletePlatform($event, platform.id!, platform.name)" title="Borrar" aria-label="Borrar">
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M4 7h16"></path>
-                        <path d="M9 7V4h6v3"></path>
-                        <path d="M7 7l1 13h8l1-13"></path>
-                        <path d="M10 11v6"></path>
-                        <path d="M14 11v6"></path>
-                      </svg>
+                    <button class="btn btn-danger" type="button" (click)="deletePlatform($event, platform.id!, platform.name)">
+                      Borrar
                     </button>
                   </div>
                 </td>

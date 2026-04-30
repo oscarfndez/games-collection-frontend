@@ -62,4 +62,9 @@ export class UserService {
     const params = new HttpParams().set('id', id);
     return this.http.put<UserDto>(`${this.baseUrl}/users`, user, { params });
   }
+
+  delete(id: string): Observable<void> {
+    const params = new HttpParams().set('id', id);
+    return this.http.delete<void>(`${this.baseUrl}/users`, { params });
+  }
 }

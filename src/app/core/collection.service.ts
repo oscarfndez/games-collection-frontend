@@ -49,6 +49,11 @@ export class CollectionService {
     return this.http.post<GameItemDto>(this.baseUrl, gameItem);
   }
 
+  update(id: string, gameItem: GameItemDto): Observable<GameItemDto> {
+    const params = new HttpParams().set('id', id);
+    return this.http.put<GameItemDto>(this.baseUrl, gameItem, { params });
+  }
+
   delete(id: string): Observable<void> {
     const params = new HttpParams().set('id', id);
     return this.http.delete<void>(this.baseUrl, { params });

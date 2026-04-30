@@ -26,7 +26,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
       </div>
 
       <div class="card" style="margin-top: 16px;">
-        <h2>Añadir juego</h2>
+        <h2>{{ editingItemId ? 'Editar juego en colección' : 'Añadir juego' }}</h2>
         <div class="form-grid">
           <div class="form-field">
             <label for="game">Juego</label>
@@ -48,7 +48,10 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 
           <div class="actions">
             <button class="btn btn-primary" type="button" (click)="addToCollection()" [disabled]="!canAdd">
-              Añadir a colección
+              {{ editingItemId ? 'Guardar cambios' : 'Añadir a colección' }}
+            </button>
+            <button class="btn btn-secondary" type="button" *ngIf="editingItemId" (click)="cancelEdit()">
+              Cancelar edición
             </button>
           </div>
         </div>
@@ -100,7 +103,10 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
                 <td>{{ item.game_name }}</td>
                 <td>{{ item.platform_name }}</td>
                 <td>
-                  <button class="btn btn-danger" type="button" (click)="remove(item)">Quitar</button>
+                  <div class="row-actions">
+                    <button class="btn btn-secondary" type="button" (click)="edit(item)">Editar</button>
+                    <button class="btn btn-danger" type="button" (click)="remove(item)">Quitar</button>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -157,6 +163,7 @@ export class CollectionPageComponent implements OnInit {
   confirmDeleteOpen = false;
   itemIdToDelete: string | null = null;
   gameNameToDelete = '';
+  editingItemId: string | null = null;
 
   ngOnInit(): void {
     this.loadGames();
@@ -266,20 +273,52 @@ export class CollectionPageComponent implements OnInit {
       return;
     }
 
-    this.collectionService.add({
+    const payload = {
       game_id: this.selectedGameId,
       platform_id: this.selectedPlatformId
-    }).subscribe({
+    };
+
+    if (this.editingItemId) {
+      this.collectionService.update(this.editingItemId, payload).subscribe({
+        next: () => {
+          this.successMessage = 'Juego actualizado en la colección.';
+          this.cancelEdit();
+          this.loadCollection();
+        },
+        error: () => {
+          this.errorMessage = 'No se pudo actualizar el juego en la colección.';
+        }
+      });
+      return;
+    }
+
+    this.collectionService.add(payload).subscribe({
       next: () => {
         this.successMessage = 'Juego añadido a la colección.';
-        this.selectedGameId = '';
-        this.selectedPlatformId = '';
+        this.clearSelection();
         this.loadCollection();
       },
       error: () => {
         this.errorMessage = 'No se pudo añadir el juego a la colección.';
       }
     });
+  }
+
+  edit(item: GameItemDto): void {
+    if (!item.id) {
+      return;
+    }
+
+    this.editingItemId = item.id;
+    this.selectedGameId = item.game_id;
+    this.selectedPlatformId = item.platform_id;
+    this.successMessage = '';
+    this.errorMessage = '';
+  }
+
+  cancelEdit(): void {
+    this.editingItemId = null;
+    this.clearSelection();
   }
 
   remove(item: GameItemDto): void {
@@ -325,5 +364,10 @@ export class CollectionPageComponent implements OnInit {
 
   onImageError(event: Event): void {
     (event.target as HTMLImageElement).src = this.defaultImage;
+  }
+
+  private clearSelection(): void {
+    this.selectedGameId = '';
+    this.selectedPlatformId = '';
   }
 }

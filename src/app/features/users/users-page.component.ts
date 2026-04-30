@@ -3,10 +3,11 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserDto, UserService } from '../../core/user.service';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ConfirmDialogComponent],
   template: `
     <div class="page-container">
       <div class="card">
@@ -62,11 +63,12 @@ import { UserDto, UserService } from '../../core/user.service';
                 <td>{{ user.role }}</td>
                 <td class="actions-cell" (click)="$event.stopPropagation()">
                   <div class="row-actions">
-                    <button class="icon-btn" (click)="edit($event, user.id!)" title="Editar" aria-label="Editar">
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M4 20h4l10.5-10.5a1.4 1.4 0 0 0 0-2L16.5 5a1.4 1.4 0 0 0-2 0L4 15.5V20z"></path>
-                        <path d="M13.5 6.5l4 4"></path>
-                      </svg>
+                    <button class="btn btn-secondary" type="button" (click)="edit($event, user.id!)">
+                      Editar
+                    </button>
+
+                    <button class="btn btn-danger" type="button" (click)="deleteUser($event, user.id!, user.email)">
+                      Borrar
                     </button>
                   </div>
                 </td>
@@ -99,6 +101,14 @@ import { UserDto, UserService } from '../../core/user.service';
         </ng-template>
       </div>
     </div>
+
+    <app-confirm-dialog
+      [open]="confirmDeleteOpen"
+      title="Eliminar usuario"
+      [message]="'¿Seguro que quieres eliminar el usuario &quot;' + userEmailToDelete + '&quot;?'"
+      (cancel)="cancelDelete()"
+      (confirm)="confirmDelete()">
+    </app-confirm-dialog>
   `
 })
 export class UsersPageComponent implements OnInit {
@@ -116,6 +126,9 @@ export class UsersPageComponent implements OnInit {
   pageSize = 10;
   totalPages = 0;
   totalElements = 0;
+  confirmDeleteOpen = false;
+  userIdToDelete: string | null = null;
+  userEmailToDelete = '';
 
   ngOnInit(): void {
     this.loadUsers();
@@ -174,6 +187,37 @@ export class UsersPageComponent implements OnInit {
   edit(event: Event, id: string): void {
     event.stopPropagation();
     this.router.navigate(['users', id, 'edit']);
+  }
+
+  deleteUser(event: Event, id: string, email: string): void {
+    event.stopPropagation();
+    this.userIdToDelete = id;
+    this.userEmailToDelete = email;
+    this.confirmDeleteOpen = true;
+  }
+
+  cancelDelete(): void {
+    this.confirmDeleteOpen = false;
+    this.userIdToDelete = null;
+    this.userEmailToDelete = '';
+  }
+
+  confirmDelete(): void {
+    if (!this.userIdToDelete) {
+      return;
+    }
+
+    this.userService.delete(this.userIdToDelete).subscribe({
+      next: () => {
+        this.successMessage = 'Usuario eliminado correctamente.';
+        this.cancelDelete();
+        this.loadUsers();
+      },
+      error: () => {
+        this.errorMessage = 'No se pudo eliminar el usuario.';
+        this.cancelDelete();
+      }
+    });
   }
 
   goToPreviousPage(): void {
