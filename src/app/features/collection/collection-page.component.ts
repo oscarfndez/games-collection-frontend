@@ -57,6 +57,17 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
       <div class="card" style="margin-top: 16px;">
         <h2>Juegos en colección</h2>
 
+        <div class="form-field" style="margin: 16px 0;">
+          <label for="collectionSearch">Buscar en mi colección</label>
+          <input
+            id="collectionSearch"
+            type="text"
+            [(ngModel)]="searchTerm"
+            (input)="applyFilter()"
+            placeholder="Busca por nombre, descripción o plataforma"
+          />
+        </div>
+
         <div *ngIf="loading">Cargando colección...</div>
         <div *ngIf="!loading && !items.length" class="muted">No hay juegos en esta colección.</div>
 
@@ -65,8 +76,14 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
             <thead>
               <tr>
                 <th>Imagen</th>
-                <th>Juego</th>
-                <th>Plataforma</th>
+                <th (click)="sort('game')" class="sortable-header">
+                  <span>Juego</span>
+                  <span class="sort-icon">{{ getSortIcon('game') }}</span>
+                </th>
+                <th (click)="sort('platform')" class="sortable-header">
+                  <span>Plataforma</span>
+                  <span class="sort-icon">{{ getSortIcon('platform') }}</span>
+                </th>
                 <th style="width: 120px;"></th>
               </tr>
             </thead>
@@ -88,6 +105,21 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
               </tr>
             </tbody>
           </table>
+
+          <div class="actions" style="justify-content: space-between; align-items: center; margin-top: 16px;" *ngIf="totalPages > 0">
+            <div class="muted">
+              Página {{ currentPage + 1 }} de {{ totalPages }} · {{ totalElements }} juegos
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-secondary" type="button" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
+                Anterior
+              </button>
+              <button class="btn btn-secondary" type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">
+                Siguiente
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -114,6 +146,13 @@ export class CollectionPageComponent implements OnInit {
   loading = false;
   errorMessage = '';
   successMessage = '';
+  searchTerm = '';
+  sortField = 'game';
+  sortDir = 'asc';
+  currentPage = 0;
+  pageSize = 10;
+  totalPages = 0;
+  totalElements = 0;
   defaultImage = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
   confirmDeleteOpen = false;
   itemIdToDelete: string | null = null;
@@ -161,9 +200,19 @@ export class CollectionPageComponent implements OnInit {
   loadCollection(): void {
     this.loading = true;
     this.errorMessage = '';
-    this.collectionService.getMine().subscribe({
-      next: (items) => {
-        this.items = items;
+    this.collectionService.getMine(
+      this.searchTerm,
+      this.sortField,
+      this.sortDir,
+      this.currentPage,
+      this.pageSize
+    ).subscribe({
+      next: (response) => {
+        this.items = response.content;
+        this.currentPage = response.page;
+        this.pageSize = response.size;
+        this.totalPages = response.total_pages;
+        this.totalElements = response.total_elements;
         this.loading = false;
       },
       error: () => {
@@ -171,6 +220,45 @@ export class CollectionPageComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  applyFilter(): void {
+    this.currentPage = 0;
+    this.loadCollection();
+  }
+
+  sort(field: string): void {
+    if (this.sortField === field) {
+      this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDir = 'asc';
+    }
+
+    this.currentPage = 0;
+    this.loadCollection();
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadCollection();
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.loadCollection();
+    }
+  }
+
+  getSortIcon(field: string): string {
+    if (this.sortField !== field) {
+      return '↕';
+    }
+
+    return this.sortDir === 'asc' ? '↑' : '↓';
   }
 
   addToCollection(): void {
