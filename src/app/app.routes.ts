@@ -14,6 +14,8 @@ import { PlatformFormComponent } from './features/inventory/platforms/platform-f
 
 import { ProfilePageComponent } from './features/profile/profile-page.component';
 import { UsersPageComponent } from './features/users/users-page.component';
+import { UserDetailComponent } from './features/users/user-detail.component';
+import { UserFormComponent } from './features/users/user-form.component';
 import { CollectionPageComponent } from './features/collection/collection-page.component';
 
 export const appRoutes: Routes = [
@@ -40,6 +42,8 @@ export const appRoutes: Routes = [
 
   { path: 'profile', component: ProfilePageComponent, canActivate: [authGuard] },
   { path: 'users', component: UsersPageComponent, canActivate: [authGuard] },
+  { path: 'users/:id', component: UserDetailComponent, canActivate: [authGuard] },
+  { path: 'users/:id/edit', component: UserFormComponent, canActivate: [authGuard] },
   { path: 'collection', component: CollectionPageComponent, canActivate: [authGuard] },
 
   { path: '', pathMatch: 'full', redirectTo: 'inventory/games' },
