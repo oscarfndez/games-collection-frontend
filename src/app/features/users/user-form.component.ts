@@ -108,6 +108,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!id) {
+      return;
+    }
+
     this.loadUser(id);
   }
 
