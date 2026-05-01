@@ -46,7 +46,19 @@ import { UserDto, UserService } from '../../core/user.service';
 
           <div class="form-field">
             <label for="photo">Foto de usuario</label>
-            <input id="photo" type="file" accept="image/*" (change)="onPhotoSelected($event)" />
+            <div class="file-picker">
+              <input
+                id="photo"
+                class="file-picker__input"
+                type="file"
+                accept="image/*"
+                (change)="onPhotoSelected($event)"
+              />
+              <label class="btn btn-secondary file-picker__button" for="photo">
+                Seleccionar foto
+              </label>
+              <span class="file-picker__filename">{{ selectedPhotoName }}</span>
+            </div>
           </div>
 
           <div class="form-field">
@@ -72,7 +84,34 @@ import { UserDto, UserService } from '../../core/user.service';
         </form>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .file-picker {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .file-picker__input {
+      height: 1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      width: 1px;
+    }
+
+    .file-picker__button {
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .file-picker__filename {
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+  `]
 })
 export class UserFormComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
@@ -86,6 +125,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   private userId: string | null = null;
   isEditMode = false;
   selectedPhoto?: File;
+  selectedPhotoName = 'Ningún archivo seleccionado';
   photoPreviewUrl = 'assets/images/profile.png';
   private objectUrl?: string;
 
@@ -149,6 +189,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     }
 
     this.selectedPhoto = file;
+    this.selectedPhotoName = file.name;
     this.revokeObjectUrl();
     this.objectUrl = URL.createObjectURL(file);
     this.photoPreviewUrl = this.objectUrl;
