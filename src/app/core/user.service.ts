@@ -16,6 +16,8 @@ export interface UserDto {
   last_name: string;
   email: string;
   role: string;
+  password?: string;
+  has_photo?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -58,9 +60,31 @@ export class UserService {
     return this.http.get<UserDto>(`${this.baseUrl}/users`, { params });
   }
 
-  update(id: string, user: UserDto): Observable<UserDto> {
+  update(id: string, user: UserDto, photo?: File | null): Observable<UserDto> {
     const params = new HttpParams().set('id', id);
+    if (photo) {
+      const formData = new FormData();
+      formData.append('user', new Blob([JSON.stringify(user)], { type: 'application/json' }));
+      formData.append('photo', photo);
+      return this.http.put<UserDto>(`${this.baseUrl}/users`, formData, { params });
+    }
+
     return this.http.put<UserDto>(`${this.baseUrl}/users`, user, { params });
+  }
+
+  create(user: UserDto, photo?: File | null): Observable<UserDto> {
+    const formData = new FormData();
+    formData.append('user', new Blob([JSON.stringify(user)], { type: 'application/json' }));
+    if (photo) {
+      formData.append('photo', photo);
+    }
+
+    return this.http.post<UserDto>(`${this.baseUrl}/users`, formData);
+  }
+
+  getPhoto(id: string): Observable<Blob> {
+    const params = new HttpParams().set('id', id);
+    return this.http.get(`${this.baseUrl}/users/photo`, { params, responseType: 'blob' });
   }
 
   delete(id: string): Observable<void> {

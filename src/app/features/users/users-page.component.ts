@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UserDto, UserService } from '../../core/user.service';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmDialogComponent],
+  imports: [CommonModule, FormsModule, ConfirmDialogComponent, RouterLink],
   template: `
     <div class="page-container">
       <div class="card">
@@ -16,6 +16,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
             <h1>Listado de usuarios</h1>
             <p class="muted">Consulta y gestiona los usuarios registrados.</p>
           </div>
+          <a class="btn btn-primary" routerLink="/users/new">Nuevo usuario</a>
         </div>
 
         <div class="form-field" style="margin: 16px 0;">
@@ -36,6 +37,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
           <table class="table" *ngIf="users.length; else emptyTpl">
             <thead>
               <tr>
+                <th>Foto</th>
                 <th (click)="sort('firstName')" class="sortable-header">
                   <span>Nombre</span>
                   <span class="sort-icon">{{ getSortIcon('firstName') }}</span>
@@ -57,6 +59,13 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
             </thead>
             <tbody>
               <tr *ngFor="let user of users" (click)="openUser(user.id!)" class="clickable-row">
+                <td>
+                  <img
+                    [src]="photoUrl(user)"
+                    [alt]="user.email"
+                    style="width: 48px; height: 48px; object-fit: cover; border-radius: 999px;"
+                  />
+                </td>
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
                 <td>{{ user.email }}</td>
@@ -111,7 +120,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
     </app-confirm-dialog>
   `
 })
-export class UsersPageComponent implements OnInit {
+export class UsersPageComponent implements OnInit, OnDestroy {
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
 
@@ -129,9 +138,15 @@ export class UsersPageComponent implements OnInit {
   confirmDeleteOpen = false;
   userIdToDelete: string | null = null;
   userEmailToDelete = '';
+  readonly defaultPhoto = 'assets/images/profile.png';
+  private readonly photoUrls = new Map<string, string>();
 
   ngOnInit(): void {
     this.loadUsers();
+  }
+
+  ngOnDestroy(): void {
+    this.revokePhotoUrls();
   }
 
   loadUsers(): void {
@@ -141,7 +156,9 @@ export class UsersPageComponent implements OnInit {
     this.userService.getAll(this.searchTerm, this.sortField, this.sortDir, this.currentPage, this.pageSize)
       .subscribe({
         next: (response) => {
+          this.revokePhotoUrls();
           this.users = response.content;
+          this.loadUserPhotos();
           this.currentPage = response.page;
           this.pageSize = response.size;
           this.totalPages = response.total_pages;
@@ -232,5 +249,30 @@ export class UsersPageComponent implements OnInit {
       this.currentPage++;
       this.loadUsers();
     }
+  }
+
+  photoUrl(user: UserDto): string {
+    if (!user.id || !user.has_photo) {
+      return this.defaultPhoto;
+    }
+
+    return this.photoUrls.get(user.id) ?? this.defaultPhoto;
+  }
+
+  private loadUserPhotos(): void {
+    this.users
+      .filter((user) => user.id && user.has_photo)
+      .forEach((user) => {
+        this.userService.getPhoto(user.id!).subscribe({
+          next: (blob) => {
+            this.photoUrls.set(user.id!, URL.createObjectURL(blob));
+          }
+        });
+      });
+  }
+
+  private revokePhotoUrls(): void {
+    this.photoUrls.forEach((url) => URL.revokeObjectURL(url));
+    this.photoUrls.clear();
   }
 }
