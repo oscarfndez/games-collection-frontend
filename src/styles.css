@@ -276,7 +276,7 @@ button {
 
 .actions-col,
 .actions-cell {
-  width: 56px;
+  width: 220px;
 }
 
 .actions-cell {
@@ -288,15 +288,10 @@ button {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 4px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-}
-
-.table tbody tr.clickable-row:hover .row-actions {
+  gap: 8px;
   opacity: 1;
   pointer-events: auto;
+  transition: opacity 0.15s ease;
 }
 
 /* =========================

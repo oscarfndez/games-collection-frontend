@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit, inject } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/auth.service';
 import { UserService, WhoAmI } from './core/user.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -77,9 +78,10 @@ import { UserService, WhoAmI } from './core/user.service';
     <router-outlet></router-outlet>
   `
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly userService = inject(UserService);
+  private authSubscription?: Subscription;
 
   appsMenuOpen = false;
   user: WhoAmI | null = null;
@@ -91,9 +93,19 @@ export class AppComponent implements OnInit {
   exitIcon = 'assets/images/exit.png';
 
   ngOnInit(): void {
-    if (this.isAuthenticated()) {
-      this.loadUser();
-    }
+    this.authSubscription = this.authService.authenticated$.subscribe((authenticated) => {
+      if (authenticated) {
+        this.loadUser();
+        return;
+      }
+
+      this.user = null;
+      this.closeAppsMenu();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.authSubscription?.unsubscribe();
   }
 
   isAuthenticated(): boolean {
@@ -121,6 +133,9 @@ export class AppComponent implements OnInit {
 
   toggleAppsMenu(event: Event): void {
     event.stopPropagation();
+    if (this.isAuthenticated() && !this.user) {
+      this.loadUser();
+    }
     this.appsMenuOpen = !this.appsMenuOpen;
   }
 

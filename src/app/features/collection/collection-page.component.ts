@@ -87,7 +87,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
                   <span>Plataforma</span>
                   <span class="sort-icon">{{ getSortIcon('platform') }}</span>
                 </th>
-                <th style="width: 120px;"></th>
+                <th style="width: 220px;"></th>
               </tr>
             </thead>
             <tbody>
@@ -105,7 +105,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
                 <td>
                   <div class="row-actions">
                     <button class="btn btn-secondary" type="button" (click)="edit(item)">Editar</button>
-                    <button class="btn btn-danger" type="button" (click)="remove(item)">Quitar</button>
+                    <button class="btn btn-danger" type="button" (click)="remove(item)">Borrar</button>
                   </div>
                 </td>
               </tr>
