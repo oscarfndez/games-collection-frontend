@@ -99,7 +99,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!this.userId;
+    const id = this.userId;
+    this.isEditMode = !!id;
 
     if (!this.isEditMode) {
       this.form.controls.password.addValidators(Validators.required);
@@ -107,7 +108,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loadUser(this.userId);
+    this.loadUser(id);
   }
 
   loadUser(id: string): void {
