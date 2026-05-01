@@ -69,7 +69,9 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.role }}</td>
+                <td>
+                  <span class="role-pill">{{ normalizeRole(user.role) }}</span>
+                </td>
                 <td class="actions-cell" (click)="$event.stopPropagation()">
                   <div class="row-actions">
                     <button class="btn btn-secondary" type="button" (click)="edit($event, user.id!)">
@@ -118,7 +120,22 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
       (cancel)="cancelDelete()"
       (confirm)="confirmDelete()">
     </app-confirm-dialog>
-  `
+  `,
+  styles: [`
+    .role-pill {
+      background: #e0ecff;
+      border-radius: 999px;
+      color: #1d4ed8;
+      display: inline-flex;
+      font-size: 0.78rem;
+      font-weight: 700;
+      justify-content: center;
+      letter-spacing: 0.04em;
+      min-width: 84px;
+      padding: 5px 12px;
+      text-transform: uppercase;
+    }
+  `]
 })
 export class UsersPageComponent implements OnInit, OnDestroy {
   private readonly userService = inject(UserService);
@@ -195,6 +212,10 @@ export class UsersPageComponent implements OnInit, OnDestroy {
     }
 
     return this.sortDir === 'asc' ? '↑' : '↓';
+  }
+
+  normalizeRole(role: string): string {
+    return role.replace('ROLE_', '');
   }
 
   openUser(id: string): void {
