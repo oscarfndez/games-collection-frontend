@@ -25,6 +25,7 @@ export const appRoutes: Routes = [
     path: 'inventory',
     component: InventoryShellComponent,
     canActivate: [authGuard],
+    canActivateChild: [authGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'games' },
 
