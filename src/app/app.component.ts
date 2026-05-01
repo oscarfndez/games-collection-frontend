@@ -45,7 +45,7 @@ import { Subscription } from 'rxjs';
 
   <div class="apps-grid">
 
-    <a class="app-tile" routerLink="/inventory" (click)="closeAppsMenu()">
+    <a class="app-tile" *ngIf="isAdmin" routerLink="/inventory" (click)="closeAppsMenu()">
       <img [src]="inventoryIcon" alt="Inventario" />
       <span>Inventario</span>
     </a>
@@ -55,7 +55,7 @@ import { Subscription } from 'rxjs';
       <span>Colección</span>
     </a>
 
-    <a class="app-tile" routerLink="/users" (click)="closeAppsMenu()">
+    <a class="app-tile" *ngIf="isAdmin" routerLink="/users" (click)="closeAppsMenu()">
       <img [src]="usersIcon" alt="Usuarios" />
       <span>Usuarios</span>
     </a>
@@ -130,6 +130,10 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     return this.user.role.replace('ROLE_', '');
+  }
+
+  get isAdmin(): boolean {
+    return this.user?.role === 'ADMIN' || this.user?.role === 'ROLE_ADMIN';
   }
 
   toggleAppsMenu(event: Event): void {

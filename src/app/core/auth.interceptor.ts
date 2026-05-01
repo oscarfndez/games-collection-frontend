@@ -21,11 +21,15 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authenticatedRequest).pipe(
     catchError((error) => {
-      if (error.status === 401 || error.status === 403) {
+      if (error.status === 401) {
         authService.logout();
         router.navigate(['/login'], {
           queryParams: { redirectUrl: router.url }
         });
+      }
+
+      if (error.status === 403) {
+        router.navigate(['/forbidden']);
       }
 
       return throwError(() => error);

@@ -61,7 +61,7 @@ export class LoginComponent {
     this.authService.signin(this.form.getRawValue()).subscribe({
       next: () => {
         this.loading = false;
-        const redirectUrl = this.route.snapshot.queryParamMap.get('redirectUrl') ?? '/inventory/games';
+        const redirectUrl = this.route.snapshot.queryParamMap.get('redirectUrl') ?? '/collection';
         this.router.navigateByUrl(redirectUrl);
       },
       error: (error) => {

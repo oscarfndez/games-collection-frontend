@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth.guard';
+import { adminGuard } from './core/role.guard';
 import { LoginComponent } from './features/auth/login.component';
 
 import { InventoryShellComponent } from './features/inventory/inventory-shell.component';
@@ -17,6 +18,7 @@ import { UsersPageComponent } from './features/users/users-page.component';
 import { UserDetailComponent } from './features/users/user-detail.component';
 import { UserFormComponent } from './features/users/user-form.component';
 import { CollectionPageComponent } from './features/collection/collection-page.component';
+import { ForbiddenPageComponent } from './features/forbidden/forbidden-page.component';
 
 export const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -24,8 +26,8 @@ export const appRoutes: Routes = [
   {
     path: 'inventory',
     component: InventoryShellComponent,
-    canActivate: [authGuard],
-    canActivateChild: [authGuard],
+    canActivate: [authGuard, adminGuard],
+    canActivateChild: [authGuard, adminGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'games' },
 
@@ -42,11 +44,12 @@ export const appRoutes: Routes = [
   },
 
   { path: 'profile', component: ProfilePageComponent, canActivate: [authGuard] },
-  { path: 'users', component: UsersPageComponent, canActivate: [authGuard] },
-  { path: 'users/:id', component: UserDetailComponent, canActivate: [authGuard] },
-  { path: 'users/:id/edit', component: UserFormComponent, canActivate: [authGuard] },
+  { path: 'users', component: UsersPageComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'users/:id', component: UserDetailComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'users/:id/edit', component: UserFormComponent, canActivate: [authGuard, adminGuard] },
   { path: 'collection', component: CollectionPageComponent, canActivate: [authGuard] },
+  { path: 'forbidden', component: ForbiddenPageComponent, canActivate: [authGuard] },
 
-  { path: '', pathMatch: 'full', redirectTo: 'inventory/games' },
-  { path: '**', redirectTo: 'inventory/games' }
+  { path: '', pathMatch: 'full', redirectTo: 'collection' },
+  { path: '**', redirectTo: 'collection' }
 ];
