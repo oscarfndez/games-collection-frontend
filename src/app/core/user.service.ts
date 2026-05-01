@@ -8,6 +8,9 @@ export interface WhoAmI {
   id: string;
   email: string;
   role: string;
+  first_name?: string;
+  last_name?: string;
+  has_photo?: boolean;
 }
 
 export interface UserDto {
@@ -27,6 +30,10 @@ export class UserService {
 
   whoAmI(): Observable<WhoAmI> {
     return this.http.get<WhoAmI>(`${this.baseUrl}/whoami`);
+  }
+
+  getMyPhoto(): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/whoami/photo`, { responseType: 'blob' });
   }
 
   getAll(

@@ -24,21 +24,13 @@ import { Subscription } from 'rxjs';
               (click)="toggleAppsMenu($event)"
               aria-label="Abrir menú"
               title="Menú">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="6" cy="6" r="1.6"></circle>
-                <circle cx="12" cy="6" r="1.6"></circle>
-                <circle cx="18" cy="6" r="1.6"></circle>
-                <circle cx="6" cy="12" r="1.6"></circle>
-                <circle cx="12" cy="12" r="1.6"></circle>
-                <circle cx="18" cy="12" r="1.6"></circle>
-                <circle cx="6" cy="18" r="1.6"></circle>
-                <circle cx="12" cy="18" r="1.6"></circle>
-                <circle cx="18" cy="18" r="1.6"></circle>
-              </svg>
+              <img [src]="loggedUserPhotoUrl" [alt]="displayName || user?.email || 'Usuario'" />
             </button>
 
 <div class="apps-panel" *ngIf="appsMenuOpen" (click)="$event.stopPropagation()">
   <div class="apps-user-header" *ngIf="user">
+    <img class="apps-user-photo" [src]="loggedUserPhotoUrl" [alt]="displayName || user.email" />
+    <div class="apps-user-name">{{ displayName }}</div>
     <div class="apps-user-email">{{ user.email }}</div>
     <div class="apps-user-role">{{ roleLabel }}</div>
   </div>
@@ -76,7 +68,82 @@ import { Subscription } from 'rxjs';
     </header>
 
     <router-outlet></router-outlet>
-  `
+  `,
+  styles: [`
+    .menu-toggle-btn {
+      align-items: center;
+      background: transparent;
+      border: 2px solid transparent;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      height: 44px;
+      justify-content: center;
+      padding: 2px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+      width: 44px;
+    }
+
+    .menu-toggle-btn:hover {
+      border-color: #2563eb;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .menu-toggle-btn img {
+      border-radius: 999px;
+      height: 36px;
+      object-fit: cover;
+      width: 36px;
+    }
+
+    .apps-panel {
+      min-width: 330px;
+    }
+
+    .apps-user-header {
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 22px 18px 18px;
+      text-align: center;
+    }
+
+    .apps-user-photo {
+      border: 3px solid #e2e8f0;
+      border-radius: 999px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16);
+      height: 96px;
+      object-fit: cover;
+      width: 96px;
+    }
+
+    .apps-user-name {
+      color: #0f172a;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .apps-user-email {
+      color: #475569;
+      font-size: 0.92rem;
+    }
+
+    .apps-user-role {
+      background: #e0ecff;
+      border-radius: 999px;
+      color: #1d4ed8;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+      padding: 5px 12px;
+      text-transform: uppercase;
+    }
+  `]
 })
 export class AppComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
@@ -86,6 +153,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   appsMenuOpen = false;
   user: WhoAmI | null = null;
+  loggedUserPhotoUrl = 'assets/images/profile.png';
+  private loggedUserPhotoObjectUrl?: string;
 
   profileIcon = 'assets/images/profile.png';
   usersIcon = 'assets/images/users.png';
@@ -101,12 +170,14 @@ export class AppComponent implements OnInit, OnDestroy {
       }
 
       this.user = null;
+      this.resetLoggedUserPhoto();
       this.closeAppsMenu();
     });
   }
 
   ngOnDestroy(): void {
     this.authSubscription?.unsubscribe();
+    this.revokeLoggedUserPhotoObjectUrl();
   }
 
   isAuthenticated(): boolean {
@@ -117,11 +188,22 @@ export class AppComponent implements OnInit, OnDestroy {
     this.userService.whoAmI().subscribe({
       next: (user) => {
         this.user = user;
+        this.loadLoggedUserPhoto(user);
       },
       error: () => {
         this.user = null;
+        this.resetLoggedUserPhoto();
       }
     });
+  }
+
+  get displayName(): string {
+    const fullName = [this.user?.first_name, this.user?.last_name]
+      .filter(Boolean)
+      .join(' ')
+      .trim();
+
+    return fullName || this.user?.email || '';
   }
 
   get roleLabel(): string {
@@ -150,6 +232,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.authService.logout();
+    this.resetLoggedUserPhoto();
     this.router.navigate(['/login']);
   }
 
@@ -161,5 +244,33 @@ export class AppComponent implements OnInit, OnDestroy {
   @HostListener('document:click')
   onDocumentClick(): void {
     this.closeAppsMenu();
+  }
+
+  private loadLoggedUserPhoto(user: WhoAmI): void {
+    if (!user.has_photo) {
+      this.resetLoggedUserPhoto();
+      return;
+    }
+
+    this.userService.getMyPhoto().subscribe({
+      next: (blob) => {
+        this.revokeLoggedUserPhotoObjectUrl();
+        this.loggedUserPhotoObjectUrl = URL.createObjectURL(blob);
+        this.loggedUserPhotoUrl = this.loggedUserPhotoObjectUrl;
+      },
+      error: () => this.resetLoggedUserPhoto()
+    });
+  }
+
+  private resetLoggedUserPhoto(): void {
+    this.revokeLoggedUserPhotoObjectUrl();
+    this.loggedUserPhotoUrl = this.profileIcon;
+  }
+
+  private revokeLoggedUserPhotoObjectUrl(): void {
+    if (this.loggedUserPhotoObjectUrl) {
+      URL.revokeObjectURL(this.loggedUserPhotoObjectUrl);
+      this.loggedUserPhotoObjectUrl = undefined;
+    }
   }
 }
