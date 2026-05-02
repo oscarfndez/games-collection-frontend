@@ -50,6 +50,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
                   <span>Plataforma</span>
                   <span class="sort-icon">{{ getSortIcon('platform') }}</span>
                 </th>
+                <th>Estudio</th>
                 <th style="width: 240px;"></th>
               </tr>
             </thead>
@@ -66,6 +67,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
                 <td>{{ game.name }}</td>
                 <td>{{ game.description }}</td>
                 <td>{{ displayPlatform(game) }}</td>
+                <td>{{ game.studio_name || '-' }}</td>
                 <td class="actions-cell" (click)="$event.stopPropagation()">
                   <div class="row-actions">
                     <button class="btn btn-secondary" type="button" (click)="edit($event, game.id!)">

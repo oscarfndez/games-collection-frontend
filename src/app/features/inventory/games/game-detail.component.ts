@@ -21,6 +21,7 @@ import { GameDto, GameService } from '../../../core/game.service';
 
         <p><strong>ID:</strong> {{ game.id }}</p>
         <p><strong>Descripción:</strong> {{ game.description }}</p>
+        <p><strong>Estudio:</strong> {{ game.studio_name || 'Sin estudio conocido' }}</p>
         <p><strong>Plataforma:</strong> {{ game.platform_name }}</p>
         <p *ngIf="game.platform_names?.length">
           <strong>Disponible en:</strong> {{ game.platform_names?.join(', ') }}

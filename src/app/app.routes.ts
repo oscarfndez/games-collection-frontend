@@ -12,6 +12,9 @@ import { GameFormComponent } from './features/inventory/games/game-form.componen
 import { PlatformsListComponent } from './features/inventory/platforms/platforms-list.component';
 import { PlatformDetailComponent } from './features/inventory/platforms/platform-detail.component';
 import { PlatformFormComponent } from './features/inventory/platforms/platform-form.component';
+import { StudiosListComponent } from './features/inventory/studios/studios-list.component';
+import { StudioDetailComponent } from './features/inventory/studios/studio-detail.component';
+import { StudioFormComponent } from './features/inventory/studios/studio-form.component';
 
 import { ProfilePageComponent } from './features/profile/profile-page.component';
 import { UsersPageComponent } from './features/users/users-page.component';
@@ -39,7 +42,12 @@ export const appRoutes: Routes = [
       { path: 'platforms', component: PlatformsListComponent },
       { path: 'platforms/new', component: PlatformFormComponent },
       { path: 'platforms/:id', component: PlatformDetailComponent },
-      { path: 'platforms/:id/edit', component: PlatformFormComponent }
+      { path: 'platforms/:id/edit', component: PlatformFormComponent },
+
+      { path: 'studios', component: StudiosListComponent },
+      { path: 'studios/new', component: StudioFormComponent },
+      { path: 'studios/:id', component: StudioDetailComponent },
+      { path: 'studios/:id/edit', component: StudioFormComponent }
     ]
   },
 

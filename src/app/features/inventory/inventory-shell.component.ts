@@ -24,6 +24,14 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
             class="tab-link">
             Plataformas
           </a>
+
+          <a
+            routerLink="/inventory/studios"
+            routerLinkActive="active-tab"
+            [routerLinkActiveOptions]="{ exact: false }"
+            class="tab-link">
+            Estudios
+          </a>
         </nav>
 
         <div class="panel-content">

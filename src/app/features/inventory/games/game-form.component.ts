@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameDto, GameService } from '../../../core/game.service';
 import { PlatformDto, PlatformService } from '../../../core/platform.service';
+import { StudioDto, StudioService } from '../../../core/studio.service';
 
 @Component({
   standalone: true,
@@ -48,6 +49,14 @@ import { PlatformDto, PlatformService } from '../../../core/platform.service';
             <div *ngIf="platformSelectionError" class="status-error" style="margin-top: 8px;">
               Debes seleccionar al menos una plataforma.
             </div>
+          </div>
+
+          <div class="form-field">
+            <label for="studio">Estudio</label>
+            <select id="studio" formControlName="studio_id">
+              <option value="">Sin estudio conocido</option>
+              <option *ngFor="let studio of studios" [value]="studio.id">{{ studio.name }}</option>
+            </select>
           </div>
 
             <div class="form-field">
@@ -118,6 +127,7 @@ export class GameFormComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly gameService = inject(GameService);
   private readonly platformService = inject(PlatformService);
+  private readonly studioService = inject(StudioService);
 
   loading = false;
   errorMessage = '';
@@ -125,18 +135,22 @@ export class GameFormComponent implements OnInit {
   isEditMode = false;
   private gameId: string | null = null;
   platforms: PlatformDto[] = [];
+  studios: StudioDto[] = [];
   loadingPlatforms = false;
+  loadingStudios = false;
   defaultImage = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
 
 readonly form = this.fb.nonNullable.group({
   name: ['', [Validators.required]],
   description: ['', [Validators.required]],
   platform_ids: [[] as string[]],
+  studio_id: [''],
   image_url: ['']
 });
 
   ngOnInit(): void {
     this.loadPlatforms();
+    this.loadStudios();
 
     this.gameId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.gameId;
@@ -161,6 +175,21 @@ loadPlatforms(): void {
   });
 }
 
+loadStudios(): void {
+  this.loadingStudios = true;
+
+  this.studioService.getAll(undefined, 'name', 'asc', 0, 1000).subscribe({
+    next: (response) => {
+      this.studios = response.content;
+      this.loadingStudios = false;
+    },
+    error: () => {
+      this.errorMessage = 'No se pudieron cargar los estudios.';
+      this.loadingStudios = false;
+    }
+  });
+}
+
   loadGame(id: string): void {
     this.loading = true;
 
@@ -170,7 +199,8 @@ loadPlatforms(): void {
           name: game.name,
           description: game.description,
           platform_ids: game.platform_ids?.length ? game.platform_ids : game.platform_id ? [game.platform_id] : [],
-          image_url: game.image_url ?? ''
+          image_url: game.image_url ?? '',
+          studio_id: game.studio_id ?? ''
        });
         this.loading = false;
       },
@@ -198,10 +228,14 @@ loadPlatforms(): void {
     this.platformSelectionError = false;
 
     const payload = this.form.getRawValue();
+    const normalizedPayload = {
+      ...payload,
+      studio_id: payload.studio_id || undefined
+    };
 
     const request$ = this.isEditMode && this.gameId
-      ? this.gameService.update(this.gameId, payload)
-      : this.gameService.create(payload);
+      ? this.gameService.update(this.gameId, normalizedPayload)
+      : this.gameService.create(normalizedPayload);
 
     request$.subscribe({
       next: (saved) => {

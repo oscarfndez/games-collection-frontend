@@ -12,6 +12,8 @@ export interface GameDto {
   platform_ids?: string[];
   platform_names?: string[];
   image_url?: string;
+  studio_id?: string;
+  studio_name?: string;
 }
 
 export interface PageResponseDto<T> {
