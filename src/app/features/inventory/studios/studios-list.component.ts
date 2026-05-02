@@ -33,7 +33,6 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
               <th (click)="sort('name')" class="sortable-header">Nombre <span class="sort-icon">{{ getSortIcon('name') }}</span></th>
               <th (click)="sort('location')" class="sortable-header">Ubicacion <span class="sort-icon">{{ getSortIcon('location') }}</span></th>
               <th>First party</th>
-              <th>Juegos</th>
               <th style="width: 240px;"></th>
             </tr>
           </thead>
@@ -42,7 +41,6 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
               <td>{{ studio.name }}</td>
               <td>{{ studio.location }}</td>
               <td>{{ studio.first_party ? 'Si' : 'No' }}</td>
-              <td>{{ studio.games_count ?? 0 }}</td>
               <td class="actions-cell" (click)="$event.stopPropagation()">
                 <div class="row-actions">
                   <button class="btn btn-secondary" type="button" (click)="edit($event, studio.id!)">Editar</button>

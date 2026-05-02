@@ -66,7 +66,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
               </td>
                 <td>{{ game.name }}</td>
                 <td>{{ game.description }}</td>
-                <td>{{ displayPlatform(game) }}</td>
+                <td><span class="pill">{{ displayPlatform(game) }}</span></td>
                 <td>{{ game.studio_name || '-' }}</td>
                 <td class="actions-cell" (click)="$event.stopPropagation()">
                   <div class="row-actions">

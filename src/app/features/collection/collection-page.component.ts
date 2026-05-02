@@ -101,7 +101,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
                   />
                 </td>
                 <td>{{ item.game_name }}</td>
-                <td>{{ item.platform_name }}</td>
+                <td><span class="pill">{{ item.platform_name }}</span></td>
                 <td>
                   <div class="row-actions">
                     <button class="btn btn-secondary" type="button" (click)="edit(item)">Editar</button>
