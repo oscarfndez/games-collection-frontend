@@ -28,34 +28,36 @@ import { Subscription } from 'rxjs';
             </button>
 
 <div class="apps-panel" *ngIf="appsMenuOpen" (click)="$event.stopPropagation()">
+  <button class="apps-close-btn" type="button" aria-label="Cerrar menu" (click)="closeAppsMenu()">×</button>
   <div class="apps-user-header" *ngIf="user">
-    <img class="apps-user-photo" [src]="loggedUserPhotoUrl" [alt]="displayName || user.email" />
-    <div class="apps-user-name">{{ displayName }}</div>
     <div class="apps-user-email">{{ user.email }}</div>
+    <img class="apps-user-photo" [src]="loggedUserPhotoUrl" [alt]="displayName || user.email" />
+    <div class="apps-user-name">¡Hola, {{ firstName || displayName }}!</div>
+    <div class="apps-user-fullname">{{ displayName }}</div>
     <div class="apps-user-role">{{ roleLabel }}</div>
   </div>
 
-  <div class="apps-grid">
+  <div class="apps-actions-card">
 
-    <a class="app-tile" *ngIf="isAdmin" routerLink="/inventory" (click)="closeAppsMenu()">
+    <a class="app-row" *ngIf="isAdmin" routerLink="/inventory" (click)="closeAppsMenu()">
       <img [src]="inventoryIcon" alt="Inventario" />
       <span>Inventario</span>
     </a>
 
-    <a class="app-tile" routerLink="/collection" (click)="closeAppsMenu()">
+    <a class="app-row" routerLink="/collection" (click)="closeAppsMenu()">
       <img [src]="gamesIcon" alt="Colección" />
       <span>Colección</span>
     </a>
 
-    <a class="app-tile" *ngIf="isAdmin" routerLink="/users" (click)="closeAppsMenu()">
+    <a class="app-row" *ngIf="isAdmin" routerLink="/users" (click)="closeAppsMenu()">
       <img [src]="usersIcon" alt="Usuarios" />
       <span>Usuarios</span>
     </a>
 
-    <a class="app-tile" (click)="logoutFromMenu()">
+    <button class="app-row app-row-button" type="button" (click)="logoutFromMenu()">
       <img [src]="exitIcon" alt="Salir" />
       <span>Salir</span>
-    </a>
+    </button>
 
   </div>
 
@@ -98,38 +100,78 @@ import { Subscription } from 'rxjs';
     }
 
     .apps-panel {
-      min-width: 330px;
+      background: #e8eef7;
+      border: 1px solid rgba(148, 163, 184, 0.42);
+      border-radius: 28px;
+      box-shadow: 0 22px 55px rgba(15, 23, 42, 0.24);
+      color: #1f2937;
+      min-width: 360px;
+      overflow: hidden;
+      padding: 18px 20px 20px;
+    }
+
+    .apps-close-btn {
+      align-items: center;
+      background: transparent;
+      border: none;
+      border-radius: 999px;
+      color: #475569;
+      display: inline-flex;
+      font-size: 2rem;
+      height: 38px;
+      justify-content: center;
+      line-height: 1;
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      width: 38px;
+    }
+
+    .apps-close-btn:hover {
+      background: rgba(100, 116, 139, 0.14);
+      color: #0f172a;
     }
 
     .apps-user-header {
       align-items: center;
-      border-bottom: 1px solid #e2e8f0;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      padding: 22px 18px 18px;
+      gap: 8px;
+      padding: 6px 18px 20px;
       text-align: center;
     }
 
     .apps-user-photo {
-      border: 3px solid #e2e8f0;
+      background: white;
+      border: 4px solid #2563eb;
       border-radius: 999px;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16);
-      height: 96px;
+      box-shadow: 0 0 0 4px #22c55e, 0 14px 34px rgba(15, 23, 42, 0.18);
+      height: 104px;
+      margin-top: 16px;
       object-fit: cover;
-      width: 96px;
+      width: 104px;
     }
 
     .apps-user-name {
       color: #0f172a;
-      font-size: 1.1rem;
+      font-size: 1.65rem;
+      font-weight: 500;
+      margin-top: 10px;
+    }
+
+    .apps-user-fullname {
+      color: #334155;
+      font-size: 0.98rem;
       font-weight: 700;
-      margin-top: 8px;
     }
 
     .apps-user-email {
-      color: #475569;
-      font-size: 0.92rem;
+      color: #1f2937;
+      font-size: 0.98rem;
+      font-weight: 700;
+      max-width: 250px;
+      word-break: break-word;
     }
 
     .apps-user-role {
@@ -142,6 +184,52 @@ import { Subscription } from 'rxjs';
       margin-top: 4px;
       padding: 5px 12px;
       text-transform: uppercase;
+    }
+
+    .apps-actions-card {
+      background: white;
+      border-radius: 24px;
+      box-shadow: inset 0 0 0 1px rgba(226, 232, 240, 0.75);
+      overflow: hidden;
+    }
+
+    .app-row {
+      align-items: center;
+      background: white;
+      border: none;
+      border-bottom: 1px solid #e5e7eb;
+      color: #1f2937;
+      display: flex;
+      gap: 16px;
+      padding: 16px 20px;
+      text-align: left;
+      transition: background-color 0.15s ease;
+      width: 100%;
+    }
+
+    .app-row:last-child {
+      border-bottom: none;
+    }
+
+    .app-row:hover {
+      background: #f8fafc;
+    }
+
+    .app-row img {
+      border-radius: 12px;
+      height: 38px;
+      object-fit: cover;
+      width: 38px;
+    }
+
+    .app-row span {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .app-row-button {
+      cursor: pointer;
+      font-family: inherit;
     }
   `]
 })
@@ -204,6 +292,10 @@ export class AppComponent implements OnInit, OnDestroy {
       .trim();
 
     return fullName || this.user?.email || '';
+  }
+
+  get firstName(): string {
+    return this.user?.first_name?.trim() ?? '';
   }
 
   get roleLabel(): string {
