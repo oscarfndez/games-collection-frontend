@@ -89,7 +89,16 @@
       "detailMissingId": "No se ha indicado el identificador del juego.",
       "detailLoadError": "No se pudo cargar el detalle del juego.",
       "formLoadError": "No se pudieron cargar los datos del juego.",
-      "formSaveError": "No se pudo guardar el juego."
+      "formSaveError": "No se pudo guardar el juego.",
+      "createTitle": "Dar de alta juego",
+      "editTitle": "Modificar juego",
+      "createSubtitle": "Introduce los datos del nuevo juego.",
+      "editSubtitle": "Actualiza los datos del juego existente.",
+      "imageUrl": "URL de imagen",
+      "platformRequired": "Debes seleccionar al menos una plataforma.",
+      "unknownStudio": "Sin estudio conocido",
+      "createSuccess": "Juego creado correctamente.",
+      "updateSuccess": "Juego actualizado correctamente."
     },
     "platforms": {
       "title": "Listado de plataformas",
@@ -179,7 +188,16 @@
       "detailMissingId": "No se ha indicado el identificador del usuario.",
       "detailLoadError": "No se pudo cargar el detalle del usuario.",
       "formLoadError": "No se pudieron cargar los datos del usuario.",
-      "formSaveError": "No se pudo guardar el usuario."
+      "formSaveError": "No se pudo guardar el usuario.",
+      "createTitle": "Crear usuario",
+      "editTitle": "Modificar usuario",
+      "createSubtitle": "Introduce los datos del nuevo usuario.",
+      "editSubtitle": "Actualiza los datos basicos del usuario.",
+      "password": "Contrasena",
+      "preview": "Vista previa",
+      "noFileSelected": "Ningun archivo seleccionado",
+      "createSuccess": "Usuario creado correctamente.",
+      "updateSuccess": "Usuario actualizado correctamente."
     },
     "login": {
       "error": "No se pudo iniciar sesion. Revisa tus credenciales.",

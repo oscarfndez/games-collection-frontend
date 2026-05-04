@@ -89,7 +89,16 @@
       "detailMissingId": "No game identifier was provided.",
       "detailLoadError": "Could not load game details.",
       "formLoadError": "Could not load game data.",
-      "formSaveError": "Could not save the game."
+      "formSaveError": "Could not save the game.",
+      "createTitle": "Create game",
+      "editTitle": "Edit game",
+      "createSubtitle": "Enter the new game data.",
+      "editSubtitle": "Update the existing game data.",
+      "imageUrl": "Image URL",
+      "platformRequired": "You must select at least one platform.",
+      "unknownStudio": "No known studio",
+      "createSuccess": "Game created successfully.",
+      "updateSuccess": "Game updated successfully."
     },
     "platforms": {
       "title": "Platforms list",
@@ -179,7 +188,16 @@
       "detailMissingId": "No user identifier was provided.",
       "detailLoadError": "Could not load user details.",
       "formLoadError": "Could not load user data.",
-      "formSaveError": "Could not save the user."
+      "formSaveError": "Could not save the user.",
+      "createTitle": "Create user",
+      "editTitle": "Edit user",
+      "createSubtitle": "Enter the new user data.",
+      "editSubtitle": "Update the user's basic data.",
+      "password": "Password",
+      "preview": "Preview",
+      "noFileSelected": "No file selected",
+      "createSuccess": "User created successfully.",
+      "updateSuccess": "User updated successfully."
     },
     "login": {
       "error": "Could not sign in. Check your credentials.",

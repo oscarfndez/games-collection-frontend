@@ -2,31 +2,33 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { I18nService } from '../../core/i18n.service';
+import { TranslatePipe } from '../../core/translate.pipe';
 import { UserDto, UserService } from '../../core/user.service';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmDialogComponent, RouterLink],
+  imports: [CommonModule, FormsModule, ConfirmDialogComponent, RouterLink, TranslatePipe],
   template: `
     <div class="page-container">
       <div class="card">
         <div class="actions" style="justify-content: space-between; align-items: center;">
           <div>
-            <h1>Listado de usuarios</h1>
-            <p class="muted">Consulta y gestiona los usuarios registrados.</p>
+            <h1>{{ 'pages.users.title' | translate }}</h1>
+            <p class="muted">{{ 'pages.users.subtitle' | translate }}</p>
           </div>
-          <a class="btn btn-primary" routerLink="/users/new">Nuevo usuario</a>
+          <a class="btn btn-primary" routerLink="/users/new">{{ 'pages.users.new' | translate }}</a>
         </div>
 
         <div class="form-field" style="margin: 16px 0;">
-          <label for="search">Buscar usuario</label>
+          <label for="search">{{ 'pages.users.search' | translate }}</label>
           <input
             id="search"
             type="text"
             [(ngModel)]="searchTerm"
             (input)="applyFilter()"
-            placeholder="Busca por nombre, apellidos, email o rol"
+            [placeholder]="'pages.users.searchPlaceholder' | translate"
           />
         </div>
 
@@ -37,21 +39,21 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
           <table class="table" *ngIf="users.length; else emptyTpl">
             <thead>
               <tr>
-                <th>Foto</th>
+                <th>{{ 'common.photo' | translate }}</th>
                 <th (click)="sort('firstName')" class="sortable-header">
-                  <span>Nombre</span>
+                  <span>{{ 'common.firstName' | translate }}</span>
                   <span class="sort-icon">{{ getSortIcon('firstName') }}</span>
                 </th>
                 <th (click)="sort('lastName')" class="sortable-header">
-                  <span>Apellidos</span>
+                  <span>{{ 'common.lastName' | translate }}</span>
                   <span class="sort-icon">{{ getSortIcon('lastName') }}</span>
                 </th>
                 <th (click)="sort('email')" class="sortable-header">
-                  <span>Email</span>
+                  <span>{{ 'common.email' | translate }}</span>
                   <span class="sort-icon">{{ getSortIcon('email') }}</span>
                 </th>
                 <th (click)="sort('role')" class="sortable-header">
-                  <span>Rol</span>
+                  <span>{{ 'common.role' | translate }}</span>
                   <span class="sort-icon">{{ getSortIcon('role') }}</span>
                 </th>
                 <th style="width: 120px;"></th>
@@ -62,7 +64,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
                 <td>
                   <img
                     [src]="photoUrl(user)"
-                    [alt]="user.email"
+                    [alt]="'pages.users.photoAlt' | translate: { email: user.email }"
                     style="width: 48px; height: 48px; object-fit: cover; border-radius: 999px;"
                   />
                 </td>
@@ -74,13 +76,8 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
                 </td>
                 <td class="actions-cell" (click)="$event.stopPropagation()">
                   <div class="row-actions">
-                    <button class="btn btn-secondary" type="button" (click)="edit($event, user.id!)">
-                      Editar
-                    </button>
-
-                    <button class="btn btn-danger" type="button" (click)="deleteUser($event, user.id!, user.email)">
-                      Borrar
-                    </button>
+                    <button class="btn btn-secondary" type="button" (click)="edit($event, user.id!)">{{ 'common.edit' | translate }}</button>
+                    <button class="btn btn-danger" type="button" (click)="deleteUser($event, user.id!, user.email)">{{ 'common.delete' | translate }}</button>
                   </div>
                 </td>
               </tr>
@@ -89,34 +86,24 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 
           <div class="actions" style="justify-content: space-between; align-items: center; margin-top: 16px;" *ngIf="totalPages > 0">
             <div class="muted">
-              Página {{ currentPage + 1 }} de {{ totalPages }} · {{ totalElements }} usuarios
+              {{ 'common.pageInfo' | translate: { page: currentPage + 1, totalPages: totalPages, totalElements: totalElements, items: ('pages.users.items' | translate) } }}
             </div>
-
             <div class="actions">
-              <button class="btn btn-secondary" type="button" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
-                Anterior
-              </button>
-              <button class="btn btn-secondary" type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">
-                Siguiente
-              </button>
+              <button class="btn btn-secondary" type="button" (click)="goToPreviousPage()" [disabled]="currentPage === 0">{{ 'common.previous' | translate }}</button>
+              <button class="btn btn-secondary" type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">{{ 'common.next' | translate }}</button>
             </div>
           </div>
         </div>
 
-        <ng-template #loadingTpl>
-          <p>Cargando usuarios...</p>
-        </ng-template>
-
-        <ng-template #emptyTpl>
-          <p>No hay usuarios registrados.</p>
-        </ng-template>
+        <ng-template #loadingTpl><p>{{ 'pages.users.loading' | translate }}</p></ng-template>
+        <ng-template #emptyTpl><p>{{ 'pages.users.empty' | translate }}</p></ng-template>
       </div>
     </div>
 
     <app-confirm-dialog
       [open]="confirmDeleteOpen"
-      title="Eliminar usuario"
-      [message]="'¿Seguro que quieres eliminar el usuario &quot;' + userEmailToDelete + '&quot;?'"
+      [title]="'confirm.deleteUserTitle' | translate"
+      [message]="'confirm.deleteUserMessage' | translate: { email: userEmailToDelete }"
       (cancel)="cancelDelete()"
       (confirm)="confirmDelete()">
     </app-confirm-dialog>
@@ -140,6 +127,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 export class UsersPageComponent implements OnInit, OnDestroy {
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
+  private readonly i18nService = inject(I18nService);
 
   users: UserDto[] = [];
   loading = true;
@@ -183,7 +171,7 @@ export class UsersPageComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: () => {
-          this.errorMessage = 'No se pudo cargar el listado de usuarios.';
+          this.errorMessage = this.i18nService.translate('pages.users.loadError');
           this.loading = false;
         }
       });
@@ -247,12 +235,12 @@ export class UsersPageComponent implements OnInit, OnDestroy {
 
     this.userService.delete(this.userIdToDelete).subscribe({
       next: () => {
-        this.successMessage = 'Usuario eliminado correctamente.';
+        this.successMessage = this.i18nService.translate('pages.users.deleteSuccess');
         this.cancelDelete();
         this.loadUsers();
       },
       error: () => {
-        this.errorMessage = 'No se pudo eliminar el usuario.';
+        this.errorMessage = this.i18nService.translate('pages.users.deleteError');
         this.cancelDelete();
       }
     });
