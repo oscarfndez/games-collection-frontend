@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { TranslatePipe } from '../core/translate.pipe';
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   selector: 'app-confirm-dialog',
   template: `
     <div class="dialog-backdrop" *ngIf="open" (click)="onCancel()">
@@ -12,8 +13,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
         <p>{{ message }}</p>
 
         <div class="dialog-actions">
-          <button class="btn btn-secondary" type="button" (click)="onCancel()">Cancelar</button>
-          <button class="btn btn-danger" type="button" (click)="onConfirm()">Confirmar</button>
+          <button class="btn btn-secondary" type="button" (click)="onCancel()">{{ 'common.cancel' | translate }}</button>
+          <button class="btn btn-danger" type="button" (click)="onConfirm()">{{ 'common.delete' | translate }}</button>
         </div>
       </div>
     </div>
@@ -21,8 +22,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ConfirmDialogComponent {
   @Input() open = false;
-  @Input() title = 'Confirmar acción';
-  @Input() message = '¿Seguro que deseas continuar?';
+  @Input() title = '';
+  @Input() message = '';
 
   @Output() cancel = new EventEmitter<void>();
   @Output() confirm = new EventEmitter<void>();
