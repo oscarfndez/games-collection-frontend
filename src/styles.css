@@ -297,9 +297,20 @@ button:disabled {
   justify-content: flex-end;
   align-items: center;
   gap: 8px;
+}
+
+.table tbody .row-actions {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(6px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.table tbody tr:hover .row-actions,
+.table tbody tr:focus-within .row-actions {
   opacity: 1;
   pointer-events: auto;
-  transition: opacity 0.15s ease;
+  transform: translateX(0);
 }
 
 /* =========================

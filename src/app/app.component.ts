@@ -48,6 +48,16 @@ import { UserService, WhoAmI } from './core/user.service';
                 <div class="apps-user-role">{{ roleLabel }}</div>
               </div>
 
+              <div class="apps-section-card language-card">
+                <div class="language-row">
+                  <label for="languageSelector">{{ 'menu.language' | translate }}</label>
+                  <select id="languageSelector" [value]="currentLanguage" (change)="changeLanguage($event)">
+                    <option value="es">{{ 'languages.es' | translate }}</option>
+                    <option value="en">{{ 'languages.en' | translate }}</option>
+                  </select>
+                </div>
+              </div>
+
               <div class="apps-actions-card">
                 <a class="app-row" *ngIf="isAdmin" routerLink="/inventory" (click)="closeAppsMenu()">
                   <img [src]="inventoryIcon" [alt]="'menu.inventory' | translate" />
@@ -63,14 +73,6 @@ import { UserService, WhoAmI } from './core/user.service';
                   <img [src]="usersIcon" [alt]="'menu.users' | translate" />
                   <span>{{ 'menu.users' | translate }}</span>
                 </a>
-
-                <div class="language-row">
-                  <label for="languageSelector">{{ 'menu.language' | translate }}</label>
-                  <select id="languageSelector" [value]="currentLanguage" (change)="changeLanguage($event)">
-                    <option value="es">{{ 'languages.es' | translate }}</option>
-                    <option value="en">{{ 'languages.en' | translate }}</option>
-                  </select>
-                </div>
 
                 <button class="app-row app-row-button" type="button" (click)="logoutFromMenu()">
                   <img [src]="exitIcon" [alt]="'menu.logout' | translate" />
@@ -200,11 +202,20 @@ import { UserService, WhoAmI } from './core/user.service';
       text-transform: uppercase;
     }
 
+    .apps-section-card,
     .apps-actions-card {
       background: white;
       border-radius: 24px;
       box-shadow: inset 0 0 0 1px rgba(226, 232, 240, 0.75);
       overflow: hidden;
+    }
+
+    .apps-section-card {
+      margin-bottom: 12px;
+    }
+
+    .language-card {
+      background: linear-gradient(135deg, #f8fbff 0%, #eef4ff 100%);
     }
 
     .app-row {
@@ -248,12 +259,10 @@ import { UserService, WhoAmI } from './core/user.service';
 
     .language-row {
       align-items: center;
-      background: #f8fafc;
-      border-bottom: 1px solid #e5e7eb;
       display: flex;
       gap: 14px;
       justify-content: space-between;
-      padding: 14px 20px;
+      padding: 16px 20px;
     }
 
     .language-row label {
