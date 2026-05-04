@@ -2,36 +2,38 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { I18nService } from '../../../core/i18n.service';
 import { StudioDto, StudioService } from '../../../core/studio.service';
+import { TranslatePipe } from '../../../core/translate.pipe';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
   template: `
     <div class="page-container">
       <div class="card">
-        <h1>{{ isEditMode ? 'Modificar estudio' : 'Dar de alta estudio' }}</h1>
-        <p class="muted">{{ isEditMode ? 'Actualiza los datos del estudio.' : 'Introduce los datos del nuevo estudio.' }}</p>
+        <h1>{{ (isEditMode ? 'pages.studios.editTitle' : 'pages.studios.createTitle') | translate }}</h1>
+        <p class="muted">{{ (isEditMode ? 'pages.studios.editSubtitle' : 'pages.studios.createSubtitle') | translate }}</p>
 
         <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
           <div class="form-field">
-            <label for="name">Nombre</label>
+            <label for="name">{{ 'common.name' | translate }}</label>
             <input id="name" type="text" formControlName="name" />
           </div>
 
           <div class="form-field">
-            <label for="description">Descripcion</label>
+            <label for="description">{{ 'common.description' | translate }}</label>
             <textarea id="description" formControlName="description"></textarea>
           </div>
 
           <div class="form-field">
-            <label for="location">Ubicacion</label>
+            <label for="location">{{ 'common.location' | translate }}</label>
             <input id="location" type="text" formControlName="location" />
           </div>
 
           <label class="checkbox-row">
             <input type="checkbox" formControlName="first_party" />
-            <span>First party</span>
+            <span>{{ 'pages.studios.firstParty' | translate }}</span>
           </label>
 
           <div *ngIf="errorMessage" class="status-error">{{ errorMessage }}</div>
@@ -39,9 +41,9 @@ import { StudioDto, StudioService } from '../../../core/studio.service';
 
           <div class="actions">
             <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading">
-              {{ loading ? 'Guardando...' : 'Guardar' }}
+              {{ (loading ? 'common.loadingSave' : 'common.save') | translate }}
             </button>
-            <button class="btn btn-secondary" type="button" (click)="goBack()">Cancelar</button>
+            <button class="btn btn-secondary" type="button" (click)="goBack()">{{ 'common.cancel' | translate }}</button>
           </div>
         </form>
       </div>
@@ -61,6 +63,7 @@ export class StudioFormComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly studioService = inject(StudioService);
+  private readonly i18nService = inject(I18nService);
 
   loading = false;
   errorMessage = '';
@@ -97,7 +100,7 @@ export class StudioFormComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.errorMessage = 'No se pudieron cargar los datos del estudio.';
+        this.errorMessage = this.i18nService.translate('pages.studios.formLoadError');
         this.loading = false;
       }
     });
@@ -120,12 +123,14 @@ export class StudioFormComponent implements OnInit {
     request$.subscribe({
       next: (saved) => {
         this.loading = false;
-        this.successMessage = this.isEditMode ? 'Estudio actualizado correctamente.' : 'Estudio creado correctamente.';
+        this.successMessage = this.i18nService.translate(
+          this.isEditMode ? 'pages.studios.updateSuccess' : 'pages.studios.createSuccess'
+        );
         this.router.navigate(['inventory', 'studios', saved.id]);
       },
       error: () => {
         this.loading = false;
-        this.errorMessage = 'No se pudo guardar el estudio.';
+        this.errorMessage = this.i18nService.translate('pages.studios.formSaveError');
       }
     });
   }

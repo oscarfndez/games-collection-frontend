@@ -98,7 +98,9 @@
       "platformRequired": "You must select at least one platform.",
       "unknownStudio": "No known studio",
       "createSuccess": "Game created successfully.",
-      "updateSuccess": "Game updated successfully."
+      "updateSuccess": "Game updated successfully.",
+      "availableOn": "Available on",
+      "detailsSubtitle": "Registered game details."
     },
     "platforms": {
       "title": "Platforms list",
@@ -117,7 +119,15 @@
       "detailMissingId": "No platform identifier was provided.",
       "detailLoadError": "Could not load platform details.",
       "formLoadError": "Could not load platform data.",
-      "formSaveError": "Could not save the platform."
+      "formSaveError": "Could not save the platform.",
+      "createTitle": "Create platform",
+      "editTitle": "Edit platform",
+      "createSubtitle": "Enter the new platform data.",
+      "editSubtitle": "Update the existing platform data.",
+      "imageUrl": "Image URL",
+      "preview": "Preview",
+      "createSuccess": "Platform created successfully.",
+      "updateSuccess": "Platform updated successfully."
     },
     "studios": {
       "title": "Studios list",
@@ -138,7 +148,13 @@
       "detailMissingId": "No studio identifier was provided.",
       "detailLoadError": "Could not load studio details.",
       "formLoadError": "Could not load studio data.",
-      "formSaveError": "Could not save the studio."
+      "formSaveError": "Could not save the studio.",
+      "createTitle": "Create studio",
+      "editTitle": "Edit studio",
+      "createSubtitle": "Enter the new studio data.",
+      "editSubtitle": "Update the studio data.",
+      "createSuccess": "Studio created successfully.",
+      "updateSuccess": "Studio updated successfully."
     },
     "collection": {
       "title": "My collection",
@@ -197,14 +213,24 @@
       "preview": "Preview",
       "noFileSelected": "No file selected",
       "createSuccess": "User created successfully.",
-      "updateSuccess": "User updated successfully."
+      "updateSuccess": "User updated successfully.",
+      "detailsSubtitle": "Registered user details."
     },
     "login": {
+      "title": "System access",
+      "subtitle": "Enter your email and password to get a JWT.",
       "error": "Could not sign in. Check your credentials.",
-      "emailPlaceholder": "user@domain.com"
+      "emailPlaceholder": "user@domain.com",
+      "loading": "Signing in...",
+      "submit": "Sign in"
     },
     "profile": {
       "title": "Profile"
+    },
+    "forbidden": {
+      "title": "Not enough privileges",
+      "message": "Your user does not have permission to access this section. If you need access, sign in with an administrator user.",
+      "goToCollection": "Go to my collection"
     }
   }
 }

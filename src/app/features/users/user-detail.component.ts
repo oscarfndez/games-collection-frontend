@@ -1,40 +1,42 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { I18nService } from '../../core/i18n.service';
+import { TranslatePipe } from '../../core/translate.pipe';
 import { UserDto, UserService } from '../../core/user.service';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslatePipe],
   template: `
     <div class="page-container">
       <div class="card" *ngIf="user; else stateTpl">
         <h1>{{ user.first_name }} {{ user.last_name }}</h1>
-        <p class="muted">Detalle del usuario registrado.</p>
+        <p class="muted">{{ 'pages.users.detailsSubtitle' | translate }}</p>
 
         <div style="margin: 16px 0;">
           <img
             [src]="photoUrl"
-            [alt]="user.email"
+            [alt]="'pages.users.photoAlt' | translate: { email: user.email }"
             style="width: 140px; height: 140px; object-fit: cover; border-radius: 999px; border: 1px solid #d0d7e2;"
           />
         </div>
 
         <p><strong>ID:</strong> {{ user.id }}</p>
-        <p><strong>Nombre:</strong> {{ user.first_name }}</p>
-        <p><strong>Apellidos:</strong> {{ user.last_name }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Rol:</strong> {{ user.role }}</p>
+        <p><strong>{{ 'common.firstName' | translate }}:</strong> {{ user.first_name }}</p>
+        <p><strong>{{ 'common.lastName' | translate }}:</strong> {{ user.last_name }}</p>
+        <p><strong>{{ 'common.email' | translate }}:</strong> {{ user.email }}</p>
+        <p><strong>{{ 'common.role' | translate }}:</strong> {{ user.role }}</p>
 
         <div class="actions" style="margin-top: 24px;">
-          <a class="btn btn-secondary" routerLink="/users">Volver</a>
-          <a class="btn btn-primary" [routerLink]="['/users', user.id, 'edit']">Editar</a>
+          <a class="btn btn-secondary" routerLink="/users">{{ 'common.back' | translate }}</a>
+          <a class="btn btn-primary" [routerLink]="['/users', user.id, 'edit']">{{ 'common.edit' | translate }}</a>
         </div>
       </div>
 
       <ng-template #stateTpl>
         <div class="card">
-          <div *ngIf="loading">Cargando detalle del usuario...</div>
+          <div *ngIf="loading">{{ 'pages.users.detailLoading' | translate }}</div>
           <div *ngIf="!loading && errorMessage" class="status-error">{{ errorMessage }}</div>
         </div>
       </ng-template>
@@ -44,6 +46,7 @@ import { UserDto, UserService } from '../../core/user.service';
 export class UserDetailComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly userService = inject(UserService);
+  private readonly i18nService = inject(I18nService);
 
   user?: UserDto;
   loading = true;
@@ -55,7 +58,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
       this.loading = false;
-      this.errorMessage = 'No se ha indicado el identificador del usuario.';
+      this.errorMessage = this.i18nService.translate('pages.users.detailMissingId');
       return;
     }
 
@@ -66,7 +69,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         this.loading = false;
       },
       error: () => {
-        this.errorMessage = 'No se pudo cargar el detalle del usuario.';
+        this.errorMessage = this.i18nService.translate('pages.users.detailLoadError');
         this.loading = false;
       }
     });

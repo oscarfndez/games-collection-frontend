@@ -2,42 +2,44 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { I18nService } from '../../core/i18n.service';
+import { TranslatePipe } from '../../core/translate.pipe';
 import { UserDto, UserService } from '../../core/user.service';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
   template: `
     <div class="page-container">
       <div class="card">
-        <h1>{{ isEditMode ? 'Modificar usuario' : 'Crear usuario' }}</h1>
+        <h1>{{ (isEditMode ? 'pages.users.editTitle' : 'pages.users.createTitle') | translate }}</h1>
         <p class="muted">
-          {{ isEditMode ? 'Actualiza los datos básicos del usuario.' : 'Introduce los datos del nuevo usuario.' }}
+          {{ (isEditMode ? 'pages.users.editSubtitle' : 'pages.users.createSubtitle') | translate }}
         </p>
 
         <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
           <div class="form-field">
-            <label for="firstName">Nombre</label>
+            <label for="firstName">{{ 'common.firstName' | translate }}</label>
             <input id="firstName" type="text" formControlName="first_name" />
           </div>
 
           <div class="form-field">
-            <label for="lastName">Apellidos</label>
+            <label for="lastName">{{ 'common.lastName' | translate }}</label>
             <input id="lastName" type="text" formControlName="last_name" />
           </div>
 
           <div class="form-field">
-            <label for="email">Email</label>
+            <label for="email">{{ 'common.email' | translate }}</label>
             <input id="email" type="email" formControlName="email" />
           </div>
 
           <div class="form-field" *ngIf="!isEditMode">
-            <label for="password">Contraseña</label>
+            <label for="password">{{ 'pages.users.password' | translate }}</label>
             <input id="password" type="password" formControlName="password" />
           </div>
 
           <div class="form-field">
-            <label for="role">Rol</label>
+            <label for="role">{{ 'common.role' | translate }}</label>
             <select id="role" formControlName="role">
               <option value="USER">USER</option>
               <option value="ADMIN">ADMIN</option>
@@ -45,7 +47,7 @@ import { UserDto, UserService } from '../../core/user.service';
           </div>
 
           <div class="form-field">
-            <label for="photo">Foto de usuario</label>
+            <label for="photo">{{ 'pages.users.photoField' | translate }}</label>
             <div class="file-picker">
               <input
                 id="photo"
@@ -55,18 +57,18 @@ import { UserDto, UserService } from '../../core/user.service';
                 (change)="onPhotoSelected($event)"
               />
               <label class="btn btn-secondary file-picker__button" for="photo">
-                Seleccionar foto
+                {{ 'pages.users.selectPhoto' | translate }}
               </label>
               <span class="file-picker__filename">{{ selectedPhotoName }}</span>
             </div>
           </div>
 
           <div class="form-field">
-            <label>Vista previa</label>
+            <label>{{ 'pages.users.preview' | translate }}</label>
             <div style="margin-top: 8px;">
               <img
                 [src]="photoPreviewUrl"
-                alt="Vista previa de la foto del usuario"
+                [alt]="'pages.users.photoPreviewAlt' | translate"
                 style="width: 140px; height: 140px; object-fit: cover; border-radius: 999px; border: 1px solid #d0d7e2;"
               />
             </div>
@@ -77,9 +79,9 @@ import { UserDto, UserService } from '../../core/user.service';
 
           <div class="actions">
             <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading">
-              {{ loading ? 'Guardando...' : 'Guardar' }}
+              {{ (loading ? 'common.loadingSave' : 'common.save') | translate }}
             </button>
-            <button class="btn btn-secondary" type="button" (click)="goBack()">Cancelar</button>
+            <button class="btn btn-secondary" type="button" (click)="goBack()">{{ 'common.cancel' | translate }}</button>
           </div>
         </form>
       </div>
@@ -118,6 +120,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly userService = inject(UserService);
+  private readonly i18nService = inject(I18nService);
 
   loading = false;
   errorMessage = '';
@@ -125,7 +128,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   private userId: string | null = null;
   isEditMode = false;
   selectedPhoto?: File;
-  selectedPhotoName = 'Ningún archivo seleccionado';
+  selectedPhotoName = this.i18nService.translate('pages.users.noFileSelected');
   photoPreviewUrl = 'assets/images/profile.png';
   private objectUrl?: string;
 
@@ -171,7 +174,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
         this.loading = false;
       },
       error: () => {
-        this.errorMessage = 'No se pudieron cargar los datos del usuario.';
+        this.errorMessage = this.i18nService.translate('pages.users.formLoadError');
         this.loading = false;
       }
     });
@@ -206,7 +209,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.successMessage = '';
 
     const payload: UserDto = this.form.getRawValue();
-
     const request$ = this.isEditMode
       ? this.userService.update(this.userId!, payload, this.selectedPhoto)
       : this.userService.create(payload, this.selectedPhoto);
@@ -214,14 +216,14 @@ export class UserFormComponent implements OnInit, OnDestroy {
     request$.subscribe({
       next: (saved) => {
         this.loading = false;
-        this.successMessage = this.isEditMode
-          ? 'Usuario actualizado correctamente.'
-          : 'Usuario creado correctamente.';
+        this.successMessage = this.i18nService.translate(
+          this.isEditMode ? 'pages.users.updateSuccess' : 'pages.users.createSuccess'
+        );
         this.router.navigate(['/users', saved.id]);
       },
       error: () => {
         this.loading = false;
-        this.errorMessage = 'No se pudo guardar el usuario.';
+        this.errorMessage = this.i18nService.translate('pages.users.formSaveError');
       }
     });
   }

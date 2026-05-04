@@ -1,43 +1,45 @@
-import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { I18nService } from '../../../core/i18n.service';
 import { PlatformDto, PlatformService } from '../../../core/platform.service';
+import { TranslatePipe } from '../../../core/translate.pipe';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
   template: `
     <div class="page-container">
       <div class="card">
-        <h1>{{ isEditMode ? 'Modificar plataforma' : 'Dar de alta plataforma' }}</h1>
+        <h1>{{ (isEditMode ? 'pages.platforms.editTitle' : 'pages.platforms.createTitle') | translate }}</h1>
         <p class="muted">
-          {{ isEditMode ? 'Actualiza los datos de la plataforma existente.' : 'Introduce los datos de la nueva plataforma.' }}
+          {{ (isEditMode ? 'pages.platforms.editSubtitle' : 'pages.platforms.createSubtitle') | translate }}
         </p>
 
         <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
           <div class="form-field">
-            <label for="name">Nombre</label>
+            <label for="name">{{ 'common.name' | translate }}</label>
             <input id="name" type="text" formControlName="name" />
           </div>
 
           <div class="form-field">
-            <label for="description">Descripción</label>
+            <label for="description">{{ 'common.description' | translate }}</label>
             <textarea id="description" formControlName="description"></textarea>
           </div>
 
           <div class="form-field">
-            <label for="imageUrl">URL de imagen</label>
+            <label for="imageUrl">{{ 'pages.platforms.imageUrl' | translate }}</label>
             <input id="imageUrl" type="text" formControlName="image_url" placeholder="https://..." />
           </div>
 
           <div class="form-field">
-            <label>Vista previa</label>
+            <label>{{ 'pages.platforms.preview' | translate }}</label>
             <div style="margin-top: 8px;">
               <img
                 [src]="form.controls.image_url.value || defaultImage"
                 (error)="onImageError($event)"
-                alt="Vista previa de la imagen de la plataforma"
+                [alt]="'pages.platforms.imagePreviewAlt' | translate"
                 style="max-width: 260px; width: 100%; border-radius: 12px; border: 1px solid #d0d7e2;"
               />
             </div>
@@ -48,9 +50,9 @@ import { PlatformDto, PlatformService } from '../../../core/platform.service';
 
           <div class="actions">
             <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading">
-              {{ loading ? 'Guardando...' : 'Guardar' }}
+              {{ (loading ? 'common.loadingSave' : 'common.save') | translate }}
             </button>
-            <button class="btn btn-secondary" type="button" (click)="goBack()">Cancelar</button>
+            <button class="btn btn-secondary" type="button" (click)="goBack()">{{ 'common.cancel' | translate }}</button>
           </div>
         </form>
       </div>
@@ -62,9 +64,9 @@ export class PlatformFormComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly platformService = inject(PlatformService);
+  private readonly i18nService = inject(I18nService);
 
   defaultImage = 'https://thumbs.dreamstime.com/b/photo-not-available-icon-isolated-white-background-your-web-mobile-app-design-133861179.jpg?w=768';
-
   loading = false;
   errorMessage = '';
   successMessage = '';
@@ -100,7 +102,7 @@ export class PlatformFormComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.errorMessage = 'No se pudieron cargar los datos de la plataforma.';
+        this.errorMessage = this.i18nService.translate('pages.platforms.formLoadError');
         this.loading = false;
       }
     });
@@ -117,7 +119,6 @@ export class PlatformFormComponent implements OnInit {
     this.successMessage = '';
 
     const payload: PlatformDto = this.form.getRawValue();
-
     const request$ = this.isEditMode && this.platformId
       ? this.platformService.update(this.platformId, payload)
       : this.platformService.create(payload);
@@ -125,15 +126,14 @@ export class PlatformFormComponent implements OnInit {
     request$.subscribe({
       next: (saved) => {
         this.loading = false;
-        this.successMessage = this.isEditMode
-          ? 'Plataforma actualizada correctamente.'
-          : 'Plataforma creada correctamente.';
-
+        this.successMessage = this.i18nService.translate(
+          this.isEditMode ? 'pages.platforms.updateSuccess' : 'pages.platforms.createSuccess'
+        );
         this.router.navigate(['/inventory', 'platforms', saved.id]);
       },
       error: () => {
         this.loading = false;
-        this.errorMessage = 'No se pudo guardar la plataforma.';
+        this.errorMessage = this.i18nService.translate('pages.platforms.formSaveError');
       }
     });
   }

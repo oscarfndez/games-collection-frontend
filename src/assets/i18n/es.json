@@ -98,7 +98,9 @@
       "platformRequired": "Debes seleccionar al menos una plataforma.",
       "unknownStudio": "Sin estudio conocido",
       "createSuccess": "Juego creado correctamente.",
-      "updateSuccess": "Juego actualizado correctamente."
+      "updateSuccess": "Juego actualizado correctamente.",
+      "availableOn": "Disponible en",
+      "detailsSubtitle": "Detalle del juego registrado."
     },
     "platforms": {
       "title": "Listado de plataformas",
@@ -117,7 +119,15 @@
       "detailMissingId": "No se ha indicado el identificador de la plataforma.",
       "detailLoadError": "No se pudo cargar el detalle de la plataforma.",
       "formLoadError": "No se pudieron cargar los datos de la plataforma.",
-      "formSaveError": "No se pudo guardar la plataforma."
+      "formSaveError": "No se pudo guardar la plataforma.",
+      "createTitle": "Dar de alta plataforma",
+      "editTitle": "Modificar plataforma",
+      "createSubtitle": "Introduce los datos de la nueva plataforma.",
+      "editSubtitle": "Actualiza los datos de la plataforma existente.",
+      "imageUrl": "URL de imagen",
+      "preview": "Vista previa",
+      "createSuccess": "Plataforma creada correctamente.",
+      "updateSuccess": "Plataforma actualizada correctamente."
     },
     "studios": {
       "title": "Listado de estudios",
@@ -138,7 +148,13 @@
       "detailMissingId": "No se ha indicado el identificador del estudio.",
       "detailLoadError": "No se pudo cargar el detalle del estudio.",
       "formLoadError": "No se pudieron cargar los datos del estudio.",
-      "formSaveError": "No se pudo guardar el estudio."
+      "formSaveError": "No se pudo guardar el estudio.",
+      "createTitle": "Dar de alta estudio",
+      "editTitle": "Modificar estudio",
+      "createSubtitle": "Introduce los datos del nuevo estudio.",
+      "editSubtitle": "Actualiza los datos del estudio.",
+      "createSuccess": "Estudio creado correctamente.",
+      "updateSuccess": "Estudio actualizado correctamente."
     },
     "collection": {
       "title": "Mi coleccion",
@@ -197,14 +213,24 @@
       "preview": "Vista previa",
       "noFileSelected": "Ningun archivo seleccionado",
       "createSuccess": "Usuario creado correctamente.",
-      "updateSuccess": "Usuario actualizado correctamente."
+      "updateSuccess": "Usuario actualizado correctamente.",
+      "detailsSubtitle": "Detalle del usuario registrado."
     },
     "login": {
+      "title": "Acceso al sistema",
+      "subtitle": "Introduce tu email y contrasena para obtener el JWT.",
       "error": "No se pudo iniciar sesion. Revisa tus credenciales.",
-      "emailPlaceholder": "usuario@dominio.com"
+      "emailPlaceholder": "usuario@dominio.com",
+      "loading": "Entrando...",
+      "submit": "Entrar"
     },
     "profile": {
       "title": "Perfil"
+    },
+    "forbidden": {
+      "title": "Sin privilegios suficientes",
+      "message": "Tu usuario no tiene permisos para acceder a esta seccion. Si necesitas entrar aqui, inicia sesion con un usuario administrador.",
+      "goToCollection": "Ir a mi coleccion"
     }
   }
 }

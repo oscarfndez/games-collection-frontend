@@ -1,41 +1,45 @@
-import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { GameDto, GameService } from '../../../core/game.service';
+import { I18nService } from '../../../core/i18n.service';
+import { TranslatePipe } from '../../../core/translate.pipe';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslatePipe],
   template: `
     <div class="page-container">
       <div class="card" *ngIf="game; else stateTpl">
         <h1>{{ game.name }}</h1>
-        <div *ngIf="game.image_url" style="margin: 16px 0;">
+        <p class="muted">{{ 'pages.games.detailsSubtitle' | translate }}</p>
+
+        <div style="margin: 16px 0;">
           <img
             [src]="game.image_url || defaultImage"
             (error)="onImageError($event)"
             [alt]="game.name"
             style="max-width: 320px; width: 100%; border-radius: 12px;"
-           />
+          />
         </div>
 
         <p><strong>ID:</strong> {{ game.id }}</p>
-        <p><strong>Descripción:</strong> {{ game.description }}</p>
-        <p><strong>Estudio:</strong> {{ game.studio_name || 'Sin estudio conocido' }}</p>
-        <p><strong>Plataforma:</strong> {{ game.platform_name }}</p>
+        <p><strong>{{ 'common.description' | translate }}:</strong> {{ game.description }}</p>
+        <p><strong>{{ 'pages.games.studio' | translate }}:</strong> {{ game.studio_name || ('pages.games.unknownStudio' | translate) }}</p>
+        <p><strong>{{ 'pages.games.platform' | translate }}:</strong> {{ game.platform_name || '-' }}</p>
         <p *ngIf="game.platform_names?.length">
-          <strong>Disponible en:</strong> {{ game.platform_names?.join(', ') }}
+          <strong>{{ 'pages.games.availableOn' | translate }}:</strong> {{ game.platform_names?.join(', ') }}
         </p>
 
         <div class="actions" style="margin-top: 24px;">
-          <a class="btn btn-secondary" routerLink="/inventory/games">Volver</a>
-          <a class="btn btn-primary" [routerLink]="['/inventory/games', game.id, 'edit']">Editar</a>
+          <a class="btn btn-secondary" routerLink="/inventory/games">{{ 'common.back' | translate }}</a>
+          <a class="btn btn-primary" [routerLink]="['/inventory/games', game.id, 'edit']">{{ 'common.edit' | translate }}</a>
         </div>
       </div>
 
       <ng-template #stateTpl>
         <div class="card">
-          <div *ngIf="loading">Cargando detalle del juego...</div>
+          <div *ngIf="loading">{{ 'pages.games.detailLoading' | translate }}</div>
           <div *ngIf="!loading && errorMessage" class="status-error">{{ errorMessage }}</div>
         </div>
       </ng-template>
@@ -45,6 +49,7 @@ import { GameDto, GameService } from '../../../core/game.service';
 export class GameDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly gameService = inject(GameService);
+  private readonly i18nService = inject(I18nService);
 
   game?: GameDto;
   loading = true;
@@ -55,7 +60,7 @@ export class GameDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
       this.loading = false;
-      this.errorMessage = 'No se ha indicado el identificador del juego.';
+      this.errorMessage = this.i18nService.translate('pages.games.detailMissingId');
       return;
     }
 
@@ -65,13 +70,13 @@ export class GameDetailComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.errorMessage = 'No se pudo cargar el detalle del juego.';
+        this.errorMessage = this.i18nService.translate('pages.games.detailLoadError');
         this.loading = false;
       }
     });
   }
 
-  onImageError(event: Event) {
+  onImageError(event: Event): void {
     (event.target as HTMLImageElement).src = this.defaultImage;
   }
 }
