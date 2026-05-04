@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { TranslatePipe } from '../../core/translate.pipe';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, TranslatePipe],
   template: `
     <main class="app-shell">
       <div class="app-panel">
@@ -14,7 +15,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
             routerLinkActive="active-tab"
             [routerLinkActiveOptions]="{ exact: false }"
             class="tab-link">
-            Juegos
+            {{ 'inventory.games' | translate }}
           </a>
 
           <a
@@ -22,7 +23,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
             routerLinkActive="active-tab"
             [routerLinkActiveOptions]="{ exact: false }"
             class="tab-link">
-            Plataformas
+            {{ 'inventory.platforms' | translate }}
           </a>
 
           <a
@@ -30,7 +31,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
             routerLinkActive="active-tab"
             [routerLinkActiveOptions]="{ exact: false }"
             class="tab-link">
-            Estudios
+            {{ 'inventory.studios' | translate }}
           </a>
         </nav>
 

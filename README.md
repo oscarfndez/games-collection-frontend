@@ -1,145 +1,188 @@
-# Frontend Angular para colección de videojuegos
+# Games Collection Frontend
 
-Este proyecto implementa un frontend en Angular para:
+Angular frontend for Games Collection. It provides the web interface for authentication, personal game collections, inventory administration, and user administration.
 
-- Iniciar sesión mediante `email` y `password`.
-- Obtener y almacenar un token JWT devuelto por el backend.
-- Listar juegos.
-- Ver detalle de un juego.
-- Dar de alta juegos.
-- Modificar juegos.
-- Dar de baja juegos.
+![Games Collection Architecture](docs/architecture.png)
 
-## Endpoints usados
+## What It Does
 
-### Autenticación
-- `POST /api/v1/auth/signin`
+- JWT login.
+- Redirects unauthenticated users to login.
+- Protects navigation by role.
+- Provides a personal collection section for authenticated users.
+- Provides an inventory section for administrators.
+- Manages games, platforms, and studios.
+- Manages users, including private user photos.
+- Provides lists with search, sorting, and pagination.
+- Integrates with `users-service` and `inventory-service`.
 
-### Juegos
-- `GET /api/game/all`
-- `GET /api/game?id={uuid}`
-- `POST /api/game`
-- `PUT /api/game?id={uuid}`
-- `DELETE /api/game?id={uuid}`
+## Tech Stack
 
-## Requisitos
+- Angular 17
+- TypeScript
+- RxJS
+- Angular Router
+- Angular Forms
+- NGINX for serving the production build in Docker/Kubernetes
+- Jenkins + Kaniko for Docker image publishing
 
-- Node.js 18 o superior
-- npm 9 o superior
+## Requirements
 
-## Configuración
+- Node.js 20 recommended
+- npm
 
-La URL base del backend se define en este fichero:
+## Clone
 
-```ts
-src/environments/environment.ts
+```bash
+git clone <frontend-repository-url>
+cd games-collection-frontend
 ```
 
-Por defecto está configurada así:
+## Install Dependencies
 
-```ts
-apiBaseUrl: 'http://localhost:8080'
+```bash
+npm ci
 ```
 
-Cámbiala si tu backend corre en otra URL o puerto.
-
-## Instalación
+For local development you can also use:
 
 ```bash
 npm install
 ```
 
-## Arranque en desarrollo
+## Configuration
+
+The API base URL is configured in:
+
+```text
+src/environments/environment.ts
+```
+
+Current value:
+
+```ts
+apiBaseUrl: '/gamescollection'
+```
+
+This value is intended for execution behind the Kubernetes Ingress:
+
+```text
+http://oscarfndez.eu/gamescollection/
+```
+
+If you run the frontend locally against local backends, adjust `apiBaseUrl` as needed.
+
+## Run Locally
 
 ```bash
 npm start
 ```
 
-La aplicación quedará disponible normalmente en:
+Default URL:
 
-```bash
+```text
 http://localhost:4200
 ```
 
-## Build de producción
+## Build
 
 ```bash
 npm run build
 ```
 
-El resultado se generará en:
+Output directory:
 
-```bash
+```text
 dist/game-collection-frontend
 ```
 
-## Notas importantes
+## Main Routes
 
-### 1. Formato esperado para login
-
-El frontend envía este JSON al endpoint `/api/v1/auth/signin`:
-
-```json
-{
-  "email": "usuario@dominio.com",
-  "password": "secreto"
-}
+```text
+/login
+/collection
+/profile
+/inventory/games
+/inventory/platforms
+/inventory/studios
+/users
+/forbidden
 ```
 
-Y espera una respuesta con este formato:
+Access rules:
 
-```json
-{
-  "token": "jwt-aqui"
-}
-```
+- `USER`: can access collection and profile.
+- `ADMIN`: can access every section.
+- No token: redirects to login and then back to the requested route.
 
-Si tu clase `JwtAuthenticationResponse` devuelve otra propiedad distinta de `token`, tendrás que ajustar `AuthService`.
+## APIs Used
 
-### 2. Formato esperado para juegos
-
-El frontend maneja `GameDto` con esta estructura:
-
-```json
-{
-  "id": "uuid",
-  "name": "Nombre del juego",
-  "description": "Descripción",
-  "platform_id": "uuid-de-la-plataforma"
-}
-```
-
-### 3. CORS
-
-Si el frontend y el backend corren en hosts o puertos distintos, debes habilitar CORS en Spring Boot.
-
-Ejemplo habitual para desarrollo:
-- Frontend: `http://localhost:4200`
-- Backend: `http://localhost:8080`
-
-### 4. Seguridad
-
-El JWT se guarda en `localStorage` y se envía automáticamente en la cabecera:
+Authentication and users:
 
 ```http
-Authorization: Bearer <token>
+POST   /api/v1/auth/signin
+POST   /api/v1/auth/signup
+GET    /api/whoami
+GET    /api/whoami/photo
+GET    /api/users/all
+POST   /api/users
+PUT    /api/users
+DELETE /api/users
 ```
 
-## Estructura del frontend
+Inventory:
 
-- `src/app/features/auth/login.component.ts`: pantalla de acceso.
-- `src/app/features/games/games-list.component.ts`: listado de juegos.
-- `src/app/features/games/game-detail.component.ts`: detalle del juego.
-- `src/app/features/games/game-form.component.ts`: alta y edición.
-- `src/app/core/auth.interceptor.ts`: añade el JWT a las peticiones.
-- `src/app/core/game.service.ts`: llamadas HTTP del CRUD.
-- `src/app/core/auth.service.ts`: autenticación.
+```http
+GET    /api/game/all
+POST   /api/game
+PUT    /api/game
+DELETE /api/game
+GET    /api/platform/all
+POST   /api/platform
+PUT    /api/platform
+DELETE /api/platform
+GET    /api/studio/all
+POST   /api/studio
+PUT    /api/studio
+DELETE /api/studio
+```
 
-## Flujo de uso
+Collection:
 
-1. Abres `/login`.
-2. Introduces email y contraseña.
-3. Se llama a `/api/v1/auth/signin`.
-4. Se guarda el JWT.
-5. El usuario entra al módulo de juegos.
-6. Todas las llamadas al CRUD incluyen el token automáticamente.
+```http
+GET    /api/collection
+POST   /api/collection
+PUT    /api/collection
+DELETE /api/collection
+```
+
+## Docker
+
+Build a local image:
+
+```bash
+docker build -t game-collection-frontend .
+```
+
+Run:
+
+```bash
+docker run --rm -p 8080:80 game-collection-frontend
+```
+
+## CI/CD
+
+The `Jenkinsfile` runs:
+
+- Checkout.
+- `npm ci`.
+- `npm run build`.
+- Docker image build and push with Kaniko.
+
+Image:
+
+```text
+docker.io/oscarfndez/game-collection-frontend:build-<BUILD_NUMBER>
+```
+
+Kubernetes deployment is managed from the `fleet-infra` repository through Flux GitOps.

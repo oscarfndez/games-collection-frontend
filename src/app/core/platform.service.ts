@@ -67,4 +67,5 @@ export class PlatformService {
     const params = new HttpParams().set('id', id);
     return this.http.delete<void>(this.baseUrl, { params });
   }
+
 }

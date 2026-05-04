@@ -129,7 +129,7 @@ export class PlatformFormComponent implements OnInit {
           ? 'Plataforma actualizada correctamente.'
           : 'Plataforma creada correctamente.';
 
-        this.router.navigate(['/platforms', saved.id]);
+        this.router.navigate(['/inventory', 'platforms', saved.id]);
       },
       error: () => {
         this.loading = false;
@@ -140,11 +140,11 @@ export class PlatformFormComponent implements OnInit {
 
   goBack(): void {
     if (this.platformId) {
-      this.router.navigate(['/inventory', '/platforms', this.platformId]);
+      this.router.navigate(['/inventory', 'platforms', this.platformId]);
       return;
     }
 
-    this.router.navigate(['/inventory', '/platforms']);
+    this.router.navigate(['/inventory', 'platforms']);
   }
 
   onImageError(event: Event): void {

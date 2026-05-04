@@ -1,19 +1,21 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { AuthService } from './core/auth.service';
-import { UserService, WhoAmI } from './core/user.service';
 import { Subscription } from 'rxjs';
+import { AuthService } from './core/auth.service';
+import { I18nService, SupportedLanguage } from './core/i18n.service';
+import { TranslatePipe } from './core/translate.pipe';
+import { UserService, WhoAmI } from './core/user.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink],
+  imports: [CommonModule, RouterOutlet, RouterLink, TranslatePipe],
   template: `
     <header class="topbar" *ngIf="isAuthenticated()">
       <div class="topbar-content">
         <div>
-          <strong>Game Collection</strong>
+          <strong>{{ 'app.name' | translate }}</strong>
         </div>
 
         <div class="topbar-actions">
@@ -22,48 +24,60 @@ import { Subscription } from 'rxjs';
               class="menu-toggle-btn"
               type="button"
               (click)="toggleAppsMenu($event)"
-              aria-label="Abrir menú"
-              title="Menú">
-              <img [src]="loggedUserPhotoUrl" [alt]="displayName || user?.email || 'Usuario'" />
+              [attr.aria-label]="'menu.open' | translate"
+              [title]="'menu.title' | translate">
+              <img [src]="loggedUserPhotoUrl" [alt]="displayName || user?.email || ('menu.users' | translate)" />
             </button>
 
-<div class="apps-panel" *ngIf="appsMenuOpen" (click)="$event.stopPropagation()">
-  <button class="apps-close-btn" type="button" aria-label="Cerrar menu" (click)="closeAppsMenu()">×</button>
-  <div class="apps-user-header" *ngIf="user">
-    <div class="apps-user-email">{{ user.email }}</div>
-    <img class="apps-user-photo" [src]="loggedUserPhotoUrl" [alt]="displayName || user.email" />
-    <div class="apps-user-name">¡Hola, {{ firstName || displayName }}!</div>
-    <div class="apps-user-fullname">{{ displayName }}</div>
-    <div class="apps-user-role">{{ roleLabel }}</div>
-  </div>
+            <div class="apps-panel" *ngIf="appsMenuOpen" (click)="$event.stopPropagation()">
+              <button
+                class="apps-close-btn"
+                type="button"
+                [attr.aria-label]="'menu.close' | translate"
+                (click)="closeAppsMenu()">
+                ×
+              </button>
 
-  <div class="apps-actions-card">
+              <div class="apps-user-header" *ngIf="user">
+                <div class="apps-user-email">{{ user.email }}</div>
+                <img class="apps-user-photo" [src]="loggedUserPhotoUrl" [alt]="displayName || user.email" />
+                <div class="apps-user-name">
+                  {{ 'menu.greeting' | translate: { name: firstName || displayName } }}
+                </div>
+                <div class="apps-user-fullname">{{ displayName }}</div>
+                <div class="apps-user-role">{{ roleLabel }}</div>
+              </div>
 
-    <a class="app-row" *ngIf="isAdmin" routerLink="/inventory" (click)="closeAppsMenu()">
-      <img [src]="inventoryIcon" alt="Inventario" />
-      <span>Inventario</span>
-    </a>
+              <div class="apps-actions-card">
+                <a class="app-row" *ngIf="isAdmin" routerLink="/inventory" (click)="closeAppsMenu()">
+                  <img [src]="inventoryIcon" [alt]="'menu.inventory' | translate" />
+                  <span>{{ 'menu.inventory' | translate }}</span>
+                </a>
 
-    <a class="app-row" routerLink="/collection" (click)="closeAppsMenu()">
-      <img [src]="gamesIcon" alt="Colección" />
-      <span>Colección</span>
-    </a>
+                <a class="app-row" routerLink="/collection" (click)="closeAppsMenu()">
+                  <img [src]="gamesIcon" [alt]="'menu.collection' | translate" />
+                  <span>{{ 'menu.collection' | translate }}</span>
+                </a>
 
-    <a class="app-row" *ngIf="isAdmin" routerLink="/users" (click)="closeAppsMenu()">
-      <img [src]="usersIcon" alt="Usuarios" />
-      <span>Usuarios</span>
-    </a>
+                <a class="app-row" *ngIf="isAdmin" routerLink="/users" (click)="closeAppsMenu()">
+                  <img [src]="usersIcon" [alt]="'menu.users' | translate" />
+                  <span>{{ 'menu.users' | translate }}</span>
+                </a>
 
-    <button class="app-row app-row-button" type="button" (click)="logoutFromMenu()">
-      <img [src]="exitIcon" alt="Salir" />
-      <span>Salir</span>
-    </button>
+                <div class="language-row">
+                  <label for="languageSelector">{{ 'menu.language' | translate }}</label>
+                  <select id="languageSelector" [value]="currentLanguage" (change)="changeLanguage($event)">
+                    <option value="es">{{ 'languages.es' | translate }}</option>
+                    <option value="en">{{ 'languages.en' | translate }}</option>
+                  </select>
+                </div>
 
-  </div>
-
-</div>
-
-
+                <button class="app-row app-row-button" type="button" (click)="logoutFromMenu()">
+                  <img [src]="exitIcon" [alt]="'menu.logout' | translate" />
+                  <span>{{ 'menu.logout' | translate }}</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -231,12 +245,39 @@ import { Subscription } from 'rxjs';
       cursor: pointer;
       font-family: inherit;
     }
+
+    .language-row {
+      align-items: center;
+      background: #f8fafc;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      gap: 14px;
+      justify-content: space-between;
+      padding: 14px 20px;
+    }
+
+    .language-row label {
+      color: #475569;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .language-row select {
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 999px;
+      color: #0f172a;
+      font: inherit;
+      font-weight: 700;
+      padding: 7px 12px;
+    }
   `]
 })
 export class AppComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
+  private readonly i18nService = inject(I18nService);
   private authSubscription?: Subscription;
 
   appsMenuOpen = false;
@@ -249,6 +290,10 @@ export class AppComponent implements OnInit, OnDestroy {
   inventoryIcon = 'assets/images/inventory.png';
   gamesIcon = 'assets/images/games.png';
   exitIcon = 'assets/images/exit.png';
+
+  get currentLanguage(): SupportedLanguage {
+    return this.i18nService.language();
+  }
 
   ngOnInit(): void {
     this.authSubscription = this.authService.authenticated$.subscribe((authenticated) => {
@@ -331,6 +376,11 @@ export class AppComponent implements OnInit, OnDestroy {
   logoutFromMenu(): void {
     this.closeAppsMenu();
     this.logout();
+  }
+
+  changeLanguage(event: Event): void {
+    const language = (event.target as HTMLSelectElement).value as SupportedLanguage;
+    void this.i18nService.setLanguage(language);
   }
 
   @HostListener('document:click')
