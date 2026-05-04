@@ -1,0 +1,25 @@
+{
+  "app": {
+    "name": "Game Collection"
+  },
+  "menu": {
+    "open": "Open menu",
+    "close": "Close menu",
+    "title": "Menu",
+    "greeting": "Hello, {{name}}!",
+    "inventory": "Inventory",
+    "collection": "Collection",
+    "users": "Users",
+    "logout": "Logout",
+    "language": "Language"
+  },
+  "inventory": {
+    "games": "Games",
+    "platforms": "Platforms",
+    "studios": "Studios"
+  },
+  "languages": {
+    "es": "Espanol",
+    "en": "English"
+  }
+}
