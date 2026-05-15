@@ -48,11 +48,15 @@ E2E_HEADLESS=true
 E2E_TIMEOUT_MS=15000
 E2E_USER_EMAIL=user@domain.com
 E2E_USER_PASSWORD=password
+E2E_REGULAR_USER_EMAIL=user@domain.com
+E2E_REGULAR_USER_PASSWORD=password
 E2E_CHROME_BINARY=/usr/bin/chromium-browser
 E2E_CHROME_DRIVER=/usr/bin/chromedriver
 ```
 
 `E2E_CHROME_BINARY` and `E2E_CHROME_DRIVER` are useful in Jenkins when running inside an Alpine-based Node container with Chromium installed through `apk`.
+
+`E2E_USER_EMAIL` is the default account used for generic smoke flows. `E2E_REGULAR_USER_EMAIL` is used specifically for RBAC checks that assert admin navigation is hidden. If no regular user is configured, that RBAC scenario is skipped instead of making assumptions about the default account role.
 
 Example Alpine setup:
 

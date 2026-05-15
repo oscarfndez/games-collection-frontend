@@ -16,5 +16,7 @@ module.exports = {
   headless: boolEnv(process.env.E2E_HEADLESS, true),
   timeoutMs: Number(process.env.E2E_TIMEOUT_MS || 15000),
   userEmail: process.env.E2E_USER_EMAIL || 'user@domain.com',
-  userPassword: process.env.E2E_USER_PASSWORD || 'password'
+  userPassword: process.env.E2E_USER_PASSWORD || 'password',
+  regularUserEmail: process.env.E2E_REGULAR_USER_EMAIL,
+  regularUserPassword: process.env.E2E_REGULAR_USER_PASSWORD || process.env.E2E_USER_PASSWORD || 'password'
 };

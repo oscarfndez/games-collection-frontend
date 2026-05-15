@@ -25,6 +25,16 @@ Given('I am signed in as the default user', async function () {
   await this.waitVisibleByTestId('collection-game-select');
 });
 
+Given('I am signed in as a regular user', async function () {
+  if (!config.regularUserEmail) {
+    return 'skipped';
+  }
+
+  await signIn(this, config.regularUserEmail, config.regularUserPassword);
+  await this.waitUrlContains('/collection');
+  await this.waitVisibleByTestId('collection-game-select');
+});
+
 When('I open the protected route {string}', async function (route) {
   await this.clearSession();
   await this.open(route);

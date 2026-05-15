@@ -18,7 +18,7 @@ Feature: Games Collection smoke tests
     Then I should be on the login page
 
   Scenario: Regular user does not see admin navigation entries
-    Given I am signed in as the default user
+    Given I am signed in as a regular user
     When I open the account menu
     Then I should not see the inventory navigation entry
     And I should not see the users navigation entry
