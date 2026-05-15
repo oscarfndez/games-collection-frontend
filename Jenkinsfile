@@ -33,6 +33,11 @@ spec:
     }
   }
 
+  parameters {
+    booleanParam(name: 'RUN_SMOKE_TESTS', defaultValue: false, description: 'Run Selenium/Cucumber smoke tests against the deployed application')
+    string(name: 'SMOKE_BASE_URL', defaultValue: 'http://oscarfndez.eu/gamescollection', description: 'Base URL used by the smoke test suite')
+  }
+
   environment {
     REGISTRY = 'docker.io/oscarfndez'
     IMAGE_NAME = 'game-collection-frontend'
@@ -54,6 +59,28 @@ spec:
           sh 'npm -v'
           sh 'npm ci'
           sh 'npm run build'
+        }
+      }
+    }
+
+    stage('Smoke Tests') {
+      when {
+        expression { return params.RUN_SMOKE_TESTS }
+      }
+      steps {
+        container('node') {
+          sh 'apk add --no-cache chromium'
+          sh '''
+            E2E_BASE_URL="${SMOKE_BASE_URL}" \
+            E2E_CHROME_BINARY=/usr/bin/chromium-browser \
+            E2E_HEADLESS=true \
+            npm run e2e:smoke
+          '''
+        }
+      }
+      post {
+        always {
+          archiveArtifacts artifacts: 'e2e/reports/**', allowEmptyArchive: true
         }
       }
     }

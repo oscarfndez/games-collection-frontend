@@ -96,6 +96,36 @@ Output directory:
 dist/game-collection-frontend
 ```
 
+## Smoke Tests
+
+The project includes a first Selenium + Cucumber smoke test suite under:
+
+```text
+e2e/
+```
+
+Run against a local Angular server:
+
+```bash
+npm run e2e:smoke
+```
+
+Run against the deployed Kubernetes ingress:
+
+```powershell
+$env:E2E_BASE_URL="http://oscarfndez.eu/gamescollection"
+npm run e2e:smoke
+```
+
+Default smoke credentials can be overridden with:
+
+```text
+E2E_USER_EMAIL
+E2E_USER_PASSWORD
+```
+
+The suite uses stable `data-testid` selectors and writes an HTML report to `e2e/reports/cucumber-report.html`.
+
 ## Main Routes
 
 ```text

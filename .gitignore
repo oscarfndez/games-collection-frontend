@@ -42,6 +42,7 @@ Thumbs.db
 # Build / coverage
 # =========================
 coverage/
+e2e/reports/
 
 # =========================
 # Misc
