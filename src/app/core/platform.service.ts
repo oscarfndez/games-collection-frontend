@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { GameDto } from './game.service';
 
 export interface PlatformDto {
   id?: string;
@@ -52,6 +53,34 @@ export class PlatformService {
   getById(id: string): Observable<PlatformDto> {
     const params = new HttpParams().set('id', id);
     return this.http.get<PlatformDto>(this.baseUrl, { params });
+  }
+
+  getGames(
+    id: string,
+    search?: string,
+    sortField?: string,
+    sortDir?: string,
+    page: number = 0,
+    size: number = 10
+  ): Observable<PageResponseDto<GameDto>> {
+    let params = new HttpParams()
+      .set('id', id)
+      .set('page', page)
+      .set('size', size);
+
+    if (search && search.trim()) {
+      params = params.set('search', search.trim());
+    }
+
+    if (sortField) {
+      params = params.set('sortField', sortField);
+    }
+
+    if (sortDir) {
+      params = params.set('sortDir', sortDir);
+    }
+
+    return this.http.get<PageResponseDto<GameDto>>(`${this.baseUrl}/games`, { params });
   }
 
   create(platform: PlatformDto): Observable<PlatformDto> {

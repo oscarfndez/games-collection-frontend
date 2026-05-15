@@ -100,7 +100,11 @@
       "createSuccess": "Game created successfully.",
       "updateSuccess": "Game updated successfully.",
       "availableOn": "Available on",
-      "detailsSubtitle": "Registered game details."
+      "detailsSubtitle": "Registered game details.",
+      "relatedTitle": "Related games",
+      "relatedEmpty": "No related games.",
+      "relatedLoading": "Loading related games...",
+      "relatedLoadError": "Could not load related games."
     },
     "platforms": {
       "title": "Platforms list",

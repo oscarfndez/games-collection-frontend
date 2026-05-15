@@ -100,7 +100,11 @@
       "createSuccess": "Juego creado correctamente.",
       "updateSuccess": "Juego actualizado correctamente.",
       "availableOn": "Disponible en",
-      "detailsSubtitle": "Detalle del juego registrado."
+      "detailsSubtitle": "Detalle del juego registrado.",
+      "relatedTitle": "Juegos asociados",
+      "relatedEmpty": "No hay juegos asociados.",
+      "relatedLoading": "Cargando juegos asociados...",
+      "relatedLoadError": "No se pudieron cargar los juegos asociados."
     },
     "platforms": {
       "title": "Listado de plataformas",
