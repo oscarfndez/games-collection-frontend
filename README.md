@@ -181,6 +181,7 @@ Collection:
 
 ```http
 GET    /api/collection
+GET    /api/collection/user
 POST   /api/collection
 PUT    /api/collection
 DELETE /api/collection

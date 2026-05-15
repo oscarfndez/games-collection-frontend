@@ -45,6 +45,34 @@ export class CollectionService {
     return this.http.get<PageResponseDto<GameItemDto>>(this.baseUrl, { params });
   }
 
+  getByUserId(
+    userId: string,
+    search?: string,
+    sortField?: string,
+    sortDir?: string,
+    page: number = 0,
+    size: number = 10
+  ): Observable<PageResponseDto<GameItemDto>> {
+    let params = new HttpParams()
+      .set('userId', userId)
+      .set('page', page)
+      .set('size', size);
+
+    if (search && search.trim()) {
+      params = params.set('search', search.trim());
+    }
+
+    if (sortField) {
+      params = params.set('sortField', sortField);
+    }
+
+    if (sortDir) {
+      params = params.set('sortDir', sortDir);
+    }
+
+    return this.http.get<PageResponseDto<GameItemDto>>(`${this.baseUrl}/user`, { params });
+  }
+
   add(gameItem: GameItemDto): Observable<GameItemDto> {
     return this.http.post<GameItemDto>(this.baseUrl, gameItem);
   }

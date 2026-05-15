@@ -218,7 +218,10 @@
       "noFileSelected": "No file selected",
       "createSuccess": "User created successfully.",
       "updateSuccess": "User updated successfully.",
-      "detailsSubtitle": "Registered user details."
+      "detailsSubtitle": "Registered user details.",
+      "collectionTitle": "User games",
+      "collectionEmpty": "This user does not own any games.",
+      "collectionLoadError": "Could not load the user's games."
     },
     "login": {
       "title": "System access",

@@ -218,7 +218,10 @@
       "noFileSelected": "Ningun archivo seleccionado",
       "createSuccess": "Usuario creado correctamente.",
       "updateSuccess": "Usuario actualizado correctamente.",
-      "detailsSubtitle": "Detalle del usuario registrado."
+      "detailsSubtitle": "Detalle del usuario registrado.",
+      "collectionTitle": "Juegos del usuario",
+      "collectionEmpty": "Este usuario no tiene juegos en su coleccion.",
+      "collectionLoadError": "No se pudieron cargar los juegos del usuario."
     },
     "login": {
       "title": "Acceso al sistema",
