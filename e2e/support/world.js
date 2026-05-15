@@ -24,6 +24,9 @@ class SmokeWorld extends World {
       }
       options.addArguments('--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage', '--window-size=1440,1000');
       builder = builder.setChromeOptions(options);
+      if (config.chromeDriver) {
+        builder = builder.setChromeService(new chrome.ServiceBuilder(config.chromeDriver));
+      }
     }
 
     if (config.browser === 'firefox') {

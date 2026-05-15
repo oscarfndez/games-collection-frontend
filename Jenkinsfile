@@ -69,10 +69,11 @@ spec:
       }
       steps {
         container('node') {
-          sh 'apk add --no-cache chromium'
+          sh 'apk add --no-cache chromium chromium-chromedriver'
           sh '''
             E2E_BASE_URL="${SMOKE_BASE_URL}" \
             E2E_CHROME_BINARY=/usr/bin/chromium-browser \
+            E2E_CHROME_DRIVER=/usr/bin/chromedriver \
             E2E_HEADLESS=true \
             npm run e2e:smoke
           '''
