@@ -15,24 +15,24 @@ import { TranslatePipe } from '../../../core/translate.pipe';
         <h1>{{ (isEditMode ? 'pages.studios.editTitle' : 'pages.studios.createTitle') | translate }}</h1>
         <p class="muted">{{ (isEditMode ? 'pages.studios.editSubtitle' : 'pages.studios.createSubtitle') | translate }}</p>
 
-        <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
+        <form class="form-grid" data-testid="studio-form" [formGroup]="form" (ngSubmit)="submit()">
           <div class="form-field">
             <label for="name">{{ 'common.name' | translate }}</label>
-            <input id="name" type="text" formControlName="name" />
+            <input id="name" data-testid="studio-name" type="text" formControlName="name" />
           </div>
 
           <div class="form-field">
             <label for="description">{{ 'common.description' | translate }}</label>
-            <textarea id="description" formControlName="description"></textarea>
+            <textarea id="description" data-testid="studio-description" formControlName="description"></textarea>
           </div>
 
           <div class="form-field">
             <label for="location">{{ 'common.location' | translate }}</label>
-            <input id="location" type="text" formControlName="location" />
+            <input id="location" data-testid="studio-location" type="text" formControlName="location" />
           </div>
 
           <label class="checkbox-row">
-            <input type="checkbox" formControlName="first_party" />
+            <input type="checkbox" data-testid="studio-first-party" formControlName="first_party" />
             <span>{{ 'pages.studios.firstParty' | translate }}</span>
           </label>
 
@@ -40,10 +40,10 @@ import { TranslatePipe } from '../../../core/translate.pipe';
           <div *ngIf="successMessage" class="status-success">{{ successMessage }}</div>
 
           <div class="actions">
-            <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading">
+            <button class="btn btn-primary" data-testid="studio-save" type="submit" [disabled]="form.invalid || loading">
               {{ (loading ? 'common.loadingSave' : 'common.save') | translate }}
             </button>
-            <button class="btn btn-secondary" type="button" (click)="goBack()">{{ 'common.cancel' | translate }}</button>
+            <button class="btn btn-secondary" data-testid="studio-cancel" type="button" (click)="goBack()">{{ 'common.cancel' | translate }}</button>
           </div>
         </form>
       </div>

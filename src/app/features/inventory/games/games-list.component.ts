@@ -17,13 +17,14 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
           <h1>{{ 'pages.games.title' | translate }}</h1>
           <p class="muted">{{ 'pages.games.subtitle' | translate }}</p>
         </div>
-        <a class="btn btn-primary" routerLink="/inventory/games/new">{{ 'pages.games.new' | translate }}</a>
+        <a class="btn btn-primary" data-testid="games-new" routerLink="/inventory/games/new">{{ 'pages.games.new' | translate }}</a>
       </div>
 
       <div class="form-field" style="margin: 16px 0;">
         <label for="search">{{ 'pages.games.search' | translate }}</label>
         <input
           id="search"
+          data-testid="games-search"
           type="text"
           [(ngModel)]="searchTerm"
           (input)="applyFilter()"
@@ -35,7 +36,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
       <div *ngIf="successMessage" class="status-success" style="margin: 16px 0;">{{ successMessage }}</div>
 
       <div class="table-wrapper" *ngIf="!loading; else loadingTpl">
-        <table class="table" *ngIf="filteredGames.length; else emptyTpl">
+        <table class="table" data-testid="games-table" *ngIf="filteredGames.length; else emptyTpl">
           <thead>
             <tr>
               <th>{{ 'common.image' | translate }}</th>
@@ -56,7 +57,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let game of filteredGames" (click)="openGame(game.id!)" class="clickable-row">
+            <tr *ngFor="let game of filteredGames" data-testid="games-row" (click)="openGame(game.id!)" class="clickable-row">
               <td>
                 <img
                   [src]="game.image_url || defaultImage"
@@ -71,10 +72,10 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
               <td>{{ game.studio_name || '-' }}</td>
               <td class="actions-cell" (click)="$event.stopPropagation()">
                 <div class="row-actions">
-                  <button class="btn btn-secondary" type="button" (click)="edit($event, game.id!)">
+                  <button class="btn btn-secondary" data-testid="games-edit" type="button" (click)="edit($event, game.id!)">
                     {{ 'common.edit' | translate }}
                   </button>
-                  <button class="btn btn-danger" type="button" (click)="deleteGame($event, game.id!, game.name)">
+                  <button class="btn btn-danger" data-testid="games-delete" type="button" (click)="deleteGame($event, game.id!, game.name)">
                     {{ 'common.delete' | translate }}
                   </button>
                 </div>
@@ -88,10 +89,10 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component
             {{ 'common.pageInfo' | translate: { page: currentPage + 1, totalPages: totalPages, totalElements: totalElements, items: ('pages.games.items' | translate) } }}
           </div>
           <div class="actions">
-            <button class="btn btn-secondary" type="button" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
+            <button class="btn btn-secondary" data-testid="games-previous-page" type="button" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
               {{ 'common.previous' | translate }}
             </button>
-            <button class="btn btn-secondary" type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">
+            <button class="btn btn-secondary" data-testid="games-next-page" type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">
               {{ 'common.next' | translate }}
             </button>
           </div>

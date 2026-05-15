@@ -19,25 +19,26 @@ import { TranslatePipe } from '../../../core/translate.pipe';
           {{ (isEditMode ? 'pages.games.editSubtitle' : 'pages.games.createSubtitle') | translate }}
         </p>
 
-        <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
+        <form class="form-grid" data-testid="game-form" [formGroup]="form" (ngSubmit)="submit()">
           <div class="form-field">
             <label for="name">{{ 'common.name' | translate }}</label>
-            <input id="name" type="text" formControlName="name" />
+            <input id="name" data-testid="game-name" type="text" formControlName="name" />
           </div>
 
           <div class="form-field">
             <label for="description">{{ 'common.description' | translate }}</label>
-            <textarea id="description" formControlName="description"></textarea>
+            <textarea id="description" data-testid="game-description" formControlName="description"></textarea>
           </div>
 
           <div class="form-field">
             <label>{{ 'pages.games.platforms' | translate }}</label>
             <p class="muted" style="margin: 0 0 8px;">{{ 'pages.games.selectPlatformsHelp' | translate }}</p>
             <div *ngIf="loadingPlatforms" class="muted">{{ 'pages.games.loadingPlatforms' | translate }}</div>
-            <div *ngIf="!loadingPlatforms" class="platform-options">
-              <div *ngFor="let platform of platforms" class="platform-option">
+            <div *ngIf="!loadingPlatforms" class="platform-options" data-testid="game-platform-options">
+              <div *ngFor="let platform of platforms" class="platform-option" data-testid="game-platform-option">
                 <input
                   [id]="'platform-' + platform.id"
+                  data-testid="game-platform-checkbox"
                   type="checkbox"
                   [checked]="isPlatformSelected(platform.id)"
                   (change)="togglePlatform(platform.id)"
@@ -52,7 +53,7 @@ import { TranslatePipe } from '../../../core/translate.pipe';
 
           <div class="form-field">
             <label for="studio">{{ 'pages.games.studio' | translate }}</label>
-            <select id="studio" formControlName="studio_id">
+            <select id="studio" data-testid="game-studio" formControlName="studio_id">
               <option value="">{{ 'pages.games.unknownStudio' | translate }}</option>
               <option *ngFor="let studio of studios" [value]="studio.id">{{ studio.name }}</option>
             </select>
@@ -60,7 +61,7 @@ import { TranslatePipe } from '../../../core/translate.pipe';
 
           <div class="form-field">
             <label for="imageUrl">{{ 'pages.games.imageUrl' | translate }}</label>
-            <input id="imageUrl" type="text" formControlName="image_url" placeholder="https://..." />
+            <input id="imageUrl" data-testid="game-image-url" type="text" formControlName="image_url" placeholder="https://..." />
           </div>
 
           <div class="card" style="padding: 12px; margin-top: 8px;">
@@ -76,10 +77,10 @@ import { TranslatePipe } from '../../../core/translate.pipe';
           <div *ngIf="successMessage" class="status-success">{{ successMessage }}</div>
 
           <div class="actions">
-            <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading">
+            <button class="btn btn-primary" data-testid="game-save" type="submit" [disabled]="form.invalid || loading">
               {{ (loading ? 'common.loadingSave' : 'common.save') | translate }}
             </button>
-            <button class="btn btn-secondary" type="button" (click)="goBack()">{{ 'common.cancel' | translate }}</button>
+            <button class="btn btn-secondary" data-testid="game-cancel" type="button" (click)="goBack()">{{ 'common.cancel' | translate }}</button>
           </div>
         </form>
       </div>

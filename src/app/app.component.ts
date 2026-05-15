@@ -22,6 +22,7 @@ import { UserService, WhoAmI } from './core/user.service';
           <div class="menu-container">
             <button
               class="menu-toggle-btn"
+              data-testid="app-menu-toggle"
               type="button"
               (click)="toggleAppsMenu($event)"
               [attr.aria-label]="'menu.open' | translate"
@@ -29,9 +30,10 @@ import { UserService, WhoAmI } from './core/user.service';
               <img [src]="loggedUserPhotoUrl" [alt]="displayName || user?.email || ('menu.users' | translate)" />
             </button>
 
-            <div class="apps-panel" *ngIf="appsMenuOpen" (click)="$event.stopPropagation()">
+            <div class="apps-panel" *ngIf="appsMenuOpen" data-testid="app-menu-panel" (click)="$event.stopPropagation()">
               <button
                 class="apps-close-btn"
+                data-testid="app-menu-close"
                 type="button"
                 [attr.aria-label]="'menu.close' | translate"
                 (click)="closeAppsMenu()">
@@ -51,7 +53,7 @@ import { UserService, WhoAmI } from './core/user.service';
               <div class="apps-section-card language-card">
                 <div class="language-row">
                   <label for="languageSelector">{{ 'menu.language' | translate }}</label>
-                  <select id="languageSelector" [value]="currentLanguage" (change)="changeLanguage($event)">
+                  <select id="languageSelector" data-testid="language-selector" [value]="currentLanguage" (change)="changeLanguage($event)">
                     <option value="es">{{ 'languages.es' | translate }}</option>
                     <option value="en">{{ 'languages.en' | translate }}</option>
                   </select>
@@ -59,22 +61,22 @@ import { UserService, WhoAmI } from './core/user.service';
               </div>
 
               <div class="apps-actions-card">
-                <a class="app-row" *ngIf="isAdmin" routerLink="/inventory" (click)="closeAppsMenu()">
+                <a class="app-row" data-testid="nav-inventory" *ngIf="isAdmin" routerLink="/inventory" (click)="closeAppsMenu()">
                   <img [src]="inventoryIcon" [alt]="'menu.inventory' | translate" />
                   <span>{{ 'menu.inventory' | translate }}</span>
                 </a>
 
-                <a class="app-row" routerLink="/collection" (click)="closeAppsMenu()">
+                <a class="app-row" data-testid="nav-collection" routerLink="/collection" (click)="closeAppsMenu()">
                   <img [src]="gamesIcon" [alt]="'menu.collection' | translate" />
                   <span>{{ 'menu.collection' | translate }}</span>
                 </a>
 
-                <a class="app-row" *ngIf="isAdmin" routerLink="/users" (click)="closeAppsMenu()">
+                <a class="app-row" data-testid="nav-users" *ngIf="isAdmin" routerLink="/users" (click)="closeAppsMenu()">
                   <img [src]="usersIcon" [alt]="'menu.users' | translate" />
                   <span>{{ 'menu.users' | translate }}</span>
                 </a>
 
-                <button class="app-row app-row-button" type="button" (click)="logoutFromMenu()">
+                <button class="app-row app-row-button" data-testid="nav-logout" type="button" (click)="logoutFromMenu()">
                   <img [src]="exitIcon" [alt]="'menu.logout' | translate" />
                   <span>{{ 'menu.logout' | translate }}</span>
                 </button>

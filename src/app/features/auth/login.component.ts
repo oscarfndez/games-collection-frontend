@@ -15,20 +15,20 @@ import { TranslatePipe } from '../../core/translate.pipe';
         <h1>{{ 'pages.login.title' | translate }}</h1>
         <p class="muted">{{ 'pages.login.subtitle' | translate }}</p>
 
-        <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
+        <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()" data-testid="login-form">
           <div class="form-field">
             <label for="email">{{ 'common.email' | translate }}</label>
-            <input id="email" type="email" formControlName="email" [placeholder]="'pages.login.emailPlaceholder' | translate" />
+            <input id="email" data-testid="login-email" type="email" formControlName="email" [placeholder]="'pages.login.emailPlaceholder' | translate" />
           </div>
 
           <div class="form-field">
             <label for="password">{{ 'common.password' | translate }}</label>
-            <input id="password" type="password" formControlName="password" placeholder="********" />
+            <input id="password" data-testid="login-password" type="password" formControlName="password" placeholder="********" />
           </div>
 
-          <div *ngIf="errorMessage" class="status-error">{{ errorMessage }}</div>
+          <div *ngIf="errorMessage" class="status-error" data-testid="login-error">{{ errorMessage }}</div>
 
-          <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading">
+          <button class="btn btn-primary" data-testid="login-submit" type="submit" [disabled]="form.invalid || loading">
             {{ (loading ? 'pages.login.loading' : 'pages.login.submit') | translate }}
           </button>
         </form>

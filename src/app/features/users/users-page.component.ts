@@ -18,13 +18,14 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
             <h1>{{ 'pages.users.title' | translate }}</h1>
             <p class="muted">{{ 'pages.users.subtitle' | translate }}</p>
           </div>
-          <a class="btn btn-primary" routerLink="/users/new">{{ 'pages.users.new' | translate }}</a>
+          <a class="btn btn-primary" data-testid="users-new" routerLink="/users/new">{{ 'pages.users.new' | translate }}</a>
         </div>
 
         <div class="form-field" style="margin: 16px 0;">
           <label for="search">{{ 'pages.users.search' | translate }}</label>
           <input
             id="search"
+            data-testid="users-search"
             type="text"
             [(ngModel)]="searchTerm"
             (input)="applyFilter()"
@@ -36,7 +37,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
         <div *ngIf="successMessage" class="status-success" style="margin: 16px 0;">{{ successMessage }}</div>
 
         <div class="table-wrapper" *ngIf="!loading; else loadingTpl">
-          <table class="table" *ngIf="users.length; else emptyTpl">
+          <table class="table" data-testid="users-table" *ngIf="users.length; else emptyTpl">
             <thead>
               <tr>
                 <th>{{ 'common.photo' | translate }}</th>
@@ -60,7 +61,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let user of users" (click)="openUser(user.id!)" class="clickable-row">
+              <tr *ngFor="let user of users" data-testid="users-row" (click)="openUser(user.id!)" class="clickable-row">
                 <td>
                   <img
                     [src]="photoUrl(user)"
@@ -76,8 +77,8 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
                 </td>
                 <td class="actions-cell" (click)="$event.stopPropagation()">
                   <div class="row-actions">
-                    <button class="btn btn-secondary" type="button" (click)="edit($event, user.id!)">{{ 'common.edit' | translate }}</button>
-                    <button class="btn btn-danger" type="button" (click)="deleteUser($event, user.id!, user.email)">{{ 'common.delete' | translate }}</button>
+                    <button class="btn btn-secondary" data-testid="users-edit" type="button" (click)="edit($event, user.id!)">{{ 'common.edit' | translate }}</button>
+                    <button class="btn btn-danger" data-testid="users-delete" type="button" (click)="deleteUser($event, user.id!, user.email)">{{ 'common.delete' | translate }}</button>
                   </div>
                 </td>
               </tr>
@@ -89,8 +90,8 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
               {{ 'common.pageInfo' | translate: { page: currentPage + 1, totalPages: totalPages, totalElements: totalElements, items: ('pages.users.items' | translate) } }}
             </div>
             <div class="actions">
-              <button class="btn btn-secondary" type="button" (click)="goToPreviousPage()" [disabled]="currentPage === 0">{{ 'common.previous' | translate }}</button>
-              <button class="btn btn-secondary" type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">{{ 'common.next' | translate }}</button>
+              <button class="btn btn-secondary" data-testid="users-previous-page" type="button" (click)="goToPreviousPage()" [disabled]="currentPage === 0">{{ 'common.previous' | translate }}</button>
+              <button class="btn btn-secondary" data-testid="users-next-page" type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">{{ 'common.next' | translate }}</button>
             </div>
           </div>
         </div>

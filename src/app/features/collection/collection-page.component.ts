@@ -30,7 +30,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
         <div class="form-grid">
           <div class="form-field">
             <label for="game">{{ 'pages.collection.game' | translate }}</label>
-            <select id="game" [(ngModel)]="selectedGameId" (change)="selectedPlatformId = ''">
+            <select id="game" data-testid="collection-game-select" [(ngModel)]="selectedGameId" (change)="selectedPlatformId = ''">
               <option value="">{{ 'pages.collection.selectGame' | translate }}</option>
               <option *ngFor="let game of games" [value]="game.id">{{ game.name }}</option>
             </select>
@@ -38,7 +38,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 
           <div class="form-field">
             <label for="platform">{{ 'pages.games.platform' | translate }}</label>
-            <select id="platform" [(ngModel)]="selectedPlatformId" [disabled]="!selectedGame">
+            <select id="platform" data-testid="collection-platform-select" [(ngModel)]="selectedPlatformId" [disabled]="!selectedGame">
               <option value="">{{ 'pages.collection.selectPlatform' | translate }}</option>
               <option *ngFor="let platformId of selectedGame?.platform_ids ?? []" [value]="platformId">
                 {{ platformName(selectedGame!, platformId) }}
@@ -47,10 +47,10 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
           </div>
 
           <div class="actions">
-            <button class="btn btn-primary" type="button" (click)="addToCollection()" [disabled]="!canAdd">
+            <button class="btn btn-primary" data-testid="collection-save" type="button" (click)="addToCollection()" [disabled]="!canAdd">
               {{ (editingItemId ? 'pages.collection.saveChanges' : 'pages.collection.addToCollection') | translate }}
             </button>
-            <button class="btn btn-secondary" type="button" *ngIf="editingItemId" (click)="cancelEdit()">
+            <button class="btn btn-secondary" data-testid="collection-cancel-edit" type="button" *ngIf="editingItemId" (click)="cancelEdit()">
               {{ 'common.cancelEdit' | translate }}
             </button>
           </div>
@@ -64,6 +64,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
           <label for="collectionSearch">{{ 'pages.collection.search' | translate }}</label>
           <input
             id="collectionSearch"
+            data-testid="collection-search"
             type="text"
             [(ngModel)]="searchTerm"
             (input)="applyFilter()"
@@ -75,7 +76,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
         <div *ngIf="!loading && !items.length" class="muted">{{ 'pages.collection.empty' | translate }}</div>
 
         <div class="table-wrapper" *ngIf="!loading && items.length">
-          <table class="table">
+          <table class="table" data-testid="collection-table">
             <thead>
               <tr>
                 <th>{{ 'common.image' | translate }}</th>
@@ -91,7 +92,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of items">
+              <tr *ngFor="let item of items" data-testid="collection-row">
                 <td>
                   <img
                     [src]="item.game_image_url || defaultImage"
@@ -104,8 +105,8 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
                 <td><span class="pill">{{ item.platform_name }}</span></td>
                 <td>
                   <div class="row-actions">
-                    <button class="btn btn-secondary" type="button" (click)="edit(item)">{{ 'common.edit' | translate }}</button>
-                    <button class="btn btn-danger" type="button" (click)="remove(item)">{{ 'common.delete' | translate }}</button>
+                    <button class="btn btn-secondary" data-testid="collection-edit" type="button" (click)="edit(item)">{{ 'common.edit' | translate }}</button>
+                    <button class="btn btn-danger" data-testid="collection-delete" type="button" (click)="remove(item)">{{ 'common.delete' | translate }}</button>
                   </div>
                 </td>
               </tr>
@@ -117,8 +118,8 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
               {{ 'common.pageInfo' | translate: { page: currentPage + 1, totalPages: totalPages, totalElements: totalElements, items: ('pages.collection.items' | translate) } }}
             </div>
             <div class="actions">
-              <button class="btn btn-secondary" type="button" (click)="goToPreviousPage()" [disabled]="currentPage === 0">{{ 'common.previous' | translate }}</button>
-              <button class="btn btn-secondary" type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">{{ 'common.next' | translate }}</button>
+              <button class="btn btn-secondary" data-testid="collection-previous-page" type="button" (click)="goToPreviousPage()" [disabled]="currentPage === 0">{{ 'common.previous' | translate }}</button>
+              <button class="btn btn-secondary" data-testid="collection-next-page" type="button" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">{{ 'common.next' | translate }}</button>
             </div>
           </div>
         </div>

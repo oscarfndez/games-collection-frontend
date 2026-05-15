@@ -17,20 +17,20 @@ import { TranslatePipe } from '../../../core/translate.pipe';
           {{ (isEditMode ? 'pages.platforms.editSubtitle' : 'pages.platforms.createSubtitle') | translate }}
         </p>
 
-        <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
+        <form class="form-grid" data-testid="platform-form" [formGroup]="form" (ngSubmit)="submit()">
           <div class="form-field">
             <label for="name">{{ 'common.name' | translate }}</label>
-            <input id="name" type="text" formControlName="name" />
+            <input id="name" data-testid="platform-name" type="text" formControlName="name" />
           </div>
 
           <div class="form-field">
             <label for="description">{{ 'common.description' | translate }}</label>
-            <textarea id="description" formControlName="description"></textarea>
+            <textarea id="description" data-testid="platform-description" formControlName="description"></textarea>
           </div>
 
           <div class="form-field">
             <label for="imageUrl">{{ 'pages.platforms.imageUrl' | translate }}</label>
-            <input id="imageUrl" type="text" formControlName="image_url" placeholder="https://..." />
+            <input id="imageUrl" data-testid="platform-image-url" type="text" formControlName="image_url" placeholder="https://..." />
           </div>
 
           <div class="form-field">
@@ -49,10 +49,10 @@ import { TranslatePipe } from '../../../core/translate.pipe';
           <div *ngIf="successMessage" class="status-success">{{ successMessage }}</div>
 
           <div class="actions">
-            <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading">
+            <button class="btn btn-primary" data-testid="platform-save" type="submit" [disabled]="form.invalid || loading">
               {{ (loading ? 'common.loadingSave' : 'common.save') | translate }}
             </button>
-            <button class="btn btn-secondary" type="button" (click)="goBack()">{{ 'common.cancel' | translate }}</button>
+            <button class="btn btn-secondary" data-testid="platform-cancel" type="button" (click)="goBack()">{{ 'common.cancel' | translate }}</button>
           </div>
         </form>
       </div>

@@ -11,6 +11,7 @@ import { TranslatePipe } from '../../core/translate.pipe';
       <div class="app-panel">
         <nav class="panel-tabs">
           <a
+            data-testid="inventory-tab-games"
             routerLink="/inventory/games"
             routerLinkActive="active-tab"
             [routerLinkActiveOptions]="{ exact: false }"
@@ -19,6 +20,7 @@ import { TranslatePipe } from '../../core/translate.pipe';
           </a>
 
           <a
+            data-testid="inventory-tab-platforms"
             routerLink="/inventory/platforms"
             routerLinkActive="active-tab"
             [routerLinkActiveOptions]="{ exact: false }"
@@ -27,6 +29,7 @@ import { TranslatePipe } from '../../core/translate.pipe';
           </a>
 
           <a
+            data-testid="inventory-tab-studios"
             routerLink="/inventory/studios"
             routerLinkActive="active-tab"
             [routerLinkActiveOptions]="{ exact: false }"

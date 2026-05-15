@@ -7,14 +7,14 @@ import { TranslatePipe } from '../core/translate.pipe';
   imports: [CommonModule, TranslatePipe],
   selector: 'app-confirm-dialog',
   template: `
-    <div class="dialog-backdrop" *ngIf="open" (click)="onCancel()">
+    <div class="dialog-backdrop" data-testid="confirm-dialog" *ngIf="open" (click)="onCancel()">
       <div class="dialog-card" (click)="$event.stopPropagation()">
         <h2>{{ title }}</h2>
         <p>{{ message }}</p>
 
         <div class="dialog-actions">
-          <button class="btn btn-secondary" type="button" (click)="onCancel()">{{ 'common.cancel' | translate }}</button>
-          <button class="btn btn-danger" type="button" (click)="onConfirm()">{{ 'common.delete' | translate }}</button>
+          <button class="btn btn-secondary" data-testid="confirm-cancel" type="button" (click)="onCancel()">{{ 'common.cancel' | translate }}</button>
+          <button class="btn btn-danger" data-testid="confirm-delete" type="button" (click)="onConfirm()">{{ 'common.delete' | translate }}</button>
         </div>
       </div>
     </div>

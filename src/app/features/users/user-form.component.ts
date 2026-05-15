@@ -17,30 +17,30 @@ import { UserDto, UserService } from '../../core/user.service';
           {{ (isEditMode ? 'pages.users.editSubtitle' : 'pages.users.createSubtitle') | translate }}
         </p>
 
-        <form class="form-grid" [formGroup]="form" (ngSubmit)="submit()">
+        <form class="form-grid" data-testid="user-form" [formGroup]="form" (ngSubmit)="submit()">
           <div class="form-field">
             <label for="firstName">{{ 'common.firstName' | translate }}</label>
-            <input id="firstName" type="text" formControlName="first_name" />
+            <input id="firstName" data-testid="user-first-name" type="text" formControlName="first_name" />
           </div>
 
           <div class="form-field">
             <label for="lastName">{{ 'common.lastName' | translate }}</label>
-            <input id="lastName" type="text" formControlName="last_name" />
+            <input id="lastName" data-testid="user-last-name" type="text" formControlName="last_name" />
           </div>
 
           <div class="form-field">
             <label for="email">{{ 'common.email' | translate }}</label>
-            <input id="email" type="email" formControlName="email" />
+            <input id="email" data-testid="user-email" type="email" formControlName="email" />
           </div>
 
           <div class="form-field" *ngIf="!isEditMode">
             <label for="password">{{ 'pages.users.password' | translate }}</label>
-            <input id="password" type="password" formControlName="password" />
+            <input id="password" data-testid="user-password" type="password" formControlName="password" />
           </div>
 
           <div class="form-field">
             <label for="role">{{ 'common.role' | translate }}</label>
-            <select id="role" formControlName="role">
+            <select id="role" data-testid="user-role" formControlName="role">
               <option value="USER">USER</option>
               <option value="ADMIN">ADMIN</option>
             </select>
@@ -51,12 +51,13 @@ import { UserDto, UserService } from '../../core/user.service';
             <div class="file-picker">
               <input
                 id="photo"
+                data-testid="user-photo"
                 class="file-picker__input"
                 type="file"
                 accept="image/*"
                 (change)="onPhotoSelected($event)"
               />
-              <label class="btn btn-secondary file-picker__button" for="photo">
+              <label class="btn btn-secondary file-picker__button" data-testid="user-photo-button" for="photo">
                 {{ 'pages.users.selectPhoto' | translate }}
               </label>
               <span class="file-picker__filename">{{ selectedPhotoName }}</span>
@@ -78,10 +79,10 @@ import { UserDto, UserService } from '../../core/user.service';
           <div *ngIf="successMessage" class="status-success">{{ successMessage }}</div>
 
           <div class="actions">
-            <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading">
+            <button class="btn btn-primary" data-testid="user-save" type="submit" [disabled]="form.invalid || loading">
               {{ (loading ? 'common.loadingSave' : 'common.save') | translate }}
             </button>
-            <button class="btn btn-secondary" type="button" (click)="goBack()">{{ 'common.cancel' | translate }}</button>
+            <button class="btn btn-secondary" data-testid="user-cancel" type="button" (click)="goBack()">{{ 'common.cancel' | translate }}</button>
           </div>
         </form>
       </div>
