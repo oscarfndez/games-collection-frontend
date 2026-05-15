@@ -66,11 +66,14 @@ apk add --no-cache chromium chromium-chromedriver
 
 ## Reports
 
-The npm script writes an HTML report to:
+The npm script writes a JSON report and a static HTML report to:
 
 ```text
 e2e/reports/cucumber-report.html
+e2e/reports/cucumber-report.json
 ```
+
+The HTML report is generated from the JSON file without client-side JavaScript, so it can be opened safely from Jenkins archived artifacts.
 
 On failure, screenshots are saved under:
 
