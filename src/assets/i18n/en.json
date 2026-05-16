@@ -22,6 +22,33 @@
     "es": "Espanol",
     "en": "English"
   },
+  "notifications": {
+    "open": "Open notifications",
+    "close": "Close notifications",
+    "title": "Notifications",
+    "subtitle": "{{count}} unread",
+    "loading": "Loading notifications...",
+    "empty": "You do not have notifications.",
+    "loadError": "Could not load notifications.",
+    "inventory": {
+      "gameDeleted": {
+        "title": "Game deleted",
+        "message": "The game {{name}} has been deleted from the inventory."
+      },
+      "platformDeleted": {
+        "title": "Platform deleted",
+        "message": "The platform {{name}} has been deleted from the inventory."
+      },
+      "studioDeleted": {
+        "title": "Studio deleted",
+        "message": "The studio {{name}} has been deleted from the inventory."
+      },
+      "itemDeleted": {
+        "title": "Item deleted",
+        "message": "{{name}} has been deleted from the inventory."
+      }
+    }
+  },
   "common": {
     "actions": "Actions",
     "add": "Add",

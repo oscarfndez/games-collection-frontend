@@ -22,6 +22,33 @@
     "es": "Espanol",
     "en": "English"
   },
+  "notifications": {
+    "open": "Abrir notificaciones",
+    "close": "Cerrar notificaciones",
+    "title": "Notificaciones",
+    "subtitle": "{{count}} sin leer",
+    "loading": "Cargando notificaciones...",
+    "empty": "No tienes notificaciones.",
+    "loadError": "No se pudieron cargar las notificaciones.",
+    "inventory": {
+      "gameDeleted": {
+        "title": "Juego eliminado",
+        "message": "El juego {{name}} ha sido eliminado del inventario."
+      },
+      "platformDeleted": {
+        "title": "Plataforma eliminada",
+        "message": "La plataforma {{name}} ha sido eliminada del inventario."
+      },
+      "studioDeleted": {
+        "title": "Estudio eliminado",
+        "message": "El estudio {{name}} ha sido eliminado del inventario."
+      },
+      "itemDeleted": {
+        "title": "Elemento eliminado",
+        "message": "{{name}} ha sido eliminado del inventario."
+      }
+    }
+  },
   "common": {
     "actions": "Acciones",
     "add": "Anadir",

@@ -4,6 +4,7 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from './core/auth.service';
 import { I18nService, SupportedLanguage } from './core/i18n.service';
+import { NotificationDto, NotificationService } from './core/notification.service';
 import { TranslatePipe } from './core/translate.pipe';
 import { UserService, WhoAmI } from './core/user.service';
 
@@ -19,6 +20,58 @@ import { UserService, WhoAmI } from './core/user.service';
         </div>
 
         <div class="topbar-actions">
+          <div class="notifications-container">
+            <button
+              class="notification-toggle-btn"
+              data-testid="notifications-toggle"
+              type="button"
+              (click)="toggleNotificationsPanel($event)"
+              [attr.aria-label]="'notifications.open' | translate"
+              [title]="'notifications.title' | translate">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M4.5 6.75A2.25 2.25 0 0 1 6.75 4.5h10.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25H6.75a2.25 2.25 0 0 1-2.25-2.25V6.75Zm2.02-.25 5.48 4.28 5.48-4.28H6.52Zm10.98 11a.25.25 0 0 0 .25-.25V8.4l-5.06 3.95a1.13 1.13 0 0 1-1.38 0L6.25 8.4v8.85c0 .14.11.25.25.25h11Z" />
+              </svg>
+              <span class="notification-badge" *ngIf="unreadNotifications > 0">{{ unreadNotificationsLabel }}</span>
+            </button>
+
+            <div class="notifications-panel" *ngIf="notificationsPanelOpen" data-testid="notifications-panel" (click)="$event.stopPropagation()">
+              <div class="notifications-panel-header">
+                <div>
+                  <h2>{{ 'notifications.title' | translate }}</h2>
+                  <p>{{ 'notifications.subtitle' | translate: { count: unreadNotifications } }}</p>
+                </div>
+                <button
+                  class="notifications-close-btn"
+                  data-testid="notifications-close"
+                  type="button"
+                  [attr.aria-label]="'notifications.close' | translate"
+                  (click)="closeNotificationsPanel()">
+                  &times;
+                </button>
+              </div>
+
+              <div class="notifications-state" *ngIf="notificationsLoading">{{ 'notifications.loading' | translate }}</div>
+              <div class="notifications-state notifications-error" *ngIf="!notificationsLoading && notificationsError">{{ notificationsError }}</div>
+              <div class="notifications-state" *ngIf="!notificationsLoading && !notificationsError && !notifications.length">
+                {{ 'notifications.empty' | translate }}
+              </div>
+
+              <div class="notifications-list" *ngIf="!notificationsLoading && notifications.length">
+                <button
+                  class="notification-item"
+                  data-testid="notification-item"
+                  type="button"
+                  *ngFor="let notification of notifications"
+                  [class.notification-read]="notification.read"
+                  (click)="markNotificationAsRead(notification)">
+                  <span class="notification-dot" *ngIf="!notification.read"></span>
+                  <span class="notification-text">{{ notificationMessage(notification) }}</span>
+                  <span class="notification-date">{{ notification.createdAt | date:'short' }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
           <div class="menu-container">
             <button
               class="menu-toggle-btn"
@@ -37,7 +90,7 @@ import { UserService, WhoAmI } from './core/user.service';
                 type="button"
                 [attr.aria-label]="'menu.close' | translate"
                 (click)="closeAppsMenu()">
-                ×
+                &times;
               </button>
 
               <div class="apps-user-header" *ngIf="user">
@@ -102,6 +155,192 @@ import { UserService, WhoAmI } from './core/user.service';
       padding: 2px;
       transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
       width: 44px;
+    }
+
+    .topbar-actions {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+    }
+
+    .notifications-container,
+    .menu-container {
+      position: relative;
+    }
+
+    .notification-toggle-btn {
+      align-items: center;
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 999px;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+      color: #2563eb;
+      cursor: pointer;
+      display: inline-flex;
+      height: 44px;
+      justify-content: center;
+      position: relative;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+      width: 44px;
+    }
+
+    .notification-toggle-btn:hover {
+      border-color: #2563eb;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .notification-toggle-btn svg {
+      fill: currentColor;
+      height: 24px;
+      width: 24px;
+    }
+
+    .notification-badge {
+      align-items: center;
+      background: #dc2626;
+      border: 2px solid white;
+      border-radius: 999px;
+      color: white;
+      display: inline-flex;
+      font-size: 0.68rem;
+      font-weight: 800;
+      height: 22px;
+      justify-content: center;
+      min-width: 22px;
+      padding: 0 5px;
+      position: absolute;
+      right: -6px;
+      top: -7px;
+    }
+
+    .notifications-panel {
+      background: #f8fafc;
+      border: 1px solid rgba(148, 163, 184, 0.42);
+      border-radius: 24px;
+      box-shadow: 0 22px 55px rgba(15, 23, 42, 0.24);
+      color: #1f2937;
+      min-width: 380px;
+      overflow: hidden;
+      padding: 18px;
+      position: absolute;
+      right: -58px;
+      top: 56px;
+      z-index: 30;
+    }
+
+    .notifications-panel-header {
+      align-items: flex-start;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+
+    .notifications-panel-header h2 {
+      color: #0f172a;
+      font-size: 1.15rem;
+      margin: 0;
+    }
+
+    .notifications-panel-header p {
+      color: #64748b;
+      font-size: 0.86rem;
+      margin: 5px 0 0;
+    }
+
+    .notifications-close-btn {
+      align-items: center;
+      background: transparent;
+      border: none;
+      border-radius: 999px;
+      color: #475569;
+      cursor: pointer;
+      display: inline-flex;
+      font-size: 1.8rem;
+      height: 34px;
+      justify-content: center;
+      line-height: 1;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      width: 34px;
+    }
+
+    .notifications-close-btn:hover {
+      background: rgba(100, 116, 139, 0.14);
+      color: #0f172a;
+    }
+
+    .notifications-list {
+      background: white;
+      border-radius: 18px;
+      box-shadow: inset 0 0 0 1px rgba(226, 232, 240, 0.75);
+      max-height: 360px;
+      overflow: auto;
+    }
+
+    .notification-item {
+      background: white;
+      border: none;
+      border-bottom: 1px solid #e5e7eb;
+      color: #111827;
+      cursor: pointer;
+      display: grid;
+      gap: 4px 10px;
+      grid-template-columns: 10px 1fr;
+      padding: 14px 16px;
+      text-align: left;
+      width: 100%;
+    }
+
+    .notification-item:last-child {
+      border-bottom: none;
+    }
+
+    .notification-item:hover {
+      background: #f8fafc;
+    }
+
+    .notification-read {
+      color: #64748b;
+    }
+
+    .notification-dot {
+      background: #2563eb;
+      border-radius: 999px;
+      grid-row: 1 / span 2;
+      height: 8px;
+      margin-top: 6px;
+      width: 8px;
+    }
+
+    .notification-text {
+      font-size: 0.94rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .notification-read .notification-text {
+      font-weight: 500;
+    }
+
+    .notification-date {
+      color: #94a3b8;
+      font-size: 0.76rem;
+      grid-column: 2;
+    }
+
+    .notifications-state {
+      background: white;
+      border-radius: 18px;
+      color: #64748b;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .notifications-error {
+      background: #fee2e2;
+      color: #991b1b;
+      text-align: left;
     }
 
     .menu-toggle-btn:hover {
@@ -287,12 +526,19 @@ import { UserService, WhoAmI } from './core/user.service';
 export class AppComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly userService = inject(UserService);
+  private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
   private readonly i18nService = inject(I18nService);
   private authSubscription?: Subscription;
+  private notificationsPollingId?: ReturnType<typeof setInterval>;
 
   appsMenuOpen = false;
+  notificationsPanelOpen = false;
   user: WhoAmI | null = null;
+  notifications: NotificationDto[] = [];
+  unreadNotifications = 0;
+  notificationsLoading = false;
+  notificationsError = '';
   loggedUserPhotoUrl = 'assets/images/profile.png';
   private loggedUserPhotoObjectUrl?: string;
 
@@ -314,13 +560,18 @@ export class AppComponent implements OnInit, OnDestroy {
       }
 
       this.user = null;
+      this.notifications = [];
+      this.unreadNotifications = 0;
+      this.stopNotificationsPolling();
       this.resetLoggedUserPhoto();
       this.closeAppsMenu();
+      this.closeNotificationsPanel();
     });
   }
 
   ngOnDestroy(): void {
     this.authSubscription?.unsubscribe();
+    this.stopNotificationsPolling();
     this.revokeLoggedUserPhotoObjectUrl();
   }
 
@@ -333,9 +584,14 @@ export class AppComponent implements OnInit, OnDestroy {
       next: (user) => {
         this.user = user;
         this.loadLoggedUserPhoto(user);
+        this.refreshUnreadNotifications();
+        this.startNotificationsPolling();
       },
       error: () => {
         this.user = null;
+        this.notifications = [];
+        this.unreadNotifications = 0;
+        this.stopNotificationsPolling();
         this.resetLoggedUserPhoto();
       }
     });
@@ -366,16 +622,35 @@ export class AppComponent implements OnInit, OnDestroy {
     return this.user?.role === 'ADMIN' || this.user?.role === 'ROLE_ADMIN';
   }
 
+  get unreadNotificationsLabel(): string {
+    return this.unreadNotifications > 99 ? '99+' : String(this.unreadNotifications);
+  }
+
   toggleAppsMenu(event: Event): void {
     event.stopPropagation();
     if (this.isAuthenticated() && !this.user) {
       this.loadUser();
     }
+    this.closeNotificationsPanel();
     this.appsMenuOpen = !this.appsMenuOpen;
   }
 
   closeAppsMenu(): void {
     this.appsMenuOpen = false;
+  }
+
+  toggleNotificationsPanel(event: Event): void {
+    event.stopPropagation();
+    this.closeAppsMenu();
+    this.notificationsPanelOpen = !this.notificationsPanelOpen;
+
+    if (this.notificationsPanelOpen) {
+      this.loadNotifications();
+    }
+  }
+
+  closeNotificationsPanel(): void {
+    this.notificationsPanelOpen = false;
   }
 
   logout(): void {
@@ -397,6 +672,25 @@ export class AppComponent implements OnInit, OnDestroy {
   @HostListener('document:click')
   onDocumentClick(): void {
     this.closeAppsMenu();
+    this.closeNotificationsPanel();
+  }
+
+  notificationMessage(notification: NotificationDto): string {
+    return this.i18nService.translate(notification.messageKey, this.parseNotificationParams(notification.paramsJson));
+  }
+
+  markNotificationAsRead(notification: NotificationDto): void {
+    if (notification.read || !this.user?.id) {
+      return;
+    }
+
+    this.notificationService.markAsRead(notification.id, this.user.id).subscribe({
+      next: (updatedNotification) => {
+        notification.read = true;
+        notification.readAt = updatedNotification.readAt;
+        this.refreshUnreadNotifications();
+      }
+    });
   }
 
   private loadLoggedUserPhoto(user: WhoAmI): void {
@@ -424,6 +718,62 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.loggedUserPhotoObjectUrl) {
       URL.revokeObjectURL(this.loggedUserPhotoObjectUrl);
       this.loggedUserPhotoObjectUrl = undefined;
+    }
+  }
+
+  private loadNotifications(): void {
+    if (!this.user?.id) {
+      return;
+    }
+
+    this.notificationsLoading = true;
+    this.notificationsError = '';
+    this.notificationService.getForUser(this.user.id, 0, 10).subscribe({
+      next: (page) => {
+        this.notifications = page.content;
+        this.notificationsLoading = false;
+      },
+      error: () => {
+        this.notifications = [];
+        this.notificationsLoading = false;
+        this.notificationsError = this.i18nService.translate('notifications.loadError');
+      }
+    });
+  }
+
+  private refreshUnreadNotifications(): void {
+    if (!this.user?.id) {
+      return;
+    }
+
+    this.notificationService.getUnreadCount(this.user.id).subscribe({
+      next: (response) => {
+        this.unreadNotifications = response.unread;
+      },
+      error: () => {
+        this.unreadNotifications = 0;
+      }
+    });
+  }
+
+  private startNotificationsPolling(): void {
+    this.stopNotificationsPolling();
+    this.notificationsPollingId = setInterval(() => this.refreshUnreadNotifications(), 60000);
+  }
+
+  private stopNotificationsPolling(): void {
+    if (this.notificationsPollingId) {
+      clearInterval(this.notificationsPollingId);
+      this.notificationsPollingId = undefined;
+    }
+  }
+
+  private parseNotificationParams(paramsJson: string): Record<string, string | number | undefined> {
+    try {
+      const params = JSON.parse(paramsJson) as Record<string, string | number | undefined>;
+      return params && typeof params === 'object' ? params : {};
+    } catch {
+      return {};
     }
   }
 }
